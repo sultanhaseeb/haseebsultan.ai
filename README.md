@@ -22,7 +22,7 @@ npm run preview  # Serve the production output locally
 ## Update content
 
 - **Portrait:** replace `public/images/haseeb.jpg`. The current image is an optimized JPEG of the provided photo, with no crop or effects. A square image works best; update width/height in `src/components/Hero.astro` if its dimensions change.
-- **Social links:** replace the GitHub, LinkedIn, and email placeholders in `src/data/site.ts` before publishing. These are deliberately generic URLs, not inferred personal accounts.
+- **Social links:** update your GitHub, LinkedIn, and email in `src/data/site.ts`. These are shared by the navigation, hero, and footer.
 - **Writing, projects, topics, and work areas:** edit `src/data/site.ts`.
 - **Hero and personal story:** edit the named components in `src/components/`.
 - **Visual style:** edit `src/styles/global.css`; Tailwind utilities cover recurring layout patterns.

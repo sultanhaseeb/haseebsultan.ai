@@ -2,11 +2,11 @@ export const site = {
   name: 'Haseeb Sultan',
   title: 'AI Platform Engineer',
   description: 'Haseeb Sultan is an AI Platform Engineer exploring AI infrastructure, LLMOps, agentic systems, MCP, Kubernetes, and AI security.',
-  // Replace these placeholders with your own profiles before publishing.
+  // Shared by the navigation, hero, and footer.
   social: {
-    github: 'https://github.com/',
-    linkedin: 'https://www.linkedin.com/',
-    email: 'mailto:hello@example.com',
+    github: 'https://github.com/sultanhaseeb',
+    linkedin: 'https://www.linkedin.com/in/haseeb-sultan-484416182/',
+    email: 'mailto:hello@haseebsultan.ai',
   },
 };
 
