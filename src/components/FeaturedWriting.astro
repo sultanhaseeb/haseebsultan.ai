@@ -1,11 +1,9 @@
 ---
 import { articles } from '../data/site';
-import Icon from './Icon.astro';
 ---
 <section id="writing" class="section writing" aria-labelledby="writing-title">
   <div class="section-heading">
-    <div><p class="eyebrow">Notes from the workbench</p><h2 id="writing-title">Featured Writing</h2></div>
-    <span class="section-note">Ideas taking shape</span>
+    <h2 id="writing-title">Featured Writing</h2>
   </div>
   <div class="article-list">
     {articles.map((article, index) => (
@@ -16,7 +14,6 @@ import Icon from './Icon.astro';
           <h3>{article.title}</h3>
           <p>{article.description}</p>
         </div>
-        <span class="article-action" role="link" aria-disabled="true" aria-label={`Read Article: ${article.title} (coming soon)`}>Read Article <Icon name="arrow" size={17} /></span>
       </article>
     ))}
   </div>

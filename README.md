@@ -26,11 +26,12 @@ npm run preview  # Serve the production output locally
 - **Writing, projects, topics, and work areas:** edit `src/data/site.ts`.
 - **Hero and personal story:** edit the named components in `src/components/`.
 - **Visual style:** edit `src/styles/global.css`; Tailwind utilities cover recurring layout patterns.
+- **Typography:** Inter is served locally from `public/fonts/inter-latin-variable.woff2`. Its license is included in `public/fonts/OFL.txt`; no external font service is contacted.
 - **SEO:** the default title/description live in `src/data/site.ts`, with metadata and Person structured data in `src/layouts/BaseLayout.astro`. The layout accepts optional title, description, and canonical props. No generated social image is included.
 - **Domain:** update `site` in `astro.config.mjs`, `public/robots.txt`, and `public/sitemap.xml` together if the domain changes.
 - **Favicon:** replace `public/favicon.svg`.
 
-Only the homepage is implemented. Navigation points to its sections. Articles are marked “Coming soon”; their Read Article labels are disabled until real article routes are added. Projects are previews and have no invented repository links, metrics, or dates. Add real article links when publishing posts.
+Only the homepage is implemented. Navigation points to its sections. Articles are marked “Coming soon”; reading links will be added when real article routes exist. The first project in `src/data/site.ts` receives the featured layout. Projects are previews and have no invented repository links, metrics, or dates. Add real article links when publishing posts.
 
 ## Deploy later to Cloudflare
 
