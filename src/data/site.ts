@@ -32,12 +32,6 @@ export const articles = [
 
 export const projects = [
   {
-    title: 'Rocotal',
-    description: 'Enterprise AI security and governance platform focused on protecting interactions between users, AI agents, and large language models.',
-    topics: ['AI Security', 'LLM Guardrails', 'AI Governance'],
-    icon: 'shield' as const,
-  },
-  {
     title: 'Secure Document Agent',
     description: 'An AI agent architecture for securely searching, reading, and interacting with enterprise documents using MCP.',
     topics: ['MCP', 'AI Agents', 'Security'],
