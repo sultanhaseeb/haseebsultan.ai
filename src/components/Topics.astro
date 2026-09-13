@@ -1,0 +1,7 @@
+---
+import { topics } from '../data/site';
+---
+<section class="topics" aria-labelledby="topics-title">
+  <h2 id="topics-title" class="eyebrow">Currently Exploring</h2>
+  <ul class="flex flex-wrap gap-2">{topics.map(topic => <li class="topic">{topic}</li>)}</ul>
+</section>

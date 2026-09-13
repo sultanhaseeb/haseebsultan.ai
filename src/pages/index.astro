@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Topics from '../components/Topics.astro';
+import FeaturedWriting from '../components/FeaturedWriting.astro';
+import Projects from '../components/Projects.astro';
+import Journey from '../components/Journey.astro';
+import WorkAreas from '../components/WorkAreas.astro';
+import LearningInPublic from '../components/LearningInPublic.astro';
+import Footer from '../components/Footer.astro';
+---
+<BaseLayout>
+  <Header />
+  <main id="main" class="shell">
+    <Hero />
+    <Topics />
+    <FeaturedWriting />
+    <Projects />
+    <Journey />
+    <WorkAreas />
+    <LearningInPublic />
+  </main>
+  <Footer />
+</BaseLayout>
