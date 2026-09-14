@@ -57,11 +57,6 @@ export const experience = [
 
 export const resumeProjects = [
   {
-    title: 'MLOps & LLMOps Automation', role: 'MLOps & LLMOps Engineer',
-    description: 'Built automated Azure ML pipelines with GitHub Actions for training, versioning, and deploying scikit-learn models. Integrated a fine-tuned OpenAI GPT model through LangChain and Azure Functions. Managed infrastructure with Terraform and monitoring with Azure Application Insights, delivering scalable, audit-ready workflows, reusable templates, and documentation.',
-    topics: ['Azure ML', 'GitHub Actions', 'OpenAI', 'LangChain', 'Terraform', 'scikit-learn', 'Azure Functions', 'Application Insights'],
-  },
-  {
     title: 'AWS Microservices Platform', role: 'Architect & DevOps Engineer',
     description: 'Automated Bitbucket CI/CD to lint, test, containerize, and deploy Rails microservices to ECS Fargate and the ELK stack to EKS across non-production, staging, and production. Designed segmented VPC networking and granular security groups; managed VPCs, ECS/EKS, RDS, and ElastiCache with Terraform. Added Datadog APM and dashboards, alongside DevOps and security documentation for onboarding and audit readiness.',
     topics: ['AWS', 'ECS Fargate', 'EKS', 'Terraform', 'Bitbucket', 'Rails', 'ELK', 'Datadog', 'RDS', 'ElastiCache'],
