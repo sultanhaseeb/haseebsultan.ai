@@ -14,6 +14,6 @@ const isExperience = Astro.url.pathname.replace(/\/$/, '') === '/experience';
     <a href="/experience/" aria-current={isExperience ? 'page' : undefined}>Experience</a>
     <a href="/#about">About</a>
     <a href="/hobby/" aria-current={isHobby ? 'page' : undefined}>Hobby</a>
-    <a href={site.social.github} class="nav-github">GitHub <Icon name="external" size={15} /></a>
+    <a href={site.social.github} target="_blank" rel="noopener noreferrer" class="nav-github">GitHub <Icon name="external" size={15} /></a>
   </nav>
 </header>
