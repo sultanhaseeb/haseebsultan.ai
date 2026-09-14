@@ -24,6 +24,7 @@ npm run preview  # Serve the production output locally
 - **Portrait:** replace `public/images/haseeb.jpg`. The current image is an optimized JPEG of the provided photo, with no crop or effects. A square image works best; update width/height in `src/components/Hero.astro` if its dimensions change.
 - **Social links:** update your GitHub, LinkedIn, and email in `src/data/site.ts`. These are shared by the navigation, hero, and footer.
 - **Writing, projects, topics, and work areas:** edit `src/data/site.ts`.
+- **Hobby / افسانچہ:** edit the Urdu pieces in `src/pages/hobby.astro`. The page uses right-to-left text and locally served Noto Nastaliq Urdu, licensed under `public/fonts/NotoNastaliqUrdu-OFL.txt`.
 - **Hero and personal story:** edit the named components in `src/components/`.
 - **Visual style:** edit `src/styles/global.css`; Tailwind utilities cover recurring layout patterns.
 - **Typography:** Inter is served locally from `public/fonts/inter-latin-variable.woff2`. Its license is included in `public/fonts/OFL.txt`; no external font service is contacted.
@@ -31,7 +32,7 @@ npm run preview  # Serve the production output locally
 - **Domain:** update `site` in `astro.config.mjs`, `public/robots.txt`, and `public/sitemap.xml` together if the domain changes.
 - **Favicon:** replace `public/favicon.svg`.
 
-Only the homepage is implemented. Navigation points to its sections. Articles are marked “Coming soon”; reading links will be added when real article routes exist. The first project in `src/data/site.ts` receives the featured layout. Projects are previews and have no invented repository links, metrics, or dates. Add real article links when publishing posts.
+The top navigation links to homepage sections and a separate Hobby page at `/hobby/`. Technical articles are marked “Coming soon”; reading links will be added when real article routes exist. The first project in `src/data/site.ts` receives the featured layout. Projects are previews and have no invented repository links, metrics, or dates. Add real article links when publishing posts.
 
 ## Deploy later to Cloudflare
 

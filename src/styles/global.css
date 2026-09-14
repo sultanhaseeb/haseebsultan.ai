@@ -110,7 +110,7 @@ h3 { font-size: 19px; font-weight: 600; line-height: 1.45; letter-spacing: -.025
 @media (max-width: 767px) {
   .shell { width: calc(100% - 40px); }
   .site-header { padding-block: 23px 13px; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .site-header nav { width: 100%; justify-content: space-between; gap: 8px; font-size: 13px; }
+  .site-header nav { width: 100%; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 13px; }
   .nav-github { padding-left: 12px; margin-left: 0; }
   .hero { grid-template-columns: 1fr; gap: 28px; padding-block: 36px 32px; }
   h1 { font-size: clamp(46px, 10vw, 68px); }

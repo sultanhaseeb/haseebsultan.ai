@@ -1,14 +1,17 @@
 ---
 import Icon from './Icon.astro';
 import { site } from '../data/site';
+const isHome = Astro.url.pathname === '/';
+const isHobby = Astro.url.pathname.replace(/\/$/, '') === '/hobby';
 ---
 <header class="site-header shell">
   <a href="/" class="wordmark" aria-label="Haseeb Sultan home">Haseeb Sultan<span aria-hidden="true">.</span></a>
   <nav aria-label="Main navigation">
-    <a href="/" aria-current="page">Home</a>
-    <a href="#writing">Writing</a>
-    <a href="#projects">Projects</a>
-    <a href="#about">About</a>
+    <a href="/" aria-current={isHome ? 'page' : undefined}>Home</a>
+    <a href="/#writing">Writing</a>
+    <a href="/#projects">Projects</a>
+    <a href="/#about">About</a>
+    <a href="/hobby/" aria-current={isHobby ? 'page' : undefined}>Hobby</a>
     <a href={site.social.github} class="nav-github">GitHub <Icon name="external" size={15} /></a>
   </nav>
 </header>
