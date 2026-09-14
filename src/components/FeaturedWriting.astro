@@ -1,11 +1,25 @@
 ---
 import { articles } from '../data/site';
+import { publishedArticles } from '../data/resume';
 ---
 <section id="writing" class="section writing" aria-labelledby="writing-title">
   <div class="section-heading">
     <h2 id="writing-title">Featured Writing</h2>
   </div>
   <div class="article-list">
+    {publishedArticles.map((article, index) => (
+      <article class="article-row">
+        <span class="article-number" aria-hidden="true">0{index + 1}</span>
+        <div class="article-content">
+          <div class="article-meta flex items-center gap-3"><span>{article.category}</span><span class="meta-separator" aria-hidden="true">/</span><span>Published on Medium</span></div>
+          <h3><a class="article-title-link" href={article.href}>{article.title}</a></h3>
+        </div>
+      </article>
+    ))}
+  </div>
+  <details class="upcoming-writing">
+    <summary>Upcoming writing</summary>
+    <div class="article-list">
     {articles.map((article, index) => (
       <article class="article-row">
         <span class="article-number" aria-hidden="true">0{index + 1}</span>
@@ -16,5 +30,6 @@ import { articles } from '../data/site';
         </div>
       </article>
     ))}
-  </div>
+    </div>
+  </details>
 </section>

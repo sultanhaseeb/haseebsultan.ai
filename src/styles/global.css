@@ -31,7 +31,7 @@ h1, h2, h3, p, figure { margin: 0; }
 .site-header { min-height: 106px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--color-line); }
 .wordmark { font-size: 21px; font-weight: 650; letter-spacing: -.8px; white-space: nowrap; }
 .wordmark span { color: var(--color-accent); }
-.site-header nav { display: flex; align-items: center; gap: 30px; font-size: 14px; font-weight: 500; color: var(--color-muted); }
+.site-header nav { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; font-size: 14px; font-weight: 500; color: var(--color-muted); }
 .site-header nav a { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; }
 .site-header nav a:hover, .site-footer a:hover { color: var(--color-accent); }
 .site-header nav a[aria-current] { color: var(--color-ink); }
@@ -77,7 +77,7 @@ h3 { font-size: 19px; font-weight: 600; line-height: 1.45; letter-spacing: -.025
 .project-featured .project-tags { align-content: center; align-items: flex-start; flex-direction: column; gap: 12px; margin: 0; padding: 8px 0 8px 32px; border-top: 0; border-left: 1px solid #d5dfef; color: #355785; }
 .journey { display: grid; grid-template-columns: .95fr 1.2fr; gap: 90px; margin-top: 86px; padding-block: 54px; border-block: 1px solid var(--color-line); }
 .journey h2 { font-size: 31px; }
-.journey > p { font-size: 17px; line-height: 1.9; color: var(--color-muted); }
+.journey-copy > p { font-size: 17px; line-height: 1.9; color: var(--color-muted); }
 .journey-direction { display: flex; align-items: center; gap: 12px; font: 12px var(--font-mono); color: #526178; margin-top: 29px; }
 .journey-direction span:last-child { color: var(--color-accent); }
 .work-grid { gap: 30px; }
@@ -89,6 +89,11 @@ h3 { font-size: 19px; font-weight: 600; line-height: 1.45; letter-spacing: -.025
 .learning-copy { font-size: 16px; line-height: 1.85; color: #4d5c70; max-width: 790px; margin-top: 18px; }
 .text-link { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: #2456b8; font-size: 14px; font-weight: 600; margin-top: 17px; }
 .text-link:hover { color: #132e69; }
+.article-title-link:hover { color: var(--color-accent); }
+.upcoming-writing { margin-top: 26px; }
+.upcoming-writing summary { cursor: pointer; padding-block: 15px; color: var(--color-muted); font-size: 14px; list-style: disclosure-closed inside; }
+.upcoming-writing[open] summary { list-style-type: disclosure-open; margin-bottom: 12px; }
+.upcoming-writing summary:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
 .site-footer { border-top: 1px solid var(--color-line); padding-top: 37px; }
 .footer-main { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .footer-main p { font-size: 13px; color: var(--color-muted); margin-top: 8px; }
@@ -132,7 +137,7 @@ h3 { font-size: 19px; font-weight: 600; line-height: 1.45; letter-spacing: -.025
   .project-featured .project-tags { flex-direction: row; padding: 19px 0 0; border-left: 0; border-top: 1px solid #d5dfef; gap: 12px; }
   .journey { grid-template-columns: 1fr; gap: 25px; margin-top: 57px; padding-block: 35px; }
   .journey h2 { font-size: 29px; }
-  .journey > p { font-size: 16px; }
+  .journey-copy > p { font-size: 16px; }
   .desktop-break { display: none; }
   .journey-direction { margin-top: 20px; }
   .work-grid { gap: 27px; }

@@ -23,7 +23,8 @@ npm run preview  # Serve the production output locally
 
 - **Portrait:** replace `public/images/haseeb.jpg`. The current image is an optimized JPEG of the provided photo, with no crop or effects. A square image works best; update width/height in `src/components/Hero.astro` if its dimensions change.
 - **Social links:** update your GitHub, LinkedIn, and email in `src/data/site.ts`. These are shared by the navigation, hero, and footer.
-- **Writing, projects, topics, and work areas:** edit `src/data/site.ts`.
+- **Upcoming writing, current experiments, topics, and work areas:** edit `src/data/site.ts`.
+- **Professional background:** edit `src/data/resume.ts` for career history through 2025, ten delivered projects, published articles, expertise, contact details, certifications/exams, and education. Employer and client identities are deliberately omitted. The full profile is at `/experience/`, with selected highlights on the homepage.
 - **Hobby / افسانچہ:** edit the Urdu pieces in `src/pages/hobby.astro`. The page uses right-to-left text and locally served Noto Nastaliq Urdu, licensed under `public/fonts/NotoNastaliqUrdu-OFL.txt`.
 - **Hero and personal story:** edit the named components in `src/components/`.
 - **Visual style:** edit `src/styles/global.css`; Tailwind utilities cover recurring layout patterns.
@@ -32,11 +33,11 @@ npm run preview  # Serve the production output locally
 - **Domain:** update `site` in `astro.config.mjs`, `public/robots.txt`, and `public/sitemap.xml` together if the domain changes.
 - **Favicon:** replace `public/favicon.svg`.
 
-The top navigation links to homepage sections and a separate Hobby page at `/hobby/`. Technical articles are marked “Coming soon”; reading links will be added when real article routes exist. The first project in `src/data/site.ts` receives the featured layout. Projects are previews and have no invented repository links, metrics, or dates. Add real article links when publishing posts.
+The top navigation links to homepage sections, the professional background at `/experience/`, and Urdu writing at `/hobby/`. Published articles link to Medium. Upcoming writing and current experiments remain in expandable sections. The first three résumé projects appear on the homepage, with all ten on the Experience page. Career dates and qualifications reflect the résumé through 2025; update them only when newer information is available.
 
-## Deploy later to Cloudflare
+## Deploy to Cloudflare
 
-The project is prepared locally; it has not been published or connected to a domain.
+The site is published at `https://haseebsultan.ai`. Pushing to `main` on the GitHub repository triggers the Cloudflare Workers build and deployment. Run `ASTRO_TELEMETRY_DISABLED=1 npm run build` before pushing.
 
 ### Workers static assets
 

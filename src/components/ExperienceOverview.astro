@@ -1,0 +1,23 @@
+---
+import { expertise } from '../data/resume';
+import Icon from './Icon.astro';
+---
+<section id="experience" class="section" aria-labelledby="experience-title">
+  <div class="section-heading"><h2 id="experience-title">Experience in Practice</h2><span class="section-note">Highlights from my work through 2025</span></div>
+  <div class="experience-metrics">
+    <div><strong>Up to 45%</strong><p>Azure infrastructure cost reduction</p></div>
+    <div><strong>23+</strong><p>Microservices with DevSecOps automation</p></div>
+    <div><strong>10+</strong><p>DevOps projects led</p></div>
+    <div><strong>8</strong><p>People on a team I led</p></div>
+  </div>
+  <p class="experience-summary">From full-stack development to cloud migrations and AI operations, my work spans Azure, AWS, and Google Cloud. I've delivered Kubernetes platforms, automated software releases, and built MLOps and LLMOps workflows.</p>
+  <ul class="flex flex-wrap gap-2">{expertise.map(item => <li class="topic">{item}</li>)}</ul>
+  <a href="/experience/" class="text-link">Experience, projects &amp; qualifications <Icon name="arrow" size={17} /></a>
+</section>
+<style>
+  .experience-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; padding-block: 28px; border-block: 1px solid var(--color-line); }
+  .experience-metrics strong { font-size: clamp(24px, 3.2vw, 36px); font-weight: 600; letter-spacing: -.04em; }
+  .experience-metrics p { color: var(--color-muted); font-size: 14px; line-height: 1.6; margin-top: 8px; }
+  .experience-summary { max-width: 800px; line-height: 1.85; color: var(--color-muted); margin-block: 26px 22px; font-size: 17px; }
+  @media (max-width: 767px) { .experience-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
