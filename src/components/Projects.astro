@@ -1,29 +1,35 @@
 ---
 import { projects } from '../data/site';
 import { resumeProjects } from '../data/resume';
-import Icon from './Icon.astro';
 ---
-<section id="projects" class="section" aria-labelledby="projects-title">
+<section id="project-portfolio" class="section" aria-labelledby="projects-title">
   <div class="section-heading">
-    <h2 id="projects-title">Selected Projects</h2>
-    <span class="section-note">From my cloud, DevOps, and AI work</span>
+    <h2 id="projects-title">Project Portfolio</h2>
+    <span class="section-note">{resumeProjects.length} projects · Work through 2025</span>
   </div>
-  <div class="project-grid grid gap-5 md:grid-cols-2">
-    {resumeProjects.slice(0, 3).map((project, index) => (
-      <article class:list={['project-card', { 'project-featured': index === 0 }]}>
-        <div class="project-copy">
-          <h3>{project.title}</h3>
-          <p>{project.description}</p>
-        </div>
-        <ul class="project-tags flex flex-wrap gap-x-3 gap-y-2">{project.topics.map(topic => <li>{topic}</li>)}</ul>
-      </article>
-    ))}
+  <div class="portfolio-list">
+    {resumeProjects.map((project, index) => <article class="portfolio-project" id={`project-${index + 1}`}>
+      <p class="eyebrow">{project.role}</p>
+      <h3>{project.title}</h3>
+      <p class="portfolio-description">{project.description}</p>
+      <ul class="flex flex-wrap gap-2">{project.topics.map(topic => <li class="topic">{topic}</li>)}</ul>
+    </article>)}
   </div>
-  <a href="/experience/#project-portfolio" class="text-link">View all {resumeProjects.length} projects <Icon name="arrow" size={17} /></a>
-  <details class="upcoming-writing">
-    <summary>Current experiments</summary>
-    <div class="project-grid grid gap-5 md:grid-cols-2">
-      {projects.map(project => <article class="project-card"><h3>{project.title}</h3><p>{project.description}</p><ul class="project-tags flex flex-wrap gap-x-3 gap-y-2">{project.topics.map(topic => <li>{topic}</li>)}</ul></article>)}
-    </div>
-  </details>
 </section>
+<section class="section" aria-labelledby="experiments-title">
+  <div class="section-heading"><h2 id="experiments-title">Current Experiments</h2><span class="section-note">Ideas I'm exploring</span></div>
+  <div class="project-grid grid gap-5 md:grid-cols-2">
+    {projects.map(project => <article class="project-card"><h3>{project.title}</h3><p>{project.description}</p><ul class="project-tags flex flex-wrap gap-x-3 gap-y-2">{project.topics.map(topic => <li>{topic}</li>)}</ul></article>)}
+  </div>
+</section>
+<style>
+  .portfolio-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .portfolio-project { padding: 28px; border: 1px solid var(--color-line); background: white; border-radius: 8px; }
+  .portfolio-project h3 { font-size: 22px; margin-top: 12px; }
+  .portfolio-description { line-height: 1.85; color: var(--color-muted); margin-block: 16px 24px; }
+  .portfolio-project .topic { font-size: 12px; }
+  @media (max-width: 767px) {
+    .portfolio-list { grid-template-columns: 1fr; }
+    .portfolio-project { padding: 22px; }
+  }
+</style>

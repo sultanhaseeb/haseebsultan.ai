@@ -1,0 +1,17 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Journey from '../components/Journey.astro';
+import Qualifications from '../components/Qualifications.astro';
+import { profile } from '../data/resume';
+---
+<PageLayout title="About" description="Haseeb Sultan’s journey from full-stack and cloud engineering to AI platforms, with education and professional certifications." intro="I'm Haseeb Sultan, an AI Platform Engineer based in Dubai, UAE.">
+  <Journey />
+  <Qualifications />
+  <section class="section about-contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Get in Touch</h2>
+    <a class="text-link" href={`mailto:${profile.email}`}>{profile.email}</a>
+  </section>
+</PageLayout>
+<style>
+  .about-contact a { overflow-wrap: anywhere; }
+</style>

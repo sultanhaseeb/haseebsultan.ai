@@ -4,15 +4,16 @@ import { site } from '../data/site';
 const isHome = Astro.url.pathname === '/';
 const isHobby = Astro.url.pathname.replace(/\/$/, '') === '/hobby';
 const isExperience = Astro.url.pathname.replace(/\/$/, '') === '/experience';
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
 ---
 <header class="site-header shell">
   <a href="/" class="wordmark" aria-label="Haseeb Sultan home">Haseeb Sultan<span aria-hidden="true">.</span></a>
   <nav aria-label="Main navigation">
     <a href="/" aria-current={isHome ? 'page' : undefined}>Home</a>
-    <a href="/#writing">Writing</a>
-    <a href="/#projects">Projects</a>
+    <a href="/writing/" aria-current={currentPath === '/writing' ? 'page' : undefined}>Writing</a>
+    <a href="/projects/" aria-current={currentPath === '/projects' ? 'page' : undefined}>Projects</a>
     <a href="/experience/" aria-current={isExperience ? 'page' : undefined}>Experience</a>
-    <a href="/#about">About</a>
+    <a href="/about/" aria-current={currentPath === '/about' ? 'page' : undefined}>About</a>
     <a href="/hobby/" aria-current={isHobby ? 'page' : undefined}>Hobby</a>
     <a href={site.social.github} target="_blank" rel="noopener noreferrer" class="nav-github">GitHub <Icon name="external" size={15} /></a>
   </nav>

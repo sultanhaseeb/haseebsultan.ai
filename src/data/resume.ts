@@ -3,8 +3,6 @@ export const profile = {
   title: 'Senior DevOps / AIOps Engineer',
   location: 'Dubai, UAE',
   email: 'haseebsultandogar@gmail.com',
-  phone: '+971564606252',
-  phoneDisplay: '+971 56 460 6252',
   summary: 'My background spans full-stack development, cloud architecture, DevOps, and AI operations. I build automated, secure platforms across Azure, AWS, and Google Cloud, with hands-on work in Kubernetes, infrastructure as code, CI/CD, MLOps, and LLM applications.',
 };
 

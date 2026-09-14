@@ -24,7 +24,7 @@ npm run preview  # Serve the production output locally
 - **Portrait:** replace `public/images/haseeb.jpg`. The current image is an optimized JPEG of the provided photo, with no crop or effects. A square image works best; update width/height in `src/components/Hero.astro` if its dimensions change.
 - **Social links:** update your GitHub, LinkedIn, and email in `src/data/site.ts`. These are shared by the navigation, hero, and footer.
 - **Upcoming writing, current experiments, topics, and work areas:** edit `src/data/site.ts`.
-- **Professional background:** edit `src/data/resume.ts` for career history through 2025, nine delivered projects, published articles, expertise, contact details, certifications/exams, and education. Employer and client identities are deliberately omitted. The full profile is at `/experience/`, with selected highlights on the homepage.
+- **Professional background:** edit `src/data/resume.ts` for career history through 2025, nine delivered projects, published articles, expertise, contact details, certifications/exams, and education. Employer and client identities are deliberately omitted. Career history and skills are at `/experience/`, the portfolio at `/projects/`, articles at `/writing/`, and the journey and qualifications at `/about/`. Phone numbers are not published.
 - **Hobby / افسانچہ:** edit the Urdu pieces in `src/pages/hobby.astro`. The page uses right-to-left text and locally served Noto Nastaliq Urdu, licensed under `public/fonts/NotoNastaliqUrdu-OFL.txt`.
 - **Hero and personal story:** edit the named components in `src/components/`.
 - **Visual style:** edit `src/styles/global.css`; Tailwind utilities cover recurring layout patterns.
@@ -33,7 +33,7 @@ npm run preview  # Serve the production output locally
 - **Domain:** update `site` in `astro.config.mjs`, `public/robots.txt`, and `public/sitemap.xml` together if the domain changes.
 - **Favicon:** replace `public/favicon.svg`.
 
-The top navigation links to homepage sections, the professional background at `/experience/`, and Urdu writing at `/hobby/`. Published articles link to Medium. Upcoming writing and current experiments remain in expandable sections. The first three résumé projects appear on the homepage, with all nine on the Experience page. Career dates and qualifications reflect the résumé through 2025; update them only when newer information is available.
+The top navigation opens dedicated Home, Writing, Projects, Experience, About, and Hobby pages. The homepage provides highlights and links to these topics. All nine résumé projects and current experiments are on `/projects/`. Published articles link to Medium from `/writing/`, with upcoming writing in an expandable section. `/about/` contains the journey, education, certifications, and an email contact link. Career dates and qualifications reflect the résumé through 2025; update them only when newer information is available. GitHub and LinkedIn links open in new tabs.
 
 ## Deploy to Cloudflare
 
