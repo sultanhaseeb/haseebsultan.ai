@@ -1,0 +1,17 @@
+---
+import { resumeProjects } from '../data/resume';
+import Icon from './Icon.astro';
+---
+<section id="projects" class="section" aria-labelledby="featured-projects-title">
+  <div class="section-heading"><h2 id="featured-projects-title">Featured Projects</h2><span class="section-note">Selected work in cloud and DevOps</span></div>
+  <div class="project-grid grid gap-5 md:grid-cols-2">
+    {resumeProjects.slice(0, 3).map((project, index) => <article class:list={['project-card', { 'project-featured': index === 0 }]}>
+      <div class="project-copy">
+        <h3><a class="article-title-link" href={`/projects/#project-${index + 1}`}>{project.title}</a></h3>
+        <p>{project.description.split('. ')[0].replace(/\.$/, '')}.</p>
+      </div>
+      <ul class="project-tags flex flex-wrap gap-x-3 gap-y-2">{project.topics.slice(0, 4).map(topic => <li>{topic}</li>)}</ul>
+    </article>)}
+  </div>
+  <a href="/projects/" class="text-link" aria-label="Explore more projects">Explore more <Icon name="arrow" size={17} /></a>
+</section>

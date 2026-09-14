@@ -1,5 +1,7 @@
 ---
 import Icon from './Icon.astro';
+interface Props { preview?: boolean; }
+const { preview = false } = Astro.props;
 ---
 <section id="about" class="section journey" aria-labelledby="journey-title">
   <div>
@@ -7,7 +9,11 @@ import Icon from './Icon.astro';
     <div class="journey-direction" aria-hidden="true"><span>Infrastructure</span><Icon name="arrow" size={18} /><span>AI Platforms</span></div>
   </div>
   <div class="journey-copy">
-    <p>I started in full-stack and cloud engineering in 2019, building with React, Node.js, and MySQL before moving into senior DevOps roles. My work has included cloud migrations, Kubernetes platforms, secure CI/CD, technical leadership, and automated MLOps and LLMOps pipelines. That experience now informs my focus on the infrastructure and operations behind AI systems.</p>
-    <a href="/experience/" class="text-link">Read my professional background <Icon name="arrow" size={17} /></a>
+    <p>{preview
+      ? 'I started in full-stack and cloud engineering in 2019, before moving into senior DevOps roles. My experience with cloud migrations, Kubernetes, and secure software delivery now shapes my work on AI platforms.'
+      : 'I started in full-stack and cloud engineering in 2019, building with React, Node.js, and MySQL before moving into senior DevOps roles. My work has included cloud migrations, Kubernetes platforms, secure CI/CD, technical leadership, and automated MLOps and LLMOps pipelines. That experience now informs my focus on the infrastructure and operations behind AI systems.'}</p>
+    {preview
+      ? <a href="/about/" class="text-link" aria-label="Explore more about me">Explore more <Icon name="arrow" size={17} /></a>
+      : <a href="/experience/" class="text-link">Read my professional background <Icon name="arrow" size={17} /></a>}
   </div>
 </section>

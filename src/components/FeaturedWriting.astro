@@ -1,13 +1,17 @@
 ---
 import { articles } from '../data/site';
 import { publishedArticles } from '../data/resume';
+import Icon from './Icon.astro';
+interface Props { preview?: boolean; }
+const { preview = false } = Astro.props;
+const displayedArticles = preview ? publishedArticles.slice(0, 2) : publishedArticles;
 ---
 <section id="writing" class="section writing" aria-labelledby="writing-title">
   <div class="section-heading">
-    <h2 id="writing-title">Published Articles</h2>
+    <h2 id="writing-title">{preview ? 'Featured Writing' : 'Published Articles'}</h2>
   </div>
   <div class="article-list">
-    {publishedArticles.map((article, index) => (
+    {displayedArticles.map((article, index) => (
       <article class="article-row">
         <span class="article-number" aria-hidden="true">0{index + 1}</span>
         <div class="article-content">
@@ -17,7 +21,7 @@ import { publishedArticles } from '../data/resume';
       </article>
     ))}
   </div>
-  <details class="upcoming-writing">
+  {preview ? <a href="/writing/" class="text-link" aria-label="Explore more writing">Explore more <Icon name="arrow" size={17} /></a> : <details class="upcoming-writing">
     <summary>Upcoming writing</summary>
     <div class="article-list">
     {articles.map((article, index) => (
@@ -31,5 +35,5 @@ import { publishedArticles } from '../data/resume';
       </article>
     ))}
     </div>
-  </details>
+  </details>}
 </section>

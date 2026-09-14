@@ -33,7 +33,7 @@ npm run preview  # Serve the production output locally
 - **Domain:** update `site` in `astro.config.mjs`, `public/robots.txt`, and `public/sitemap.xml` together if the domain changes.
 - **Favicon:** replace `public/favicon.svg`.
 
-The top navigation opens dedicated Home, Writing, Projects, Experience, About, and Hobby pages. The homepage provides highlights and links to these topics. All nine résumé projects and current experiments are on `/projects/`. Published articles link to Medium from `/writing/`, with upcoming writing in an expandable section. `/about/` contains the journey, education, certifications, and an email contact link. Career dates and qualifications reflect the résumé through 2025; update them only when newer information is available. GitHub and LinkedIn links open in new tabs.
+The top navigation opens dedicated Home, Writing, Projects, Experience, About, and Hobby pages. The homepage features three project previews, two published articles, and a short journey paragraph, each with an “Explore more” link to its dedicated page. All nine résumé projects and current experiments are on `/projects/`. Published articles link to Medium from `/writing/`, with upcoming writing in an expandable section. `/about/` contains the journey, education, certifications, and an email contact link. Career dates and qualifications reflect the résumé through 2025; update them only when newer information is available. GitHub and LinkedIn links open in new tabs.
 
 ## Deploy to Cloudflare
 

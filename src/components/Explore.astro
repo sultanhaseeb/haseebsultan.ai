@@ -1,23 +1,8 @@
 ---
-import Icon from './Icon.astro';
-const pages = [
-  { id: 'projects', title: 'Projects', description: 'Cloud platforms, Kubernetes, infrastructure automation, and delivery systems.', href: '/projects/' },
-  { id: 'writing', title: 'Writing', description: 'Published technical articles and upcoming ideas on DevOps, cloud, and AI.', href: '/writing/' },
-  { id: 'about', title: 'About', description: 'My journey into AI platforms, education, and professional qualifications.', href: '/about/' },
-];
+import FeaturedProjects from './FeaturedProjects.astro';
+import FeaturedWriting from './FeaturedWriting.astro';
+import Journey from './Journey.astro';
 ---
-<section class="section" aria-labelledby="explore-title">
-  <div class="section-heading"><h2 id="explore-title">Explore My Work &amp; Background</h2></div>
-  <div class="explore-grid">
-    {pages.map(page => <a id={page.id} href={page.href} class="project-card explore-card">
-      <h3>{page.title} <Icon name="arrow" size={18} /></h3>
-      <p>{page.description}</p>
-    </a>)}
-  </div>
-</section>
-<style>
-  .explore-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-  .explore-card h3 { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .explore-card p { margin-bottom: 0; }
-  @media (max-width: 767px) { .explore-grid { grid-template-columns: 1fr; } }
-</style>
+<FeaturedProjects />
+<FeaturedWriting preview />
+<Journey preview />
