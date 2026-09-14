@@ -8,7 +8,8 @@ import Footer from '../components/Footer.astro';
   <main id="main" class="shell hobby-page" lang="ur" dir="rtl">
     <h1>افسانچہ</h1>
     <div class="hobby-stories">
-      <article aria-label="کل رات میں صبح کے چار بجے سویا۔">
+      <article aria-labelledby="waiting-title">
+        <h2 id="waiting-title">انتظار کا آخری پہر</h2>
         <p>کل رات میں صبح کے چار بجے سویا۔<br />
 اس لیے نہیں کہ نیند نہیں آ رہی تھی،<br />
 بلکہ اس لیے کہ نیند آنے کی کوئی وجہ نہیں تھی۔<br />
@@ -28,7 +29,8 @@ import Footer from '../components/Footer.astro';
 شاید اس لیے نہیں کہ رات ختم ہو گئی تھی—<br />
 بلکہ اس لیے کہ انتظار ختم ہو گیا تھا۔</p>
       </article>
-      <article aria-label="آج خواب میں وہ آیا،">
+      <article aria-labelledby="dream-title">
+        <h2 id="dream-title">ممنوعہ خواب</h2>
         <p>آج خواب میں وہ آیا،<br />
 جسے خواب میں آنے کی بھی اجازت نہیں تھی۔<br />
 نہ اُس نے کچھ کہا،<br />
@@ -75,6 +77,15 @@ import Footer from '../components/Footer.astro';
   .hobby-stories article {
     padding-block: 38px;
     border-top: 1px solid var(--color-line);
+  }
+
+  .hobby-stories h2 {
+    font-family: inherit;
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 600;
+    line-height: 2.4;
+    letter-spacing: normal;
+    margin-bottom: 24px;
   }
 
   .hobby-stories p {
