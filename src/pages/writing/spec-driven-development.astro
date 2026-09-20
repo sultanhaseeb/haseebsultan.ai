@@ -27,11 +27,12 @@ import { specDrivenArticle as article } from '../../data/writing';
             <li><a href="#governance">Project governance and the constitution</a></li>
             <li><a href="#lifecycle">The SDD feature development lifecycle</a></li>
             <li><a href="#strategies">Project types and application strategies</a></li>
+            <li><a href="#tools">Tools for Spec-Driven Development</a></li>
           </ol>
         </nav>
 
         <section aria-labelledby="foundations">
-          <h2 id="foundations">Module 1: Foundations of Spec-Driven Development</h2>
+          <h2 id="foundations">Foundations of Spec-Driven Development</h2>
 
           <h3>What is Spec-Driven Development?</h3>
           <p>In simple terms, <strong>Spec-Driven Development (SDD)</strong> means creating a clear plan or blueprint, called a specification, before asking an AI coding tool to write code.</p>
@@ -69,7 +70,7 @@ import { specDrivenArticle as article } from '../../data/writing';
         </section>
 
         <section aria-labelledby="benefits">
-          <h2 id="benefits">Module 2: Core Benefits and Strategic Value</h2>
+          <h2 id="benefits">Core Benefits and Strategic Value</h2>
 
           <h3>High-leverage code control</h3>
           <p>A small change to a specification can coordinate a large implementation update. Imagine changing the approved database from SQLite to MongoDB. The revised specification gives the coding agent one reviewed source of intent from which to identify changes across schemas, persistence code, API handlers, tests, and deployment configuration.</p>
@@ -93,7 +94,7 @@ import { specDrivenArticle as article } from '../../data/writing';
         </section>
 
         <section aria-labelledby="governance">
-          <h2 id="governance">Module 3: Project Governance and the Constitution</h2>
+          <h2 id="governance">Project Governance and the Constitution</h2>
 
           <h3>The project constitution</h3>
           <p>The <strong>Project Constitution</strong> is the master blueprint for the software. It is a central, version-controlled document that records the project’s durable rules before features are implemented.</p>
@@ -106,9 +107,9 @@ import { specDrivenArticle as article } from '../../data/writing';
 
           <h3>The three core pillars</h3>
           <ul>
-            <li><strong>Mission — why does this project exist?</strong> Define the product’s goal, target users, problem, scope, and non-negotiable principles. The mission becomes a decision filter when a proposed feature adds complexity without helping the intended user.</li>
-            <li><strong>Tech stack — what tools will we use?</strong> Record the approved languages, frameworks, databases, test tools, and deployment rules. This prevents an agent from choosing a different library or architecture for every task.</li>
-            <li><strong>Roadmap — what are we building over time?</strong> Organize delivery into phases and milestones. The roadmap is a living document that keeps feature work focused while the project evolves.</li>
+            <li><strong>Mission: Why does this project exist?</strong> Define the product’s goal, target users, problem, scope, and non-negotiable principles. The mission becomes a decision filter when a proposed feature adds complexity without helping the intended user.</li>
+            <li><strong>Tech stack: What tools will we use?</strong> Record the approved languages, frameworks, databases, test tools, and deployment rules. This prevents an agent from choosing a different library or architecture for every task.</li>
+            <li><strong>Roadmap: What are we building over time?</strong> Organize delivery into phases and milestones. The roadmap is a living document that keeps feature work focused while the project evolves.</li>
           </ul>
 
           <h3>Constitution versus AGENTS.md</h3>
@@ -117,36 +118,35 @@ import { specDrivenArticle as article } from '../../data/writing';
         </section>
 
         <section aria-labelledby="lifecycle">
-          <h2 id="lifecycle">Module 4: The SDD Feature Development Lifecycle</h2>
+          <h2 id="lifecycle">The SDD Feature Development Lifecycle</h2>
           <p>Once the project rules are established, each feature moves through a continuous six-step loop:</p>
-          <p class="process-line" aria-label="Specify, then Plan, then Tasks, then Implement, then Validate and Converge, then Replan">Specify <span aria-hidden="true">→</span> Plan <span aria-hidden="true">→</span> Tasks <span aria-hidden="true">→</span> Implement <span aria-hidden="true">→</span> Validate &amp; Converge <span aria-hidden="true">→</span> Replan</p>
 
           <figure class="article-figure">
             <img src="/images/writing/spec-driven-development/sdd-iterative-engine.png" alt="Circular Spec-Driven Development lifecycle showing specify, plan, implement, validate, and replan around the project constitution." width="1520" height="820" loading="lazy" decoding="async" />
             <figcaption>Specifications evolve with validated learning; they are active engineering tools rather than documents written once and forgotten.</figcaption>
           </figure>
 
-          <h3>1. Specify — what and why</h3>
+          <h3>1. Specify: What and why</h3>
           <p>Describe what the user experiences and what success looks like without deciding every implementation detail. Define user flows, exact acceptance criteria, and edge cases such as a failed login or a lost network connection.</p>
 
-          <h3>2. Plan — the technical blueprint</h3>
+          <h3>2. Plan: The technical blueprint</h3>
           <p>Choose the technical approach before writing code. The plan records the database schema, frameworks, API structures, security rules, dependencies, and other boundaries the implementation must respect.</p>
 
-          <h3>3. Tasks — bite-sized action items</h3>
+          <h3>3. Tasks: Bite-sized action items</h3>
           <p>Break the plan into small, testable pieces. Instead of asking the agent to “build the whole user system,” define focused tasks such as “Create the email validation endpoint” and “Add the password hash check.”</p>
 
-          <h3>4. Implement — the AI writes the code</h3>
+          <h3>4. Implement: The AI writes the code</h3>
           <p>The coding agent completes one task at a time. Because each task traces back to a specification and plan, the generated code stays grounded in agreed requirements.</p>
 
-          <h3>5. Validate and converge — the quality check</h3>
+          <h3>5. Validate and converge: The quality check</h3>
           <p>Compiling is not enough. Run automated tests, type checks, linting, reviews, and relevant operational checks until the implementation meets its acceptance criteria and reaches a verified state.</p>
 
-          <h3>6. Replan — learn and improve</h3>
+          <h3>6. Replan: Learn and improve</h3>
           <p>Development is iterative. Update the roadmap, refine future specifications, and improve templates when implementation reveals new information. This closes the loop and gives the next feature a stronger starting point.</p>
         </section>
 
         <section aria-labelledby="strategies">
-          <h2 id="strategies">Module 5: Project Types and Application Strategies</h2>
+          <h2 id="strategies">Project Types and Application Strategies</h2>
 
           <h3>Match the specification to the project</h3>
           <p>Not every project needs the same level of rigor. A prototype may use a specification mainly to establish initial clarity. A production system benefits from specifications that evolve with the code and connect to automated tests. A highly mature platform may treat the specification as the source that triggers implementation changes.</p>
@@ -163,16 +163,50 @@ import { specDrivenArticle as article } from '../../data/writing';
             <figcaption>New systems begin with an explicit foundation; existing systems begin by discovering the architecture already in place.</figcaption>
           </figure>
 
-          <h3>Greenfield projects — building from scratch</h3>
+          <h3>Greenfield projects: Building from scratch</h3>
           <p>A greenfield project is like building a new house on an empty plot. There is no existing code to constrain the design. The human and AI create the Project Constitution together, defining the mission, technical choices, and roadmap before beginning the first feature loop.</p>
 
-          <h3>Brownfield projects — adding to an existing house</h3>
+          <h3>Brownfield projects: Adding to an existing house</h3>
           <p>A brownfield project already has an established codebase. The agent first inspects the folder structure, dependencies, interfaces, tests, and recurring patterns. The new specification must reflect the system’s real constraints so each feature feels native to the product rather than awkwardly attached.</p>
 
-          <h3>Legacy modernization — replacing old plumbing and wiring</h3>
+          <h3>Legacy modernization: Replacing old plumbing and wiring</h3>
           <p>A legacy system may contain valuable business logic inside code that is difficult to maintain. Instead of reproducing every old implementation detail, the team extracts the essential behavior into clear specifications. Those specifications guide a modern implementation while tests and staged migration protect the behavior users still depend on.</p>
 
           <p>Across all three project types, the central idea remains the same: preserve intent in a durable form, give the agent clear boundaries, and validate the result against the specification. That turns AI-assisted development from a sequence of isolated prompts into an engineering process the team can inspect, repeat, and improve.</p>
+        </section>
+
+        <section aria-labelledby="tools">
+          <h2 id="tools">Tools for Spec-Driven Development</h2>
+
+          <h3>1. GitHub Spec Kit</h3>
+          <p><strong>What it is:</strong> An open-source toolkit created by GitHub to help developers establish structured, agent-guided engineering processes.</p>
+          <p><strong>How it works:</strong> It provides a Python-based CLI called <code>specify-cli</code>. The CLI installs reusable agent skills for supported AI coding assistants, including GitHub Copilot, Claude Code, and Gemini CLI.</p>
+          <p><strong>Key workflows:</strong></p>
+          <ol>
+            <li><strong>Spec-Driven Development:</strong> Uses commands in the AI chat, moving from <code>/speckit-constitution</code> to <code>/speckit-specify</code>, <code>/speckit-plan</code>, <code>/speckit-tasks</code>, <code>/speckit-implement</code>, and <code>/speckit-converge</code>.</li>
+            <li><strong>Bug fixing:</strong> Uses the optional bug extension with <code>/speckit-bug-assess</code>, <code>/speckit-bug-fix</code>, and <code>/speckit-bug-test</code> to diagnose, repair, and verify defects separately.</li>
+            <li><strong>Idea assessment:</strong> Uses the optional assessment extension, beginning with <code>/speckit-assess-intake</code> and ending with <code>/speckit-assess-decide</code>, to evaluate an idea before implementation.</li>
+          </ol>
+          <p><strong>Why it is useful:</strong> Spec Kit provides structured quality gates, including the <code>/speckit-converge</code> step, and repeatable processes that keep agents aligned with team rules, technical choices, and acceptance criteria.</p>
+          <p class="repository-link"><a href="https://github.com/github/spec-kit" target="_blank" rel="noopener noreferrer">https://github.com/github/spec-kit</a></p>
+
+          <h3>2. OpenSpec</h3>
+          <p><strong>What it is:</strong> A lightweight SDD framework developed by Fission-AI for rapid iteration by individual developers and larger teams.</p>
+          <p><strong>How it works:</strong> Install it with Node.js using <code>npm install -g @fission-ai/openspec@latest</code>. It supports more than 30 AI coding assistants, including Cursor, GitHub Copilot, Amazon Q, and Codex. Command syntax can vary by assistant.</p>
+          <p><strong>Key workflows:</strong></p>
+          <ul>
+            <li><strong>Interactive commands:</strong> <code>/opsx:explore</code> helps investigate an idea, <code>/opsx:propose</code> creates structured change artifacts, <code>/opsx:apply</code> carries out the implementation tasks, and <code>/opsx:archive</code> records the completed change.</li>
+            <li><strong>Folder-based artifacts:</strong> Each feature change has its own folder with <code>proposal.md</code>, <code>specs/</code> for requirements and scenarios, <code>design.md</code>, and <code>tasks.md</code>.</li>
+            <li><strong>Stores:</strong> This beta feature allows teams to keep planning specifications in a dedicated repository shared across frontend, backend, and library repositories.</li>
+          </ul>
+          <p><strong>Why it is useful:</strong> OpenSpec is fluid and less rigid. Teams can update artifacts as they learn, making it easy to introduce on existing brownfield projects.</p>
+          <p class="repository-link"><a href="https://github.com/Fission-AI/OpenSpec" target="_blank" rel="noopener noreferrer">https://github.com/Fission-AI/OpenSpec</a></p>
+
+          <h3>Quick comparison: Which one should you use?</h3>
+          <ul>
+            <li><strong>Choose Spec Kit</strong> if you want a highly structured, opinionated workflow with explicit validation through <code>converge</code> and dedicated processes for bug fixing and idea assessment.</li>
+            <li><strong>Choose OpenSpec</strong> if you want a lightweight, flexible framework that supports cross-repository planning through Stores and allows rapid iteration with less ceremony.</li>
+          </ul>
         </section>
         <a href="/writing/" class="text-link">Explore more writing →</a>
       </div>
@@ -203,7 +237,7 @@ import { specDrivenArticle as article } from '../../data/writing';
   .article-figure { margin-block: 30px 34px; }
   .article-figure img { display: block; width: 100%; height: auto; border: 1px solid var(--color-line); border-radius: 8px; background: #0d4d82; }
   .article-figure figcaption { margin-top: 10px; color: var(--color-muted); font-size: 13px; line-height: 1.6; }
-  .process-line { margin-block: 22px 8px; padding: 18px 20px; border-left: 3px solid var(--color-accent); background: #f6f8fb; font-family: var(--font-mono); font-size: 14px; line-height: 1.8; }
+  .repository-link { overflow-wrap: anywhere; }
   .article-contents { margin-block: 32px; padding: 24px; border: 1px solid var(--color-line); border-radius: 8px; background: white; font-size: 15px; }
   .article-contents > p { font-weight: 600; }
   .article-contents ol { margin-bottom: 0; }
@@ -213,7 +247,6 @@ import { specDrivenArticle as article } from '../../data/writing';
     .article-deck { font-size: 18px; }
     .article-body { font-size: 16px; }
     .article-figure { margin-block: 24px 28px; }
-    .process-line { padding: 16px; font-size: 13px; }
     .article-contents { padding: 20px; }
   }
 </style>
