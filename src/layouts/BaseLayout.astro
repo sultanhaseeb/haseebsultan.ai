@@ -1,13 +1,29 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
-interface Props { title?: string; description?: string; canonical?: string; }
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  article?: { published: string; image: string; headline: string };
+}
 const {
   title = `${site.name} — ${site.title}`,
   description = site.description,
   canonical = new URL(Astro.url.pathname, Astro.site).href,
+  article,
 } = Astro.props;
-const structuredData = {
+const articleImage = article ? new URL(article.image, Astro.site).href : undefined;
+const structuredData = article ? {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: article.headline,
+  description,
+  datePublished: article.published,
+  image: articleImage,
+  author: { '@type': 'Person', name: site.name, url: Astro.site?.href },
+  mainEntityOfPage: canonical,
+} : {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: site.name,
@@ -28,12 +44,15 @@ const structuredData = {
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href="/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content="HaseebSultan.ai" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    {article && <meta property="article:published_time" content={article.published} />}
+    {articleImage && <meta property="og:image" content={articleImage} />}
+    {articleImage && <meta name="twitter:image" content={articleImage} />}
+    <meta name="twitter:card" content={article ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />

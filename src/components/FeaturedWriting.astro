@@ -1,10 +1,10 @@
 ---
 import { articles } from '../data/site';
-import { publishedArticles } from '../data/resume';
+import { writingArticles } from '../data/writing';
 import Icon from './Icon.astro';
 interface Props { preview?: boolean; }
 const { preview = false } = Astro.props;
-const displayedArticles = preview ? publishedArticles.slice(0, 2) : publishedArticles;
+const displayedArticles = preview ? writingArticles.slice(0, 2) : writingArticles;
 ---
 <section id="writing" class="section writing" aria-labelledby="writing-title">
   <div class="section-heading">
@@ -15,7 +15,7 @@ const displayedArticles = preview ? publishedArticles.slice(0, 2) : publishedArt
       <article class="article-row">
         <span class="article-number" aria-hidden="true">0{index + 1}</span>
         <div class="article-content">
-          <div class="article-meta flex items-center gap-3"><span>{article.category}</span><span class="meta-separator" aria-hidden="true">/</span><span>Published on Medium</span></div>
+          <div class="article-meta flex items-center gap-3"><span>{article.category}</span><span class="meta-separator" aria-hidden="true">/</span><span>Published on {article.publication}</span></div>
           <h3><a class="article-title-link" href={article.href}>{article.title}</a></h3>
         </div>
       </article>
