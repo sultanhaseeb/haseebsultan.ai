@@ -30,7 +30,23 @@ export const gisecArticle = {
   imagePosition: 'center 36%',
 };
 
+export const controlProblemArticle = {
+  title: 'Will AI Kill Us — Or Are We Really Afraid of Losing Control?',
+  description: 'What a missing watermark can teach us about AI alignment, reliable constraints, and the growing debate over control.',
+  format: 'featured' as const,
+  category: 'AI Safety',
+  href: '/writing/the-control-problem/',
+  publication: 'HaseebSultan.ai',
+  published: '2026-09-21',
+  image: '/images/writing/the-control-problem/control-problem.png',
+  imageAlt: 'The Control Problem, illustrated by an arrow breaking through a boundary on its way to a target.',
+  imageWidth: 1800,
+  imageHeight: 920,
+  imagePosition: 'center',
+};
+
 export const writingArticles = [
+  controlProblemArticle,
   gisecArticle,
   specDrivenArticle,
   ...publishedArticles.map(article => ({ ...article, publication: 'Medium', format: 'external' as const })),
