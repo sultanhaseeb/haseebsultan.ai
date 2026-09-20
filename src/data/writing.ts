@@ -2,8 +2,8 @@ import { publishedArticles } from './resume';
 
 export const specDrivenArticle = {
   title: 'Spec-Driven Development: A Blueprint for AI-Native Engineering',
-  description: 'A visual introduction to spec-driven development, with a simple workflow and a practical task-list example. Read one short page at a time.',
-  format: 'reader' as const,
+  description: 'How specifications, a project constitution, and clear human ownership keep AI-assisted engineering aligned with the system you intend to build.',
+  format: 'featured' as const,
   category: 'AI Engineering',
   href: '/writing/spec-driven-development/',
   publication: 'HaseebSultan.ai',

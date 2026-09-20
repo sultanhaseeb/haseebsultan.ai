@@ -2,7 +2,6 @@
 import { articles } from '../data/site';
 import { writingArticles } from '../data/writing';
 import Icon from './Icon.astro';
-import { readerPages } from '../data/spec-driven-reader';
 interface Props { preview?: boolean; }
 const { preview = false } = Astro.props;
 const displayedArticles = preview ? writingArticles.slice(0, 2) : writingArticles;
@@ -12,16 +11,16 @@ const displayedArticles = preview ? writingArticles.slice(0, 2) : writingArticle
     <h2 id="writing-title">{preview ? 'Featured Writing' : 'Published Articles'}</h2>
   </div>
   <div class="article-list">
-    {displayedArticles.map((article, index) => article.format === 'reader' ? (
+    {displayedArticles.map((article, index) => article.format === 'featured' ? (
       <article class="book-preview">
-        <a href={article.href} class="book-preview-cover" aria-label={`Start reading ${article.title}`}>
+        <a href={article.href} class="book-preview-cover" aria-label={`Read ${article.title}`}>
           <img src={article.image} alt="Spec-Driven Development illustrated as an architectural blueprint." width="2296" height="1196" loading="lazy" decoding="async" />
         </a>
         <div class="book-preview-copy">
-          <p class="article-meta">{article.category} · Visual guide · {readerPages.length} pages</p>
+          <p class="article-meta">{article.category} · Published on {article.publication}</p>
           <h3><a class="article-title-link" href={article.href}>{article.title}</a></h3>
           <p class="book-preview-summary">{article.description}</p>
-          <a href={article.href} class="text-link" aria-label={`Start reading ${article.title}`}>Start reading <Icon name="arrow" size={17} /></a>
+          <a href={article.href} class="text-link" aria-label={`Read ${article.title}`}>Read article <Icon name="arrow" size={17} /></a>
         </div>
       </article>
     ) : (
