@@ -19,79 +19,160 @@ import { specDrivenArticle as article } from '../../data/writing';
         <p class="article-byline">Haseeb Sultan <span aria-hidden="true">·</span> <time datetime={article.published}>September 20, 2026</time></p>
       </header>
       <div class="article-body reading-column">
-        <p>AI coding agents can turn a short request into a working implementation remarkably quickly. The harder question is whether that implementation belongs in the system we actually want to build.</p>
-        <p>A feature can work in isolation while making the wider application harder to maintain. One component may introduce a new database, another may bypass an existing authorization rule, and a third may duplicate a service that already exists. Each change can appear reasonable when judged only against the prompt that produced it.</p>
-        <p>Spec-driven development gives this work a shared reference point: a written account of the intended behavior, constraints, and conditions for success. Code is then planned, implemented, and reviewed against that intent.</p>
-
         <nav class="article-contents" aria-label="In this article">
           <p>In this article</p>
           <ol>
-            <li><a href="#from-prompts-to-specifications">From prompts to specifications</a></li>
-            <li><a href="#project-constitution">The project constitution</a></li>
-            <li><a href="#human-and-agent">The human architect and the AI builder</a></li>
-            <li><a href="#putting-it-into-practice">Putting the approach into practice</a></li>
+            <li><a href="#foundations">Foundations of Spec-Driven Development</a></li>
+            <li><a href="#benefits">Core benefits and strategic value</a></li>
+            <li><a href="#governance">Project governance and the constitution</a></li>
+            <li><a href="#lifecycle">The SDD feature development lifecycle</a></li>
+            <li><a href="#strategies">Project types and application strategies</a></li>
           </ol>
         </nav>
 
-        <section aria-labelledby="from-prompts-to-specifications">
-          <h2 id="from-prompts-to-specifications">1. From prompts to specifications</h2>
-          <p>Prompt-first development is useful for exploration. It helps us test an idea, sketch an interface, or discover what a tool can do. Problems emerge when a growing production system depends on decisions scattered across conversations that nobody maintains.</p>
-          <p>This creates <strong>architectural drift</strong>: individual changes gradually pull the software away from its intended design. The agent may satisfy the latest request while missing a decision made earlier about service boundaries, data ownership, or compatibility.</p>
-          <p>In a spec-driven workflow, the specification becomes the reference for intended behavior. It records what should happen, why it matters, what is outside scope, and how the result will be accepted. The implementation remains evidence of what the system actually does; tests and review connect the two.</p>
-          <p>A specification can guide an agent and supply acceptance criteria for automated checks. That does not make every prose document directly executable, or guarantee that generated code is correct. The useful change is that requirements can be examined and corrected before they spread through the implementation.</p>
+        <section aria-labelledby="foundations">
+          <h2 id="foundations">Module 1: Foundations of Spec-Driven Development</h2>
 
-          <h3>Small decisions can have a large reach</h3>
-          <p>Consider a proposed move from SQLite to MongoDB. Updating the specification makes the intended change visible to the whole team, and an agent can help identify its consequences across persistence code, API handlers, tests, and deployment configuration.</p>
-          <p>The database names alone are not a migration plan. The specification still needs to address the data model, query behavior, consistency expectations, migration steps, and rollback. An agent can assist with the work once those decisions are clear, but the change must be validated against real requirements.</p>
-          <p>The value is coordination: one reviewed decision can guide many related edits. Recording its rationale also preserves the “why” for the next person or agent working on the system.</p>
-        </section>
-
-        <section aria-labelledby="project-constitution">
-          <h2 id="project-constitution">2. The project constitution</h2>
-          <p>A feature specification explains a particular change. A project constitution records the principles that should guide changes throughout the project. It gives the team a durable reference when a chat ends, an agent changes, or a new contributor joins.</p>
-          <p>A useful starting point is to organize that foundation around three concerns:</p>
+          <h3>What is Spec-Driven Development?</h3>
+          <p>In simple terms, <strong>Spec-Driven Development (SDD)</strong> means creating a clear plan or blueprint, called a specification, before asking an AI coding tool to write code.</p>
+          <p>Instead of typing a quick request and hoping the AI guesses correctly, you write down:</p>
           <ul>
-            <li><strong>Mission:</strong> who the system serves, the problem it solves, and the boundaries of its scope.</li>
-            <li><strong>Technical constraints:</strong> the architectural decisions the team has agreed to follow, such as TypeScript, approved data stores, service boundaries, and testing expectations.</li>
-            <li><strong>Roadmap:</strong> the sequence of outcomes the team intends to deliver. Keep this linked to the constitution, with milestones that can evolve without constantly rewriting enduring principles.</li>
+            <li><strong>What</strong> you want to build.</li>
+            <li><strong>Why</strong> you are building it.</li>
+            <li><strong>The rules and constraints</strong> the AI must follow, including security requirements and technology choices.</li>
           </ul>
-          <p>These are an organizing approach, not a universal file format. In GitHub Spec Kit, the constitution establishes project principles, while feature specifications and implementation plans describe individual changes. Its workflow separates requirements, planning, tasks, and implementation. <a href="https://github.github.com/spec-kit/reference/agentic-sdd.html">See the Spec Kit workflow reference.</a></p>
-          <p>Keep the constitution specific enough to influence a decision. “Build high-quality software” offers little direction. “Preserve existing public API contracts, test authorization boundaries, and include a rollback plan for database migrations” gives reviewers something concrete to check.</p>
+          <p>The AI reads this blueprint and uses it to guide the implementation, testing, and delivery of the software.</p>
 
-          <h3>Starting fresh or working with an existing system</h3>
-          <p>For a <strong>greenfield project</strong>, define the mission, constraints, and initial milestones before asking an agent to build substantial functionality. Start with the decisions needed for the first useful slice and refine them as the project develops.</p>
-          <p>For a <strong>brownfield project</strong>, begin with the repository. Inspect dependencies, folder structure, interfaces, tests, and existing architecture decisions. Distinguish established behavior from proposed improvements before writing new rules. GitHub’s guidance for existing projects recommends capturing real constraints and starting with a bounded change rather than retrospectively specifying the entire system. <a href="https://github.github.io/spec-kit/guides/existing-projects.html">See the existing-project adoption guide.</a></p>
+          <h3>Vibe coding versus SDD</h3>
+          <p><strong>Vibe coding</strong> works through trial and error. You give the AI a short prompt, such as “Make a login button,” inspect what it generates, and continue correcting it through a long conversation. This can be useful for a small experiment. As the system grows, however, earlier rules become easier to lose among new prompts, logs, and corrections.</p>
 
-          <h3>How the constitution relates to AGENTS.md</h3>
-          <p><code>AGENTS.md</code> provides repository instructions for coding agents. It commonly covers setup commands, tests, coding conventions, and project-specific context. It is an open format that can be shared across compatible agents, rather than a file tied to one vendor. <a href="https://agents.md/">See the AGENTS.md format.</a></p>
-          <p>A constitution expresses the wider agreement about the product and its engineering principles. <code>AGENTS.md</code> explains how an agent should work within that agreement. The two can overlap: an instruction file may include architecture rules or link to the constitution. Keep their responsibilities clear and avoid contradictory copies of the same rule.</p>
+          <figure class="article-figure">
+            <img src="/images/writing/spec-driven-development/vibe-coding-limits.png" alt="Diagram showing a tangled prompt, inspect, correct, and repeat loop that loses project decisions as a system grows." width="1520" height="883" loading="lazy" decoding="async" />
+            <figcaption>Iterative prompting works for isolated details, but conversations become a fragile place to store system-wide decisions.</figcaption>
+          </figure>
+
+          <p><strong>Spec-Driven Development</strong> moves project rules into durable documentation. The agent can re-read the specification before each task, keeping implementation decisions anchored to the same intent even when conversations and tools change.</p>
+
+          <h3>Separate specification from implementation</h3>
+          <p>This means keeping <strong>what and why</strong> separate from <strong>how</strong>. A specification might say, “Users need to save articles to read later.” The implementation decides whether those articles live in SQL, MongoDB, or browser storage.</p>
+          <p>This separation makes change easier to reason about. If the storage technology changes, the product requirement remains stable while the technical plan identifies the affected code, schemas, handlers, tests, and deployment steps. The specification guides the change; review and validation confirm that the implementation still satisfies the intended behavior.</p>
+
+          <h3>The architect and builder model</h3>
+          <p>Think of building a house. The human acts as the architect: defining the blueprint, choosing the rooms, setting safety rules, and approving the result. The AI coding agent acts as the builder: creating plans, writing code, refactoring, and running tests within those boundaries.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/spec-driven-development/human-architect-ai-builder.png" alt="Blueprint diagram showing the human architect defining intent and constraints while an AI coding agent implements, refactors, and tests from the specification." width="1520" height="805" loading="lazy" decoding="async" />
+            <figcaption>The developer owns intent and judgment; the agent executes against a persistent, reviewable specification.</figcaption>
+          </figure>
+
+          <p>You do not need to tell a professional builder how to hold a hammer. You provide a clear blueprint and inspect the work. In the same way, the AI supplies execution capacity while the specification carries the project’s intent.</p>
         </section>
 
-        <section aria-labelledby="human-and-agent">
-          <h2 id="human-and-agent">3. The human architect and the AI builder</h2>
-          <p>AI-assisted engineering shifts more attention toward intent, boundaries, and judgment. Someone must still decide which problem is worth solving, which trade-offs are acceptable, and what evidence is needed before a change is released.</p>
-          <p>The architect-and-builder analogy is useful here, even when one developer fills several roles. A blueprint gives the builder dimensions, materials, and constraints. In software, that means requirements, interfaces, architectural decisions, and acceptance criteria.</p>
+        <section aria-labelledby="benefits">
+          <h2 id="benefits">Module 2: Core Benefits and Strategic Value</h2>
+
+          <h3>High-leverage code control</h3>
+          <p>A small change to a specification can coordinate a large implementation update. Imagine changing the approved database from SQLite to MongoDB. The revised specification gives the coding agent one reviewed source of intent from which to identify changes across schemas, persistence code, API handlers, tests, and deployment configuration.</p>
+          <p>The agent still needs a migration plan, acceptance criteria, and human review. The leverage comes from directing related changes through one clear decision instead of manually rediscovering every dependency.</p>
+
+          <h3>Eliminating context decay and drift</h3>
+          <p>AI conversations have limited context. During a long session, early architecture rules can be displaced by error messages, generated code, design debates, and new requests. This is <strong>context decay</strong>. Once the agent starts making choices that conflict with the original design, it becomes <strong>context drift</strong>.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/spec-driven-development/context-decay.png" alt="A funnel-shaped context window filled with prompts, errors, stack traces, and debates while foundational rules fall out through the bottom." width="1520" height="974" loading="lazy" decoding="async" />
+            <figcaption>Durable repository files keep architectural rules available when temporary conversation context becomes crowded.</figcaption>
+          </figure>
+
+          <p>SDD keeps essential project knowledge in version-controlled files rather than relying on a temporary chat window. Each task can begin by re-anchoring the agent to those files.</p>
+
+          <h3>Maximizing intent fidelity</h3>
+          <p><strong>Intent fidelity</strong> describes how closely the finished software matches the original goal. A vague prompt forces the AI to guess about architecture, user flows, interfaces, and failure handling. A specification makes those expectations explicit through requirements, acceptance criteria, and edge cases.</p>
+
+          <h3>Mitigating technical debt</h3>
+          <p>Technical debt grows when weak architectural choices, missing tests, and ignored edge cases accumulate. Because AI can produce code quickly, unclear direction can multiply these problems just as quickly. SDD introduces architectural guardrails, reviewable decisions, and validation checks before changes are accepted.</p>
+        </section>
+
+        <section aria-labelledby="governance">
+          <h2 id="governance">Module 3: Project Governance and the Constitution</h2>
+
+          <h3>The project constitution</h3>
+          <p>The <strong>Project Constitution</strong> is the master blueprint for the software. It is a central, version-controlled document that records the project’s durable rules before features are implemented.</p>
+          <p>Because it lives in the repository as a standard document, the constitution can remain useful across tools. Whether the team uses GitHub Copilot, Claude Code, or another AI coding agent, each agent can work from the same project foundation.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/spec-driven-development/project-constitution.png" alt="Architectural diagram showing a project supported by three constitution pillars: mission, technology stack, and roadmap." width="1520" height="818" loading="lazy" decoding="async" />
+            <figcaption>The constitution creates a stable center for product purpose, technical choices, and delivery direction.</figcaption>
+          </figure>
+
+          <h3>The three core pillars</h3>
           <ul>
-            <li><strong>The human owns the decisions:</strong> product intent, business context, architecture, risk tolerance, and acceptance of the result. The team remains responsible for reviewing and operating what it ships.</li>
-            <li><strong>The agent helps execute:</strong> repository analysis, implementation planning, code generation, refactoring, testing, and documentation within the agreed scope.</li>
+            <li><strong>Mission — why does this project exist?</strong> Define the product’s goal, target users, problem, scope, and non-negotiable principles. The mission becomes a decision filter when a proposed feature adds complexity without helping the intended user.</li>
+            <li><strong>Tech stack — what tools will we use?</strong> Record the approved languages, frameworks, databases, test tools, and deployment rules. This prevents an agent from choosing a different library or architecture for every task.</li>
+            <li><strong>Roadmap — what are we building over time?</strong> Organize delivery into phases and milestones. The roadmap is a living document that keeps feature work focused while the project evolves.</li>
           </ul>
-          <p>An agent can propose a trade-off and explain its reasoning. That proposal still needs to be evaluated against the context and constraints of the project. Producing an implementation quickly does not establish that the underlying decision was appropriate.</p>
-          <p>This is the distinction between <strong>implementation autonomy</strong> and <strong>decision autonomy</strong>. Give agents enough room to carry out well-defined work, and make clear which decisions require human judgment. More detailed instructions are useful when they describe outcomes and constraints; prescribing every line of code can obscure the problem we are trying to solve.</p>
+
+          <h3>Constitution versus AGENTS.md</h3>
+          <p>Think of the constitution as the master blueprint for humans and AI. It explains the product purpose, technical direction, and roadmap at a high level.</p>
+          <p><code>AGENTS.md</code> is the worker’s field guide for AI agents operating inside the repository. It contains practical instructions such as which commands to run, where assets belong, and which formatting or testing conventions to follow. The constitution tells the team what governs the project; <code>AGENTS.md</code> tells the agent how to work within it.</p>
         </section>
 
-        <section aria-labelledby="putting-it-into-practice">
-          <h2 id="putting-it-into-practice">4. Putting the approach into practice</h2>
-          <p>A practical spec-first loop can stay small:</p>
-          <ol>
-            <li><strong>State the outcome.</strong> Describe the user’s problem, expected behavior, and scope boundaries.</li>
-            <li><strong>Make uncertainty visible.</strong> Resolve the assumptions that could change the design.</li>
-            <li><strong>Plan against the system.</strong> Identify affected interfaces, data, dependencies, and constraints.</li>
-            <li><strong>Build a reviewable increment.</strong> Give the agent a bounded task with clear acceptance criteria.</li>
-            <li><strong>Check the result.</strong> Use tests, code review, and appropriate operational checks to compare the implementation with the specification.</li>
-            <li><strong>Reconcile what changed.</strong> Update the relevant specification and decision records when implementation reveals something new.</li>
-          </ol>
-          <p>The amount of documentation should match the decision. A small change may need a few explicit requirements. A migration or a new subsystem needs deeper treatment of interfaces, failure modes, and rollout.</p>
-          <p>Spec-driven development is most useful when it keeps intent visible throughout delivery. The specification guides the work, the implementation exposes gaps, and review brings them back into agreement. AI can accelerate that loop; people still determine what successful engineering means.</p>
+        <section aria-labelledby="lifecycle">
+          <h2 id="lifecycle">Module 4: The SDD Feature Development Lifecycle</h2>
+          <p>Once the project rules are established, each feature moves through a continuous six-step loop:</p>
+          <p class="process-line" aria-label="Specify, then Plan, then Tasks, then Implement, then Validate and Converge, then Replan">Specify <span aria-hidden="true">→</span> Plan <span aria-hidden="true">→</span> Tasks <span aria-hidden="true">→</span> Implement <span aria-hidden="true">→</span> Validate &amp; Converge <span aria-hidden="true">→</span> Replan</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/spec-driven-development/sdd-iterative-engine.png" alt="Circular Spec-Driven Development lifecycle showing specify, plan, implement, validate, and replan around the project constitution." width="1520" height="820" loading="lazy" decoding="async" />
+            <figcaption>Specifications evolve with validated learning; they are active engineering tools rather than documents written once and forgotten.</figcaption>
+          </figure>
+
+          <h3>1. Specify — what and why</h3>
+          <p>Describe what the user experiences and what success looks like without deciding every implementation detail. Define user flows, exact acceptance criteria, and edge cases such as a failed login or a lost network connection.</p>
+
+          <h3>2. Plan — the technical blueprint</h3>
+          <p>Choose the technical approach before writing code. The plan records the database schema, frameworks, API structures, security rules, dependencies, and other boundaries the implementation must respect.</p>
+
+          <h3>3. Tasks — bite-sized action items</h3>
+          <p>Break the plan into small, testable pieces. Instead of asking the agent to “build the whole user system,” define focused tasks such as “Create the email validation endpoint” and “Add the password hash check.”</p>
+
+          <h3>4. Implement — the AI writes the code</h3>
+          <p>The coding agent completes one task at a time. Because each task traces back to a specification and plan, the generated code stays grounded in agreed requirements.</p>
+
+          <h3>5. Validate and converge — the quality check</h3>
+          <p>Compiling is not enough. Run automated tests, type checks, linting, reviews, and relevant operational checks until the implementation meets its acceptance criteria and reaches a verified state.</p>
+
+          <h3>6. Replan — learn and improve</h3>
+          <p>Development is iterative. Update the roadmap, refine future specifications, and improve templates when implementation reveals new information. This closes the loop and gives the next feature a stronger starting point.</p>
+        </section>
+
+        <section aria-labelledby="strategies">
+          <h2 id="strategies">Module 5: Project Types and Application Strategies</h2>
+
+          <h3>Match the specification to the project</h3>
+          <p>Not every project needs the same level of rigor. A prototype may use a specification mainly to establish initial clarity. A production system benefits from specifications that evolve with the code and connect to automated tests. A highly mature platform may treat the specification as the source that triggers implementation changes.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/spec-driven-development/specification-spectrum.png" alt="Three levels of specification maturity: spec-first for prototypes, spec-anchored for production teams, and spec-as-source for highly automated systems." width="1520" height="825" loading="lazy" decoding="async" />
+            <figcaption>Use enough specification discipline to control the project’s risk and complexity without creating unnecessary process.</figcaption>
+          </figure>
+
+          <p>SDD can then be applied according to the starting condition of the software: greenfield, brownfield, or legacy modernization.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/spec-driven-development/greenfield-brownfield.png" alt="Split blueprint comparing a greenfield project built from a new constitution with a brownfield system analyzed to recover its current constraints." width="1520" height="822" loading="lazy" decoding="async" />
+            <figcaption>New systems begin with an explicit foundation; existing systems begin by discovering the architecture already in place.</figcaption>
+          </figure>
+
+          <h3>Greenfield projects — building from scratch</h3>
+          <p>A greenfield project is like building a new house on an empty plot. There is no existing code to constrain the design. The human and AI create the Project Constitution together, defining the mission, technical choices, and roadmap before beginning the first feature loop.</p>
+
+          <h3>Brownfield projects — adding to an existing house</h3>
+          <p>A brownfield project already has an established codebase. The agent first inspects the folder structure, dependencies, interfaces, tests, and recurring patterns. The new specification must reflect the system’s real constraints so each feature feels native to the product rather than awkwardly attached.</p>
+
+          <h3>Legacy modernization — replacing old plumbing and wiring</h3>
+          <p>A legacy system may contain valuable business logic inside code that is difficult to maintain. Instead of reproducing every old implementation detail, the team extracts the essential behavior into clear specifications. Those specifications guide a modern implementation while tests and staged migration protect the behavior users still depend on.</p>
+
+          <p>Across all three project types, the central idea remains the same: preserve intent in a durable form, give the agent clear boundaries, and validate the result against the specification. That turns AI-assisted development from a sequence of isolated prompts into an engineering process the team can inspect, repeat, and improve.</p>
         </section>
         <a href="/writing/" class="text-link">Explore more writing →</a>
       </div>
@@ -119,6 +200,10 @@ import { specDrivenArticle as article } from '../../data/writing';
   .article-body li + li { margin-top: 12px; }
   .article-body a:not(.text-link) { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
   .article-body code { font-size: .9em; padding: 2px 5px; background: #edf1f7; border-radius: 3px; }
+  .article-figure { margin-block: 30px 34px; }
+  .article-figure img { display: block; width: 100%; height: auto; border: 1px solid var(--color-line); border-radius: 8px; background: #0d4d82; }
+  .article-figure figcaption { margin-top: 10px; color: var(--color-muted); font-size: 13px; line-height: 1.6; }
+  .process-line { margin-block: 22px 8px; padding: 18px 20px; border-left: 3px solid var(--color-accent); background: #f6f8fb; font-family: var(--font-mono); font-size: 14px; line-height: 1.8; }
   .article-contents { margin-block: 32px; padding: 24px; border: 1px solid var(--color-line); border-radius: 8px; background: white; font-size: 15px; }
   .article-contents > p { font-weight: 600; }
   .article-contents ol { margin-bottom: 0; }
@@ -127,6 +212,8 @@ import { specDrivenArticle as article } from '../../data/writing';
     .article-heading { padding-top: 24px; }
     .article-deck { font-size: 18px; }
     .article-body { font-size: 16px; }
+    .article-figure { margin-block: 24px 28px; }
+    .process-line { padding: 16px; font-size: 13px; }
     .article-contents { padding: 20px; }
   }
 </style>
