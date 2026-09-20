@@ -1,0 +1,36 @@
+---
+import ReaderLayout from '../../../layouts/ReaderLayout.astro';
+---
+<ReaderLayout page={2}>
+  <figure slot="visual" class="reader-diagram" aria-labelledby="workflow-caption">
+    <p id="workflow-caption">Give the agent a clear path</p>
+    <ol class="reader-flow" aria-label="Spec-driven development workflow">
+      <li><span class="flow-number">01</span><strong>Idea</strong><span class="flow-detail">Name the need</span></li>
+      <li class="flow-spec"><span class="flow-number">02</span><strong>Specification</strong><span class="flow-detail">Define the behavior</span></li>
+      <li><span class="flow-number">03</span><strong>Build</strong><span class="flow-detail">Implement the plan</span></li>
+      <li><span class="flow-number">04</span><strong>Verify</strong><span class="flow-detail">Check the result</span></li>
+    </ol>
+  </figure>
+  <h1 id="reader-page-title">Make the request testable.</h1>
+  <p class="reader-copy">A vague prompt leaves important choices unstated. A small specification describes observable behavior so the agent and the reviewer know what “done” means.</p>
+  <section class="reader-example" aria-labelledby="example-title">
+    <h2 id="example-title">Example: a personal task list</h2>
+    <div class="reader-example-grid">
+      <div class="reader-example-card">
+        <h3>The prompt</h3>
+        <blockquote>“Build me a task list.”</blockquote>
+        <p>What can I do with a task? Should it still be there after a refresh?</p>
+      </div>
+      <div class="reader-example-card reader-example-spec">
+        <h3>A small specification</h3>
+        <ul>
+          <li>Add a task with a non-empty title.</li>
+          <li>Mark it complete or delete it.</li>
+          <li>Keep tasks in this browser after a refresh.</li>
+          <li>Leave accounts and sharing out of scope.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <p class="reader-takeaway"><strong>One acceptance check:</strong> add “Read chapter one,” refresh the page, and confirm the task is still there. A specification guides the work; testing checks whether it was followed.</p>
+</ReaderLayout>
