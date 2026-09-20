@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { gisecArticle as article } from '../../data/writing';
+---
+<BaseLayout title={`${article.title} | Haseeb Sultan`} description={article.description} article={{ published: article.published, image: article.image, headline: article.title }}>
+  <Header />
+  <main id="main" class="shell article-page">
+    <article aria-labelledby="article-title">
+      <figure class="article-cover">
+        <img src={article.image} alt={article.imageAlt} width={article.imageWidth} height={article.imageHeight} fetchpriority="high" decoding="async" />
+      </figure>
+
+      <header class="article-heading reading-column">
+        <a href="/writing/" class="article-back">← All writing</a>
+        <p class="eyebrow">{article.category}</p>
+        <h1 id="article-title">{article.title}</h1>
+        <p class="article-deck">{article.description}</p>
+        <p class="article-byline">Haseeb Sultan <span aria-hidden="true">·</span> <time datetime={article.published}>September 21, 2026</time></p>
+      </header>
+
+      <div class="article-body reading-column">
+        <p>From 16 to 18 September 2026, I attended GISEC Global at the Dubai Exhibition Centre in Expo City Dubai. Spending all three days at the event gave me an opportunity to meet cybersecurity professionals, explore new products, and understand how different companies are approaching security in the age of artificial intelligence.</p>
+
+        <nav class="article-contents" aria-label="In this article">
+          <p>In this article</p>
+          <ol>
+            <li><a href="#about-gisec">A brief introduction to GISEC</a></li>
+            <li><a href="#main-observation">My main observation</a></li>
+            <li><a href="#four-approaches">Four approaches to AI data protection</a></li>
+            <li><a href="#different-organisations">Different solutions for different organisations</a></li>
+            <li><a href="#overall-experience">My overall experience</a></li>
+          </ol>
+        </nav>
+
+        <section aria-labelledby="about-gisec">
+          <h2 id="about-gisec">A Brief Introduction to GISEC</h2>
+          <p>GISEC, originally known as the Gulf Information Security Expo and Conference, held its inaugural edition in Dubai in 2013. Since then, it has grown into one of the region’s most important cybersecurity gatherings.</p>
+          <p>The 2026 event was its 15th edition. It brought together more than 750 cybersecurity brands, over 350 cybersecurity leaders on stage, and professionals from more than 180 countries. Participants included government representatives, security leaders, ethical hackers, regulators, startups, and technology providers.</p>
+          <p>The event focused on AI security, data protection, cloud vulnerabilities, critical infrastructure, and the future of cyber resilience.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/gisec-global-2026/cyber-challenge-stage.jpeg" alt="GISEC and Dubai Cyber Challenge stage signage inside Dubai Exhibition Centre." width="1280" height="960" loading="lazy" decoding="async" />
+            <figcaption>The event brought together cybersecurity exhibitions, talks, demonstrations, and live challenges across three days.</figcaption>
+          </figure>
+        </section>
+
+        <section aria-labelledby="main-observation">
+          <h2 id="main-observation">My Main Observation</h2>
+          <p>After spending three days exploring the exhibition, one idea stayed with me: cybersecurity has a limited number of core problems, but there can be many different solutions to each problem.</p>
+          <p>Traditional cybersecurity focuses on areas such as firewalls, Security Operations Centre solutions, VPNs, identity protection, and data security. Many vendors operate in these same areas, but each one approaches the problem differently.</p>
+          <p>The same pattern is now appearing in AI security.</p>
+          <p>As organisations rapidly adopt tools such as ChatGPT, Claude, and Codex, one of their biggest concerns is protecting sensitive information. Companies, particularly banks, fintech businesses, government entities, and other regulated organisations, do not want employees to accidentally send personal, confidential, or proprietary data to a public AI model.</p>
+          <p>Some organisations also need to ensure that their data does not leave the country because of regulatory, privacy, or data residency requirements.</p>
+
+          <figure class="article-figure article-figure-portrait">
+            <img src="/images/writing/gisec-global-2026/exhibition-floor.jpeg" alt="Haseeb Sultan with the SANS and GIAC mascot on the GISEC Global exhibition floor." width="960" height="1280" loading="lazy" decoding="async" />
+            <figcaption>Exploring the exhibition floor offered a direct look at how established vendors and startups are positioning new security products.</figcaption>
+          </figure>
+
+          <p>At GISEC, I found four different approaches to solving this single problem.</p>
+        </section>
+
+        <section aria-labelledby="four-approaches">
+          <h2 id="four-approaches">Four Approaches to AI Data Protection</h2>
+
+          <h3>1. Adding AI data protection to the existing firewall</h3>
+          <p>The first approach was the simplest and most familiar.</p>
+          <p>Many organisations already route their incoming and outgoing network traffic through a corporate firewall. Firewall providers are therefore adding AI security and data loss prevention features to their existing products.</p>
+          <p>Before an employee sends a prompt or uploads a document to a public AI service, the firewall inspects the request. If it identifies personally identifiable information, confidential company data, or another restricted type of content, it can block the request.</p>
+          <p>This approach makes sense for banks, fintech companies, and other regulated organisations that already have strong network security infrastructure. Instead of introducing a completely new platform, they can extend the controls they already use.</p>
+
+          <h3>2. Protecting data through a browser extension or desktop application</h3>
+          <p>The second approach involves installing a browser extension or desktop application on employees’ devices.</p>
+          <p>When an employee uses an AI tool, the extension examines the prompt or uploaded content before it is submitted. If it detects sensitive or personal information, it can warn the user, remove the information, or block the request completely.</p>
+          <p>Several startups are building products around this approach. It can be useful for organisations that want protection directly on the employee’s device without making major changes to their network infrastructure.</p>
+          <p>Its success, however, depends on properly installing and managing the software across all relevant devices and browsers.</p>
+
+          <h3>3. Providing a controlled enterprise AI platform</h3>
+          <p>The third solution is to provide employees with a separate, company-approved AI platform.</p>
+          <p>Instead of allowing staff to access ChatGPT, Claude, or other AI services directly, the organisation asks them to use one controlled interface. Behind that interface, the company can connect approved public AI models, privately hosted models, or on-premises models.</p>
+          <p>The platform can inspect prompts, block sensitive content, maintain activity logs, apply access policies, and give administrators a central dashboard.</p>
+          <p>This provides the organisation with more control, but it also requires employees to change how they work. Rather than using their preferred AI tools directly, they must use the company’s approved platform.</p>
+
+          <h3>4. Using another AI model to sanitise the prompt</h3>
+          <p>The fourth approach was particularly interesting to me.</p>
+          <p>In this model, the security provider uses its own AI model as an intermediary. When a user enters a prompt, it does not immediately go to the final public AI model. It first passes through the provider’s security model.</p>
+          <p>That intermediary model analyses the prompt, identifies confidential information, and sanitises or removes anything that should not be shared. Only the cleaned prompt is then sent to the final AI model. The response can also pass through the same security layer before being returned to the user.</p>
+          <p>Compared with simple pattern matching, this approach may understand the context of sensitive information more effectively. However, it can also be more expensive and complex because the provider must operate its own model while paying for access to external AI models through APIs.</p>
+        </section>
+
+        <section aria-labelledby="different-organisations">
+          <h2 id="different-organisations">Different Solutions for Different Organisations</h2>
+          <p>My biggest lesson was that none of these four approaches is automatically right or wrong. Each one is suitable for a different type of organisation.</p>
+          <p>An organisation that already has mature firewall infrastructure may prefer to add AI controls to its existing security stack. Another company may find a browser extension easier and more affordable. A highly regulated business may need a controlled enterprise platform, while an organisation with more complex data may benefit from an AI-powered sanitisation layer.</p>
+          <p>Cost is also an important consideration. Solutions that build on existing firewalls or endpoint controls may be less expensive because they use infrastructure the company already has. Platforms that host models, connect to multiple AI providers, or use an additional model to sanitise prompts will normally have higher operational and API costs.</p>
+          <p>The most advanced solution is not necessarily the best solution. The right choice depends on the organisation’s industry, regulations, existing technology, risk level, budget, and the experience it wants to provide to employees.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/gisec-global-2026/cyber-challenge-hall.jpeg" alt="Participants seated with laptops in the Global Quantum X challenge hall at GISEC Global 2026." width="1280" height="960" loading="lazy" decoding="async" />
+            <figcaption>Live challenges and working sessions reinforced that security decisions depend on context, constraints, and the people operating the technology.</figcaption>
+          </figure>
+        </section>
+
+        <section aria-labelledby="overall-experience">
+          <h2 id="overall-experience">My Overall Experience</h2>
+          <p>GISEC Global 2026 was a valuable learning experience. It brought cybersecurity experts, vendors, startups, government representatives, and business leaders together in one place to discuss where the industry is heading.</p>
+          <p>For me, the most useful part was not simply discovering new products. It was seeing how different companies can examine the same problem and develop completely different ways of solving it.</p>
+          <p>AI security is still developing, and data protection is only one part of the challenge. However, the four approaches I saw at GISEC demonstrated something important: successful cybersecurity is not about finding one universal answer. It is about understanding the organisation, its risks, and its requirements, then selecting the solution that fits best.</p>
+          <p>That was my most important takeaway from three days at GISEC Global 2026.</p>
+        </section>
+
+        <a href="/writing/" class="text-link">Explore more writing →</a>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .article-page { padding-block: 40px 76px; }
+  .article-cover { aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--color-line); border-radius: 8px; background: #e9edf2; }
+  .article-cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 36%; }
+  .reading-column { max-width: 760px; margin-inline: auto; }
+  .article-heading { padding-top: 36px; }
+  .article-back { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-accent); font-size: 14px; margin-bottom: 22px; }
+  .article-heading h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.15; margin-top: 16px; letter-spacing: -.035em; }
+  .article-deck { font-size: 20px; line-height: 1.7; color: var(--color-muted); margin-top: 24px; }
+  .article-byline { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--color-muted); padding-block: 22px 28px; border-bottom: 1px solid var(--color-line); }
+  .article-body { font-size: 17px; line-height: 1.9; padding-top: 32px; overflow-wrap: break-word; }
+  .article-body p + p { margin-top: 20px; }
+  .article-body h2 { font-size: clamp(26px, 4vw, 32px); line-height: 1.35; margin-block: 48px 20px; letter-spacing: -.025em; }
+  .article-body h3 { font-size: 22px; line-height: 1.45; margin-block: 34px 14px; }
+  .article-body ol { padding-inline-start: 24px; margin-block: 20px; list-style: decimal; }
+  .article-body li + li { margin-top: 12px; }
+  .article-body a:not(.text-link) { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+  .article-contents { margin-block: 32px; padding: 24px; border: 1px solid var(--color-line); border-radius: 8px; background: white; font-size: 15px; }
+  .article-contents > p { font-weight: 600; }
+  .article-contents ol { margin-bottom: 0; }
+  .article-figure { margin-block: 30px 34px; }
+  .article-figure img { display: block; width: 100%; height: auto; border: 1px solid var(--color-line); border-radius: 8px; background: #e9edf2; }
+  .article-figure figcaption { margin-top: 10px; color: var(--color-muted); font-size: 13px; line-height: 1.6; }
+  .article-figure-portrait { max-width: 520px; margin-inline: auto; }
+  @media (max-width: 767px) {
+    .article-page { padding-block: 24px 48px; }
+    .article-cover { aspect-ratio: 4 / 3; }
+    .article-heading { padding-top: 24px; }
+    .article-deck { font-size: 18px; }
+    .article-body { font-size: 16px; }
+    .article-contents { padding: 20px; }
+    .article-figure { margin-block: 24px 28px; }
+  }
+</style>
