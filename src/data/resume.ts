@@ -117,20 +117,20 @@ export const publishedArticles = [
 ];
 
 export const certifications = [
-  'Certified Kubernetes Administrator (CKA)',
-  'Microsoft Certified: DevOps Engineer Expert',
-  'GitHub Certified Partner: GitHub Actions',
-  'GitHub Certified Partner: GitHub Advanced Security',
-  'GitHub Certified Partner: GitHub Administration',
-  'Designing and Implementing Microsoft DevOps Solutions (AZ-400)',
-  'Microsoft Certified: Azure Administrator Associate (AZ-104)',
+  { title: 'Certified Kubernetes Administrator (CKA)', issuer: 'CNCF and The Linux Foundation', logo: '/images/education/kubernetes.svg', logoWidth: 723, logoHeight: 702 },
+  { title: 'Microsoft Certified: DevOps Engineer Expert', issuer: 'Microsoft', logo: '/images/education/microsoft.svg', logoWidth: 23, logoHeight: 23 },
+  { title: 'GitHub Certified Partner: GitHub Actions', issuer: 'GitHub', logo: '/images/education/github.svg', logoWidth: 1024, logoHeight: 1024 },
+  { title: 'GitHub Certified Partner: GitHub Advanced Security', issuer: 'GitHub', logo: '/images/education/github.svg', logoWidth: 1024, logoHeight: 1024 },
+  { title: 'GitHub Certified Partner: GitHub Administration', issuer: 'GitHub', logo: '/images/education/github.svg', logoWidth: 1024, logoHeight: 1024 },
+  { title: 'Designing and Implementing Microsoft DevOps Solutions (AZ-400)', issuer: 'Microsoft', logo: '/images/education/microsoft.svg', logoWidth: 23, logoHeight: 23 },
+  { title: 'Microsoft Certified: Azure Administrator Associate (AZ-104)', issuer: 'Microsoft', logo: '/images/education/microsoft.svg', logoWidth: 23, logoHeight: 23 },
 ];
 
 export const education = [
-  { qualification: 'Artificial Intelligence: Generative AI, Cloud and MLOps', institution: 'University of Oxford', detail: 'Professional development programme', mark: 'OXF' },
-  { qualification: 'B.S. in Computer Science', institution: 'FAST — National University of Computer and Emerging Sciences', detail: 'Bachelor’s degree', mark: 'FAST' },
-  { qualification: 'Intermediate (Pre-Engineering)', institution: 'Punjab Group of Colleges', detail: 'Higher secondary education', mark: 'PGC' },
-  { qualification: 'Matriculation (Science)', institution: 'Sadiq Public School, Bahawalpur', detail: 'Secondary education', mark: 'SPS' },
+  { qualification: 'Artificial Intelligence: Generative AI, Cloud and MLOps', institution: 'University of Oxford', detail: 'Professional development programme', logo: '/images/education/university-of-oxford.svg', logoWidth: 500, logoHeight: 602 },
+  { qualification: 'B.S. in Computer Science', institution: 'FAST — National University of Computer and Emerging Sciences', detail: 'Bachelor’s degree', logo: '/images/education/fast-nuces.png', logoWidth: 315, logoHeight: 315 },
+  { qualification: 'Intermediate (Pre-Engineering)', institution: 'Punjab Group of Colleges', detail: 'Higher secondary education', logo: '/images/education/punjab-group-of-colleges.png', logoWidth: 774, logoHeight: 396 },
+  { qualification: 'Matriculation (Science)', institution: 'Sadiq Public School, Bahawalpur', detail: 'Secondary education', logo: '/images/education/sadiq-public-school.jpg', logoWidth: 111, logoHeight: 110 },
 ];
 
 export const additionalSkills = [
