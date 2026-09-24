@@ -1,0 +1,212 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { enterpriseAiSummitArticle as article } from '../../data/writing';
+---
+<BaseLayout title={`${article.title} | Haseeb Sultan`} description={article.description} article={{ published: article.published, image: article.image, headline: article.title }}>
+  <Header />
+  <main id="main" class="shell article-page">
+    <article aria-labelledby="article-title">
+      <figure class="article-cover">
+        <img src={article.image} alt={article.imageAlt} width={article.imageWidth} height={article.imageHeight} fetchpriority="high" decoding="async" />
+      </figure>
+
+      <header class="article-heading reading-column">
+        <a href="/writing/" class="article-back">← All writing</a>
+        <p class="eyebrow">{article.category}</p>
+        <h1 id="article-title">{article.title}</h1>
+        <p class="article-deck">{article.description}</p>
+        <p class="article-byline">Haseeb Sultan <span aria-hidden="true">·</span> <time datetime={article.published}>September 24, 2026</time></p>
+      </header>
+
+      <div class="article-body reading-column">
+        <p>At the 14th Middle East Enterprise AI and Analytics Summit in Dubai, the conversation felt different. It was no longer just about chatbots, copilots or automating a few repetitive tasks. Leaders were talking about agents that can use business systems, coordinate work and make decisions.</p>
+        <p>I left with a simple thought. Building more capable agents may not be the hardest part. Deciding how much we trust them will be.</p>
+
+        <nav class="article-contents" aria-label="In this article">
+          <p>What stayed with me</p>
+          <ol>
+            <li><a href="#trust">Trust grows in stages</a></li>
+            <li><a href="#risk">Risk should decide autonomy</a></li>
+            <li><a href="#work">Agents may reshape how work moves</a></li>
+            <li><a href="#governance">Governance should create speed</a></li>
+            <li><a href="#accountability">People remain accountable</a></li>
+          </ol>
+        </nav>
+
+        <section aria-labelledby="trust">
+          <h2 id="trust">Trust Grows in Stages</h2>
+          <p>One panel compared today’s agents with the early years of business automation. Companies did not switch on critical systems and immediately remove people. Teams watched the output, corrected mistakes and built confidence over time.</p>
+          <p>Agents will probably follow a similar path. At first, a person checks the work before anything happens. Once the system proves itself, the person can move from approval to monitoring. Only stable, low risk tasks should earn greater independence.</p>
+
+          <figure class="flow-figure">
+            <div class="flow" role="img" aria-label="Agent trust progresses from supervised work to monitored work and then to bounded autonomy.">
+              <div class="flow-step">
+                <span>01</span>
+                <strong>Supervised</strong>
+                <small>A person approves every action</small>
+              </div>
+              <div class="flow-step">
+                <span>02</span>
+                <strong>Monitored</strong>
+                <small>The agent acts while people observe</small>
+              </div>
+              <div class="flow-step">
+                <span>03</span>
+                <strong>Bounded autonomy</strong>
+                <small>Trusted actions stay within clear limits</small>
+              </div>
+            </div>
+            <figcaption>Autonomy should be earned through evidence, not assumed at deployment.</figcaption>
+          </figure>
+
+          <p>This makes the usual question about replacing people less useful. The better question is which decisions we are comfortable delegating, under what conditions, and who remains responsible.</p>
+        </section>
+
+        <section aria-labelledby="risk">
+          <h2 id="risk">Risk Should Decide Autonomy</h2>
+          <p>The clearest framework I heard used two ideas: blast radius and reversibility. Blast radius asks how much damage a mistake could cause. Reversibility asks how easily that mistake can be undone.</p>
+
+          <div class="risk-grid" role="group" aria-label="Two examples of agent risk and suitable oversight">
+            <div class="risk-card risk-card-low">
+              <p class="risk-label">Lower risk</p>
+              <h3>Summarise internal documents</h3>
+              <p>Limited impact and easy correction can support more autonomy.</p>
+            </div>
+            <div class="risk-card risk-card-high">
+              <p class="risk-label">Higher risk</p>
+              <h3>Approve payments or change infrastructure</h3>
+              <p>Wider impact and difficult recovery call for strict controls and human approval.</p>
+            </div>
+          </div>
+
+          <p>This is a more practical way to assess an agent than asking whether the model is intelligent. The same technology can be safe in one workflow and unacceptable in another.</p>
+
+          <figure class="article-figure">
+            <img src="/images/writing/enterprise-ai-summit-2026/agentic-ai-panel.jpeg" alt="Panel discussion about unlocking business value with agentic AI at the Middle East Enterprise AI and Analytics Summit 2026." width="1280" height="960" loading="lazy" decoding="async" />
+            <figcaption>A panel at the summit explored how organisations can move beyond automation and create business value with agents.</figcaption>
+          </figure>
+        </section>
+
+        <section aria-labelledby="work">
+          <h2 id="work">Agents May Reshape How Work Moves</h2>
+          <p>Personal agents can organise an executive’s email, calendar and messages. Departmental agents can answer questions about HR policies or help teams follow brand guidelines. The bigger opportunity may be work that crosses departmental boundaries.</p>
+          <p>A customer complaint, for example, can require customer service, finance, operations and logistics. Much of the delay comes from people moving information between these groups. A secure agent could coordinate the routine parts while the right people handle exceptions and judgment.</p>
+
+          <figure class="flow-figure">
+            <div class="flow flow-compact" role="img" aria-label="A customer complaint moves through an agent to finance and operations before resolution.">
+              <div class="flow-step"><strong>Complaint</strong></div>
+              <div class="flow-step"><strong>Agent</strong></div>
+              <div class="flow-step"><strong>Finance and operations</strong></div>
+              <div class="flow-step"><strong>Resolution</strong></div>
+            </div>
+            <figcaption>The value is not another chat window. It is less friction across a complete business process.</figcaption>
+          </figure>
+
+          <h3>The builder era</h3>
+          <p>AI is also making roles less rigid. Product managers can prototype, designers can explore data, and engineers can draft documentation. The important skill is becoming the ability to understand a problem, work across disciplines, use AI well and own the result.</p>
+          <p>The same logic applies to the build or buy decision. Companies can buy foundation models, infrastructure and common tools. They should invest their own effort in the workflows, knowledge, integrations and customer experience that make the business different.</p>
+        </section>
+
+        <section aria-labelledby="governance">
+          <h2 id="governance">Governance Should Create Speed</h2>
+          <p>Governance is often treated as a set of gates. A better version gives teams clear answers before a project starts. They know who owns the data, where it came from, who may access it, which controls apply and what evidence must be kept.</p>
+          <p>That kind of governance removes repeated debate. It gives teams a safe path to move faster.</p>
+
+          <figure class="flow-figure flow-figure-featured">
+            <div class="flow flow-compact" role="img" aria-label="Start with the outcome, then understand the process, prepare the data, establish governance and finally apply AI.">
+              <div class="flow-step"><strong>Outcome</strong></div>
+              <div class="flow-step"><strong>Process</strong></div>
+              <div class="flow-step"><strong>Data</strong></div>
+              <div class="flow-step"><strong>Governance</strong></div>
+              <div class="flow-step flow-step-accent"><strong>AI</strong></div>
+            </div>
+            <figcaption>Start with the business outcome. AI comes after the process, data and controls are understood.</figcaption>
+          </figure>
+
+          <p>This sequence was one of my biggest takeaways. Starting with an AI solution can automate a weak process without improving the result. Starting with the outcome forces the technology to earn its place.</p>
+        </section>
+
+        <section aria-labelledby="accountability">
+          <h2 id="accountability">People Remain Accountable</h2>
+          <p>An aviation example made the boundary clear. An engineer may need to search thousands of pages of approved maintenance documents. AI can find the relevant material quickly, but the authorised engineer still makes the regulated decision.</p>
+
+          <figure class="flow-figure">
+            <div class="flow flow-compact" role="img" aria-label="An engineer asks a question, AI searches approved material, relevant evidence is retrieved and the authorised engineer decides.">
+              <div class="flow-step"><strong>Engineer asks</strong></div>
+              <div class="flow-step"><strong>AI searches</strong></div>
+              <div class="flow-step"><strong>Evidence retrieved</strong></div>
+              <div class="flow-step flow-step-accent"><strong>Engineer decides</strong></div>
+            </div>
+            <figcaption>AI improves access to knowledge. It does not have to become the final authority.</figcaption>
+          </figure>
+
+          <p>This principle matters in aviation, healthcare, banking, government and critical infrastructure. Capability alone does not create enterprise value. Trust, governance and accountability turn capability into something an organisation can use responsibly.</p>
+          <p>Before deploying an agent, I would ask what problem it solves, what it can access, what actions it can take, how far a failure can spread, whether the action can be reversed, and when a person must intervene.</p>
+          <p>That was my main lesson from the summit. The next phase of AI is not just about smarter models. It is about making deliberate choices on responsibility.</p>
+        </section>
+
+        <a href="/writing/" class="text-link">Explore more writing →</a>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .article-page { padding-block: 40px 76px; }
+  .article-cover { aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--color-line); border-radius: 8px; background: #e9edf2; }
+  .article-cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 44%; }
+  .reading-column { max-width: 760px; margin-inline: auto; }
+  .article-heading { padding-top: 36px; }
+  .article-back { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-accent); font-size: 14px; margin-bottom: 22px; }
+  .article-heading h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.15; margin-top: 16px; letter-spacing: -.035em; }
+  .article-deck { font-size: 20px; line-height: 1.7; color: var(--color-muted); margin-top: 24px; }
+  .article-byline { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--color-muted); padding-block: 22px 28px; border-bottom: 1px solid var(--color-line); }
+  .article-body { font-size: 17px; line-height: 1.9; padding-top: 32px; overflow-wrap: break-word; }
+  .article-body p + p { margin-top: 20px; }
+  .article-body h2 { font-size: clamp(26px, 4vw, 32px); line-height: 1.35; margin-block: 48px 20px; letter-spacing: -.025em; }
+  .article-body h3 { font-size: 22px; line-height: 1.45; margin-block: 34px 14px; }
+  .article-body ol { padding-inline-start: 24px; margin-block: 20px; list-style: decimal; }
+  .article-body li + li { margin-top: 12px; }
+  .article-body a:not(.text-link) { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+  .article-contents { margin-block: 32px; padding: 24px; border: 1px solid var(--color-line); border-radius: 8px; background: white; font-size: 15px; }
+  .article-contents > p { font-weight: 600; }
+  .article-contents ol { margin-bottom: 0; }
+  .article-figure, .flow-figure { margin-block: 30px 34px; }
+  .article-figure img { display: block; width: 100%; height: auto; border: 1px solid var(--color-line); border-radius: 8px; background: #e9edf2; }
+  .article-figure figcaption, .flow-figure figcaption { margin-top: 10px; color: var(--color-muted); font-size: 13px; line-height: 1.6; }
+  .flow-figure { padding: 24px; border: 1px solid #d8e1ef; border-radius: 10px; background: #f4f7fb; }
+  .flow-figure-featured { border-color: #bfcfea; background: #edf3fc; }
+  .flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px; align-items: stretch; }
+  .flow-compact { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  .flow-figure-featured .flow { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
+  .flow-step { position: relative; display: flex; flex-direction: column; justify-content: center; min-height: 98px; padding: 16px; border: 1px solid #d8e0eb; border-radius: 8px; background: white; text-align: center; line-height: 1.4; }
+  .flow-step:not(:last-child)::after { content: '→'; position: absolute; left: calc(100% + 9px); top: 50%; translate: -50% -50%; color: #6b7c94; font-size: 21px; font-weight: 600; }
+  .flow-step span { margin-bottom: 8px; color: var(--color-accent); font: 12px/1 var(--font-mono); }
+  .flow-step strong { font-size: 15px; }
+  .flow-step small { margin-top: 7px; color: var(--color-muted); font-size: 12px; line-height: 1.5; }
+  .flow-step-accent { color: white; border-color: #245dd8; background: #245dd8; }
+  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-block: 28px 34px; }
+  .risk-card { padding: 24px; border: 1px solid var(--color-line); border-top-width: 3px; border-radius: 8px; background: white; }
+  .risk-card-low { border-top-color: #31866f; }
+  .risk-card-high { border-top-color: #b45d52; }
+  .risk-card .risk-label { margin: 0 0 12px; font: 12px/1.4 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--color-muted); }
+  .risk-card h3 { margin: 0; font-size: 18px; }
+  .risk-card h3 + p { margin-top: 12px; color: var(--color-muted); font-size: 14px; line-height: 1.65; }
+  @media (max-width: 767px) {
+    .article-page { padding-block: 24px 48px; }
+    .article-cover { aspect-ratio: 4 / 3; }
+    .article-heading { padding-top: 24px; }
+    .article-deck { font-size: 18px; }
+    .article-body { font-size: 16px; }
+    .article-contents { padding: 20px; }
+    .article-figure, .flow-figure { margin-block: 24px 28px; }
+    .flow-figure { padding: 18px; }
+    .flow, .flow-compact, .flow-figure-featured .flow { grid-template-columns: 1fr; gap: 28px; }
+    .flow-step { min-height: auto; }
+    .flow-step:not(:last-child)::after { content: '↓'; left: 50%; top: calc(100% + 14px); }
+    .risk-grid { grid-template-columns: 1fr; }
+  }
+</style>
