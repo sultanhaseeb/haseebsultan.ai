@@ -58,46 +58,55 @@ export const resumeProjects = [
     title: 'AWS Microservices Platform', role: 'Architect & DevOps Engineer',
     description: 'Automated Bitbucket CI/CD to lint, test, containerize, and deploy Rails microservices to ECS Fargate and the ELK stack to EKS across non-production, staging, and production. Designed segmented VPC networking and granular security groups; managed VPCs, ECS/EKS, RDS, and ElastiCache with Terraform. Added Datadog APM and dashboards, alongside DevOps and security documentation for onboarding and audit readiness.',
     topics: ['AWS', 'ECS Fargate', 'EKS', 'Terraform', 'Bitbucket', 'Rails', 'ELK', 'Datadog', 'RDS', 'ElastiCache'],
+    flow: ['Source and pipeline', 'ECS and EKS platform', 'Datadog and ELK'],
   },
   {
     title: 'GitOps Delivery on Azure', role: 'DevOps Engineer',
     description: 'Connected Azure DevOps pipelines with Git repositories containing manifests and Helm charts. Configured Argo CD to watch repository changes and automatically synchronize deployments to AKS across development, test, and production for consistent, automated delivery.',
     topics: ['Azure', 'AKS', 'Argo CD', 'Terraform', 'Azure DevOps', 'GitHub Actions', 'GitHub', 'Helm'],
+    flow: ['Git and Helm', 'Argo CD sync', 'AKS environments'],
   },
   {
     title: 'DevOps Practice & Audit Documentation', role: 'Technical Lead & Documentation Designer',
     description: 'Led the design of Microsoft audit documentation for a DevOps consulting practice: readiness plans and roadmaps, practice charters, statements of work, a knowledge repository, DevOps and DevSecOps best practices, assessment and approval gates, solution designs, project plans, and migration and deployment sequences. Documented tools and practices for modernizing DevOps environments.',
     topics: ['Azure DevOps', 'Technical Documentation', 'DevSecOps', 'Audit Readiness', 'Solution Design'],
+    flow: ['Requirements', 'Review gates', 'Audit evidence'],
   },
   {
     title: 'On-Premises to Azure Migration', role: 'Architect & DevOps Engineer',
     description: 'Automated migration to Azure using Azure DevOps pipelines, Terraform, and Ansible. Configured Application Gateway, AKS, SQL Managed Instance, PostgreSQL, ACR, virtual machines, virtual networks and peering, storage accounts, Traffic Manager, and Key Vault. Installed Twistlock, Velero, Grafana, and Prometheus through Helm, with Kubernetes backups in Blob Storage. Integrated Argo CD with Azure DevOps and Helm repositories, defining projects and applications for automated component deployments.',
     topics: ['Azure', 'Terraform', 'Ansible', 'Azure DevOps', 'Argo CD', 'AKS', 'Helm', 'Velero', 'Grafana', 'Prometheus'],
+    flow: ['On premises', 'Automated migration', 'Azure platform'],
   },
   {
     title: 'Hybrid Kubernetes with EKS Anywhere', role: 'Architect & DevOps Engineer',
     description: 'Deployed an AWS EKS Anywhere Kubernetes cluster on vSphere 7 with two ESXi hosts. Configured Twistlock, Velero, Grafana, and Prometheus with Helm charts, stored Kubernetes backups in Amazon S3, and integrated Amazon ECR with the vSphere cluster.',
     topics: ['AWS EKS Anywhere', 'Kubernetes', 'vSphere 7', 'ESXi', 'Helm', 'Twistlock', 'Velero', 'S3', 'ECR'],
+    flow: ['ECR and Helm', 'EKS Anywhere', 'vSphere and S3'],
   },
   {
     title: 'Google Cloud Microservices Delivery', role: 'Architect & DevOps Engineer',
     description: 'Built GitLab pipelines to deploy microservices and Google Cloud services across non-production, staging, and production. Worked with Kubernetes, Helm, Docker and container registries, Compute Engine, Cloud Run, Ingress, VPC networking, Cloud Monitoring, Secret Manager, Cloud SQL, Artifact Registry, and Firebase.',
     topics: ['Google Cloud', 'GitLab', 'Terraform', 'Kubernetes', 'Helm', 'Docker', 'Cloud Run', 'Firebase'],
+    flow: ['GitLab pipeline', 'GKE and Cloud Run', 'Cloud Monitoring'],
   },
   {
     title: 'Node.js Microservices on AKS', role: 'Architect & DevOps Engineer',
     description: 'Built Azure DevOps pipelines to deploy Node.js microservices and Azure cloud services across development and production, using Docker, Docker Compose, Helm, Istio, AKS, MongoDB, Git, and GitHub.',
     topics: ['Azure DevOps', 'AKS', 'Node.js', 'Docker Compose', 'Helm', 'Istio', 'MongoDB', 'GitHub'],
+    flow: ['Azure DevOps', 'Docker and Helm', 'AKS and Istio'],
   },
   {
     title: 'Azure Application Delivery & Quality Automation', role: 'Architect & DevOps Engineer',
     description: 'Built CI/CD for microservices across Dev, QA, UAT, and production using Azure DevOps, Kubernetes, Helm, Docker, container registries, Git, AKS, and MongoDB. Configured App Service, Application Gateway, Azure VPN and VNet Gateway, ARM templates, Azure Monitor Insights, Key Vault, Grafana, SonarQube, and API Management. Integrated unit and integration tests, Robot Framework and Selenium automation, PowerShell scripting, Data Factory, Databricks, and Synapse workspaces.',
     topics: ['Azure DevOps', 'Azure', 'AKS', 'MongoDB', 'SonarQube', 'Robot Framework', 'Selenium', 'PowerShell', 'API Management'],
+    flow: ['Build and test', 'Deploy and secure', 'Observe and release'],
   },
   {
     title: 'Azure DataOps Pipelines', role: 'DevOps Engineer',
     description: 'Automated deployments of Azure Data Factory, Azure Databricks, and Azure Synapse across Dev, QA, UAT, and production. Implemented a GitOps workflow with security controls, pull-request approvals, and secrets stored in Azure Key Vault.',
     topics: ['DataOps', 'Azure DevOps', 'Azure Data Factory', 'Azure Databricks', 'Azure Synapse', 'GitOps', 'Key Vault'],
+    flow: ['Git and approvals', 'Azure pipeline', 'Data platforms'],
   },
 ];
 

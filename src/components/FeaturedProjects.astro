@@ -1,6 +1,7 @@
 ---
 import { resumeProjects } from '../data/resume';
 import Icon from './Icon.astro';
+import ProjectFlow from './ProjectFlow.astro';
 ---
 <section id="projects" class="section" aria-labelledby="featured-projects-title">
   <div class="section-heading"><h2 id="featured-projects-title">Featured Projects</h2><span class="section-note">Selected work in cloud and DevOps</span></div>
@@ -9,9 +10,14 @@ import Icon from './Icon.astro';
       <div class="project-copy">
         <h3><a class="article-title-link" href={`/projects/#project-${index + 1}`}>{project.title}</a></h3>
         <p>{project.description.split('. ')[0].replace(/\.$/, '')}.</p>
+        <ProjectFlow steps={project.flow} label={`${project.title} architecture flow: ${project.flow.join(' to ')}`} compact />
       </div>
       <ul class="project-tags flex flex-wrap gap-x-3 gap-y-2">{project.topics.slice(0, 4).map(topic => <li>{topic}</li>)}</ul>
     </article>)}
   </div>
   <a href="/projects/" class="text-link" aria-label="Explore more projects">Explore more <Icon name="arrow" size={17} /></a>
 </section>
+
+<style>
+  .project-copy :global(.project-flow) { margin-top: 22px; }
+</style>

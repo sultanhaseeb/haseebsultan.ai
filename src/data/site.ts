@@ -36,12 +36,14 @@ export const projects = [
     description: 'An AI agent architecture for securely searching, reading, and interacting with enterprise documents using MCP.',
     topics: ['MCP', 'AI Agents', 'Security'],
     icon: 'document' as const,
+    flow: ['User request', 'Secure MCP agent', 'Enterprise documents'],
   },
   {
     title: 'AI Infrastructure Explorer',
     description: 'An experiment around securely understanding and visualizing cloud infrastructure using AI-assisted workflows.',
     topics: ['Cloud', 'AI Infrastructure', 'Agents'],
     icon: 'layers' as const,
+    flow: ['Cloud APIs', 'Secure AI agent', 'Infrastructure view'],
   },
 ];
 

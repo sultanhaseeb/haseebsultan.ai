@@ -1,0 +1,32 @@
+---
+interface Props {
+  steps: string[];
+  label: string;
+  compact?: boolean;
+}
+
+const { steps, label, compact = false } = Astro.props;
+---
+<div class:list={['project-flow', { 'project-flow-compact': compact }]} role="img" aria-label={label}>
+  {steps.map((step, index) => (
+    <div class="flow-node" aria-hidden="true">
+      <span>{String(index + 1).padStart(2, '0')}</span>
+      <strong>{step}</strong>
+    </div>
+  ))}
+</div>
+
+<style>
+  .project-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 25px; padding: 18px; border: 1px solid #dfe6f0; border-radius: 8px; background: #f5f8fc; }
+  .flow-node { position: relative; min-width: 0; padding: 13px 10px; border: 1px solid #d9e1ec; border-radius: 6px; background: white; text-align: center; }
+  .flow-node:not(:last-child)::after { content: '→'; position: absolute; top: 50%; left: calc(100% + 13px); translate: -50% -50%; color: #718098; font-size: 17px; font-weight: 650; }
+  .flow-node span { display: block; margin-bottom: 5px; color: var(--color-accent); font: 11px/1 var(--font-mono); }
+  .flow-node strong { display: block; color: #354358; font-size: 12px; line-height: 1.4; }
+  .project-flow-compact { padding: 14px; gap: 21px; }
+  .project-flow-compact .flow-node { padding: 11px 8px; }
+  .project-flow-compact .flow-node:not(:last-child)::after { left: calc(100% + 11px); }
+  @media (max-width: 479px) {
+    .project-flow { grid-template-columns: 1fr; gap: 25px; }
+    .flow-node:not(:last-child)::after, .project-flow-compact .flow-node:not(:last-child)::after { content: '↓'; top: calc(100% + 13px); left: 50%; }
+  }
+</style>
