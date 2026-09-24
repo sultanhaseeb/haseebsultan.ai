@@ -127,10 +127,10 @@ export const certifications = [
 ];
 
 export const education = [
-  { qualification: 'Artificial Intelligence: Generative AI, Cloud and MLOps', institution: 'University of Oxford', detail: 'Short course' },
-  { qualification: 'B.S. in Computer Science', institution: 'FAST — National University of Computer and Emerging Sciences', detail: 'Bachelor’s degree' },
-  { qualification: 'Intermediate (Pre-Engineering)', institution: 'Punjab Group of Colleges', detail: 'Higher secondary education' },
-  { qualification: 'Matriculation (Science)', institution: 'Sadiq Public School, Bahawalpur', detail: 'Secondary education' },
+  { qualification: 'Artificial Intelligence: Generative AI, Cloud and MLOps', institution: 'University of Oxford', detail: 'Professional development programme', mark: 'OXF' },
+  { qualification: 'B.S. in Computer Science', institution: 'FAST — National University of Computer and Emerging Sciences', detail: 'Bachelor’s degree', mark: 'FAST' },
+  { qualification: 'Intermediate (Pre-Engineering)', institution: 'Punjab Group of Colleges', detail: 'Higher secondary education', mark: 'PGC' },
+  { qualification: 'Matriculation (Science)', institution: 'Sadiq Public School, Bahawalpur', detail: 'Secondary education', mark: 'SPS' },
 ];
 
 export const additionalSkills = [
