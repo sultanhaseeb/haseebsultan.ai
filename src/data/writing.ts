@@ -1,5 +1,20 @@
 import { publishedArticles } from './resume';
 
+export const openAiDevDayArticle = {
+  title: 'OpenAI DevDay 2026: From Chatbots to Agentic AI',
+  description: 'How Dots, ChatGPT Space, faster models, autonomous research agents, and cloud developer tools are changing the way people work with AI.',
+  format: 'featured' as const,
+  category: 'Agentic AI',
+  href: '/writing/openai-devday-2026/',
+  publication: 'HaseebSultan.ai',
+  published: '2026-09-30',
+  image: '/images/writing/openai-devday-2026/the-new-speed-of-intelligence.jpg',
+  imageAlt: 'Comparison of GPT 6.1 sol, UltraFast, and the Decisions API by intelligence, speed, and ideal use cases.',
+  imageWidth: 2148,
+  imageHeight: 1154,
+  imagePosition: 'center',
+};
+
 export const enterpriseAiSummitArticle = {
   title: 'Beyond the AI Hype: Trust, Governance and the Future of Work',
   description: 'What the Middle East Enterprise AI and Analytics Summit taught me about agent autonomy, practical governance and where people still matter most.',
@@ -61,6 +76,7 @@ export const controlProblemArticle = {
 };
 
 export const writingArticles = [
+  openAiDevDayArticle,
   enterpriseAiSummitArticle,
   controlProblemArticle,
   gisecArticle,
