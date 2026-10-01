@@ -1,20 +1,5 @@
 import { publishedArticles } from './resume';
 
-export const openAiDevDayArticle = {
-  title: 'OpenAI DevDay 2026: From Chatbots to Agentic AI',
-  description: 'How Dots, ChatGPT Space, faster models, autonomous research agents, and cloud developer tools are changing the way people work with AI.',
-  format: 'featured' as const,
-  category: 'Agentic AI',
-  href: '/writing/openai-devday-2026/',
-  publication: 'HaseebSultan.ai',
-  published: '2026-09-30',
-  image: '/images/writing/openai-devday-2026/the-new-speed-of-intelligence.jpg',
-  imageAlt: 'Comparison of GPT 6.1 sol, UltraFast, and the Decisions API by intelligence, speed, and ideal use cases.',
-  imageWidth: 2148,
-  imageHeight: 1154,
-  imagePosition: 'center',
-};
-
 export const enterpriseAiSummitArticle = {
   title: 'Beyond the AI Hype: Trust, Governance and the Future of Work',
   description: 'What the Middle East Enterprise AI and Analytics Summit taught me about agent autonomy, practical governance and where people still matter most.',
@@ -45,21 +30,6 @@ export const specDrivenArticle = {
   imagePosition: 'center',
 };
 
-export const gisecArticle = {
-  title: 'Three Days at GISEC Global 2026: What I Learned About AI Security',
-  description: 'Four approaches to protecting sensitive data when organisations adopt public and enterprise AI tools.',
-  format: 'featured' as const,
-  category: 'AI Security',
-  href: '/writing/gisec-global-2026/',
-  publication: 'HaseebSultan.ai',
-  published: '2026-09-21',
-  image: '/images/writing/gisec-global-2026/haseeb-at-gisec.png',
-  imageAlt: 'Haseeb Sultan outside GISEC Global 2026 at Dubai Exhibition Centre.',
-  imageWidth: 1086,
-  imageHeight: 1448,
-  imagePosition: 'center 36%',
-};
-
 export const controlProblemArticle = {
   title: 'Will AI Kill Us — Or Are We Really Afraid of Losing Control?',
   description: 'What a missing watermark can teach us about AI alignment, reliable constraints, and the growing debate over control.',
@@ -76,10 +46,8 @@ export const controlProblemArticle = {
 };
 
 export const writingArticles = [
-  openAiDevDayArticle,
   enterpriseAiSummitArticle,
   controlProblemArticle,
-  gisecArticle,
   specDrivenArticle,
   ...publishedArticles.map(article => ({ ...article, publication: 'Medium', format: 'external' as const })),
 ];
