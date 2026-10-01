@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { jevArticle as article } from '../../data/writing';
+---
+<BaseLayout title={`${article.title} | Haseeb Sultan`} description={article.description} article={{ published: article.published, image: article.image, headline: article.title }}>
+  <Header />
+  <main id="main" class="shell article-page">
+    <article aria-labelledby="article-title">
+      <figure class="article-cover">
+        <img src={article.image} alt={article.imageAlt} width={article.imageWidth} height={article.imageHeight} fetchpriority="high" decoding="async" />
+      </figure>
+
+      <header class="article-heading reading-column">
+        <a href="/writing/" class="article-back">← All writing</a>
+        <p class="eyebrow">{article.category}</p>
+        <h1 id="article-title">{article.title}</h1>
+        <p class="article-deck">{article.description}</p>
+        <p class="article-byline">Haseeb Sultan <span aria-hidden="true">·</span> <time datetime={article.published}>October 1, 2026</time></p>
+      </header>
+
+      <div class="article-body reading-column">
+        <section aria-labelledby="introduction">
+          <h2 id="introduction">Introduction</h2>
+          <p>What if you could run an AI model that makes thousands of split-second decisions for your application every day, costs next to nothing, and completely eliminates the slow, expensive bottleneck of text generation?</p>
+          <p>In this lesson, you will learn how <strong>Jev</strong>—a specialized model designed by Typesafe AI—shifts the paradigm of how application code interacts with artificial intelligence.</p>
+        </section>
+
+        <aside class="learning-objectives" aria-labelledby="learning-objectives">
+          <h2 id="learning-objectives">Learning Objectives</h2>
+          <ul>
+            <li><strong>Distinguish</strong> between System 1 (fast and intuitive) and System 2 (slow and deliberative) AI models.</li>
+            <li><strong>Explain</strong> how Reinforcement Learning for Calibrated Decisions (RLCD) produces reliable probability scores.</li>
+            <li><strong>Identify</strong> Jev’s three question types and how they are structured.</li>
+            <li><strong>Leverage</strong> design patterns like speculative fan-out and confidence-gated routing to build highly efficient workflows.</li>
+            <li><strong>Analyze</strong> the architectural and pricing differences that make Jev incredibly cheap and fast compared with traditional LLMs.</li>
+          </ul>
+        </aside>
+
+        <nav class="article-contents" aria-label="In this article">
+          <p>In this article</p>
+          <ol>
+            <li><a href="#traditional-llm-bottleneck">The bottleneck of traditional LLMs</a></li>
+            <li><a href="#how-jev-thinks">How Jev thinks</a></li>
+            <li><a href="#architectural-patterns">Architectural patterns</a></li>
+            <li><a href="#limitations">Limitations</a></li>
+            <li><a href="#summary">Key takeaways</a></li>
+          </ol>
+        </nav>
+
+        <section aria-labelledby="traditional-llm-bottleneck">
+          <h2 id="traditional-llm-bottleneck">The Bottleneck of Traditional LLMs</h2>
+          <p>Most mainstream large language models (LLMs) today behave like <strong>System 2</strong> thinkers. Based on the cognitive science concepts popularized by Daniel Kahneman, System 2 thinking is slow, deliberate, and effortful—like calculating 17 × 24 in your head. Traditional LLMs are designed to generate conversational text for human consumption, which makes them slow, expensive, and difficult for application code to parse.</p>
+          <p>If you try to use a standard LLM to categorize 2,000 support tickets, it might return a wordy paragraph instead of a simple label. Even if you force it into a strict JSON schema to get a single word like “billing,” you face another hurdle: <strong>unreliable confidence scores</strong>.</p>
+          <p>Traditional models are trained using <strong>Reinforcement Learning from Human Feedback (RLHF)</strong>. This tuning process rewards answers that human testers <em>prefer</em>, which does not necessarily align with mathematical accuracy. Consequently, if you ask a standard LLM how sure it is, its confidence score is essentially a guess.</p>
+          <p>To solve this, Typesafe AI introduced <strong>Jev</strong>, a model built from the ground up for <strong>System 1</strong> thinking. System 1 is fast, automatic, and intuitive—like instantly recognizing a friend’s face. Jev is optimized to be consumed by code, not humans.</p>
+        </section>
+
+        <section aria-labelledby="how-jev-thinks">
+          <h2 id="how-jev-thinks">How Jev Thinks: Inputs, Outputs, and Question Types</h2>
+          <p>Instead of sending conversational prompts, your application interacts with Jev by passing it two specific structures:</p>
+          <ol>
+            <li><strong>The State:</strong> The raw text or data that needs to be judged, such as a customer support ticket.</li>
+            <li><strong>The Questions:</strong> The specific dimensions you want evaluated, along with defined criteria.</li>
+          </ol>
+          <p>Jev evaluates these inputs and outputs a clean <strong>probability spread</strong> and a <strong>confidence score</strong> instead of text. Jev achieves highly calibrated probabilities through <strong>Reinforcement Learning for Calibrated Decisions (RLCD)</strong>. Instead of human ratings, RLCD uses self-generated training data where the correct answer is already known. This allows the model’s confidence scores to map directly to real-world accuracy—an 80% probability means the answer will be correct exactly 80% of the time.</p>
+          <p>When querying Jev, you can use three distinct question types:</p>
+          <ul>
+            <li><strong>Choice:</strong> Selects one option from a predefined list, such as routing to Billing, Technical, or Sales.</li>
+            <li><strong>Score:</strong> Places the input on an ordered scale, such as rating customer frustration from Calm to Annoyed to Furious.</li>
+            <li><strong>Null:</strong> Evaluates a plain yes-or-no statement and returns a single probability number between 0 and 1, such as “Is the customer asking for a refund?”</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="architectural-patterns">
+          <h2 id="architectural-patterns">Architectural Patterns: Speculative Fan-Out and Gated Routing</h2>
+          <p>Traditional LLMs charge a premium for output tokens because text generation is the most resource-intensive part of running AI infrastructure. Generating text requires the GPU to repeatedly load its entire weight library into memory for every single token produced, creating a massive memory-bandwidth bottleneck.</p>
+          <p>Because Jev only outputs numbers and probabilities, <strong>its output tokens are completely free</strong>. Its input cost is also incredibly low, sitting at about 4 cents per million tokens ($42 per billion).</p>
+          <p>This unique pricing and architecture enables developers to leverage highly efficient patterns:</p>
+          <ul>
+            <li><strong>Speculative Fan-Out:</strong> Since Jev answers all questions in a single, parallel pass, you can ask multiple questions at once for virtually the same cost. You can ask whether the customer is angry, whether they mentioned a competitor, and whether they are planning to cancel—all in one call.</li>
+            <li><strong>Confidence-Gated Routing:</strong> You can build automated gates in your code based on Jev’s calibrated confidence scores. For example, if confidence is above 0.9, automatically route the ticket. If it is between 0.5 and 0.9, ask the user to confirm. If it is below 0.5, escalate the ticket to a human agent or a heavier System 2 LLM.</li>
+          </ul>
+        </section>
+
+        <aside class="limitations" aria-labelledby="limitations">
+          <h2 id="limitations">A Note on Limitations</h2>
+          <p>Jev is not a general-purpose model. It reads queries very literally, cannot perform arithmetic or counting, and treats dates as plain text rather than points in time. Keep these algorithmic tasks inside your application code.</p>
+        </aside>
+
+        <section aria-labelledby="summary">
+          <h2 id="summary">Summary</h2>
+          <h3>Key Takeaways</h3>
+          <ul>
+            <li><strong>System 1 vs. System 2:</strong> Traditional LLMs are slow, conversational System 2 processors. Jev is a fast, numeric System 1 processor designed specifically to be called by application code.</li>
+            <li><strong>RLCD vs. RLHF:</strong> Jev is trained via RLCD (Reinforcement Learning for Calibrated Decisions), ensuring its probability outputs are mathematically aligned with actual accuracy, unlike human-preferred RLHF models.</li>
+            <li><strong>Zero-Cost Outputs:</strong> Because Jev returns numbers rather than generating text, there is no text-generation bottleneck, making output tokens entirely free.</li>
+            <li><strong>Advanced Routing Patterns:</strong> Developers can use speculative fan-out to ask multiple questions in a single pass and build confidence-gated routing systems to automate high-volume workflows safely.</li>
+            <li><strong>Explicit Limitations:</strong> Jev excels at high-volume micro-judgments of text but cannot count, do math, or process dates chronologically.</li>
+          </ul>
+        </section>
+
+        <a href="/writing/" class="text-link">Explore more writing →</a>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .article-page { padding-block: 40px 76px; }
+  .article-cover { aspect-ratio: 1697 / 927; overflow: hidden; border: 1px solid var(--color-line); border-radius: 8px; background: #f2f7f4; }
+  .article-cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  .reading-column { max-width: 760px; margin-inline: auto; }
+  .article-heading { padding-top: 36px; }
+  .article-back { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-accent); font-size: 14px; margin-bottom: 22px; }
+  .article-heading h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.15; margin-top: 16px; letter-spacing: -.035em; }
+  .article-deck { font-size: 20px; line-height: 1.7; color: var(--color-muted); margin-top: 24px; }
+  .article-byline { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--color-muted); padding-block: 22px 28px; border-bottom: 1px solid var(--color-line); }
+  .article-body { font-size: 17px; line-height: 1.9; padding-top: 32px; overflow-wrap: break-word; }
+  .article-body p + p { margin-top: 20px; }
+  .article-body h2 { font-size: clamp(26px, 4vw, 32px); line-height: 1.35; margin-block: 48px 20px; letter-spacing: -.025em; }
+  .article-body h3 { font-size: 21px; line-height: 1.4; margin-block: 28px 14px; }
+  .article-body ol, .article-body ul { padding-inline-start: 24px; margin-block: 20px; }
+  .article-body ol { list-style: decimal; }
+  .article-body ul { list-style: disc; }
+  .article-body li + li { margin-top: 12px; }
+  .article-body a:not(.text-link) { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+  .article-contents, .learning-objectives, .limitations { margin-block: 32px; padding: 24px; border: 1px solid var(--color-line); border-radius: 8px; background: white; }
+  .article-contents > p { font-weight: 600; }
+  .article-contents ol { margin-bottom: 0; }
+  .learning-objectives h2, .limitations h2 { margin-top: 0; font-size: 23px; }
+  .learning-objectives ul, .limitations p { margin-bottom: 0; }
+  .limitations { border-left: 4px solid var(--color-accent); }
+  @media (max-width: 767px) {
+    .article-page { padding-block: 24px 48px; }
+    .article-heading { padding-top: 24px; }
+    .article-deck { font-size: 18px; }
+    .article-body { font-size: 16px; }
+    .article-contents, .learning-objectives, .limitations { padding: 20px; }
+  }
+</style>

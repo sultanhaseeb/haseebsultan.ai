@@ -1,5 +1,20 @@
 import { publishedArticles } from './resume';
 
+export const jevArticle = {
+  title: 'Unlocking System 1 AI: Jev',
+  description: 'How Jev replaces slow text generation with fast, calibrated decisions for high-volume application workflows.',
+  format: 'featured' as const,
+  category: 'AI Engineering',
+  href: '/writing/unlocking-system-1-ai-jev/',
+  publication: 'HaseebSultan.ai',
+  published: '2026-10-01',
+  image: '/images/writing/unlocking-system-1-ai-jev/system-1-vs-system-2.png',
+  imageAlt: 'A comparison of System 2 conversational language models and the System 1 Jev model, covering training, performance, cost, and use cases.',
+  imageWidth: 1697,
+  imageHeight: 927,
+  imagePosition: 'center',
+};
+
 export const specDrivenArticle = {
   title: 'Vibe Coding vs. Spec-Driven Development: From Chaos to Clarity',
   description: 'Why production AI engineering needs durable specifications, a Project Constitution, disciplined validation, and agent-independent workflows.',
@@ -31,6 +46,7 @@ export const controlProblemArticle = {
 };
 
 export const writingArticles = [
+  jevArticle,
   controlProblemArticle,
   specDrivenArticle,
   ...publishedArticles.map(article => ({ ...article, publication: 'Medium', format: 'external' as const })),
