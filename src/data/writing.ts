@@ -16,17 +16,17 @@ export const enterpriseAiSummitArticle = {
 };
 
 export const specDrivenArticle = {
-  title: 'Spec-Driven Development: A Blueprint for AI-Native Engineering',
-  description: 'How specifications, a project constitution, and clear human ownership keep AI-assisted engineering aligned with the system you intend to build.',
+  title: 'Vibe Coding vs. Spec-Driven Development: From Chaos to Clarity',
+  description: 'Why production AI engineering needs durable specifications, a Project Constitution, disciplined validation, and agent-independent workflows.',
   format: 'featured' as const,
   category: 'AI Engineering',
   href: '/writing/spec-driven-development/',
   publication: 'HaseebSultan.ai',
   published: '2026-09-20',
-  image: '/images/writing/spec-driven-development.png',
-  imageAlt: 'Spec-Driven Development illustrated as an architectural blueprint.',
-  imageWidth: 2296,
-  imageHeight: 1196,
+  image: '/images/writing/spec-driven-development.jpg',
+  imageAlt: 'Vibe coding and Spec-Driven Development compared as temporary prompt-driven chaos versus structured, version-controlled specifications.',
+  imageWidth: 2276,
+  imageHeight: 1170,
   imagePosition: 'center',
 };
 
