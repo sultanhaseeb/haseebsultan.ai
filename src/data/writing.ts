@@ -1,20 +1,5 @@
 import { publishedArticles } from './resume';
 
-export const enterpriseAiSummitArticle = {
-  title: 'Beyond the AI Hype: Trust, Governance and the Future of Work',
-  description: 'What the Middle East Enterprise AI and Analytics Summit taught me about agent autonomy, practical governance and where people still matter most.',
-  format: 'featured' as const,
-  category: 'Agentic AI',
-  href: '/writing/enterprise-ai-summit-2026/',
-  publication: 'HaseebSultan.ai',
-  published: '2026-09-24',
-  image: '/images/writing/enterprise-ai-summit-2026/haseeb-at-enterprise-ai-summit.jpeg',
-  imageAlt: 'Haseeb Sultan at the Middle East Enterprise AI and Analytics Summit 2026 in Dubai.',
-  imageWidth: 1200,
-  imageHeight: 1600,
-  imagePosition: 'center 44%',
-};
-
 export const specDrivenArticle = {
   title: 'Vibe Coding vs. Spec-Driven Development: From Chaos to Clarity',
   description: 'Why production AI engineering needs durable specifications, a Project Constitution, disciplined validation, and agent-independent workflows.',
@@ -46,7 +31,6 @@ export const controlProblemArticle = {
 };
 
 export const writingArticles = [
-  enterpriseAiSummitArticle,
   controlProblemArticle,
   specDrivenArticle,
   ...publishedArticles.map(article => ({ ...article, publication: 'Medium', format: 'external' as const })),
