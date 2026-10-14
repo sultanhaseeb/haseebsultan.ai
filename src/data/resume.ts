@@ -2,7 +2,7 @@
 export const profile = {
   title: 'Senior DevOps / AIOps Engineer',
   location: 'Dubai, UAE',
-  email: 'haseebsultandogar@gmail.com',
+  email: 'hello@haseebsultan.ai',
   summary: 'My background spans full-stack development, cloud architecture, DevOps, and AI operations. I build automated, secure platforms across Azure, AWS, and Google Cloud, with hands-on work in Kubernetes, infrastructure as code, CI/CD, MLOps, and LLM applications.',
 };
 
@@ -108,12 +108,6 @@ export const resumeProjects = [
     topics: ['DataOps', 'Azure DevOps', 'Azure Data Factory', 'Azure Databricks', 'Azure Synapse', 'GitOps', 'Key Vault'],
     flow: ['Git and approvals', 'Azure pipeline', 'Data platforms'],
   },
-];
-
-export const publishedArticles = [
-  { title: 'Dapr for Kubernetes', category: 'Kubernetes', href: 'https://medium.com/@haseebsultandogar/dapr-for-kubernetes-a5cf1ac8f1a7' },
-  { title: 'Kubernetes with LKE — Linode Kubernetes Engine', category: 'Cloud & Kubernetes', href: 'https://medium.com/@haseebsultandogar/kubernetes-with-lke-linode-kubernetes-engine-9de7669323b5' },
-  { title: 'DevSecOps — Integrating Security into DevOps', category: 'DevSecOps', href: 'https://medium.com/@haseebsultandogar/devsecops-integrating-security-into-devops-83121206bd95' },
 ];
 
 export const certifications = [

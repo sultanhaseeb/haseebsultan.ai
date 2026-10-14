@@ -6,29 +6,12 @@ export const site = {
   social: {
     github: 'https://github.com/sultanhaseeb',
     linkedin: 'https://www.linkedin.com/in/haseeb-sultan-484416182/',
+    topmate: 'https://topmate.io/haseeb_sultan',
     email: 'mailto:hello@haseebsultan.ai',
   },
 };
 
 export const topics = ['Agentic AI', 'LLMOps', 'MCP', 'AI Infrastructure', 'Kubernetes for AI', 'AI Security', 'RAG', 'AI Agents'];
-
-export const articles = [
-  {
-    title: "Understanding AI Agents From an Engineer's Perspective",
-    description: 'A practical introduction to how AI agents work, including tools, memory, reasoning, workflows, and orchestration.',
-    category: 'Agentic AI',
-  },
-  {
-    title: 'Running AI Workloads on Kubernetes',
-    description: 'Exploring the infrastructure challenges and architecture patterns behind running production AI systems.',
-    category: 'AI Infrastructure',
-  },
-  {
-    title: 'Building Secure MCP-Based AI Agents',
-    description: 'Notes on designing secure Model Context Protocol architectures for enterprise AI agents.',
-    category: 'AI Security',
-  },
-];
 
 export const projects = [
   {

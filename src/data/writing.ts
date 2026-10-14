@@ -1,5 +1,3 @@
-import { publishedArticles } from './resume';
-
 export const jevArticle = {
   title: 'Unlocking System 1 AI: Jev',
   description: 'How Jev replaces slow text generation with fast, calibrated decisions for high-volume application workflows.',
@@ -49,5 +47,4 @@ export const writingArticles = [
   jevArticle,
   controlProblemArticle,
   specDrivenArticle,
-  ...publishedArticles.map(article => ({ ...article, publication: 'Medium', format: 'external' as const })),
 ];
