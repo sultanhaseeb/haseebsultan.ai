@@ -5,9 +5,13 @@ import { site } from '../data/site';
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero-copy">
     <p class="intro"><span aria-hidden="true" class="intro-line"></span>Hello, I'm Haseeb Sultan.</p>
-    <h1 id="hero-title">Engineering scalable, automated infrastructure for the <span>AI era.</span></h1>
-    <p class="hero-description">I use technology, AI, and practical engineering to turn complex challenges into useful solutions.</p>
-    <p class="hero-note">Based in Dubai, with a background in senior DevOps and AIOps engineering. I bring hands-on experience across Azure, AWS, Google Cloud, Kubernetes, and MLOps to my work on AI platforms.</p>
+    <h1 id="hero-title">Engineering <span>scalable, automated infrastructure</span> for the AI era.</h1>
+    <p class="hero-description">I build secure platforms across cloud, Kubernetes, and AI—turning complex infrastructure into reliable systems that teams can scale.</p>
+    <ul class="hero-focus" aria-label="Areas of focus">
+      <li>Cloud platforms</li>
+      <li>Kubernetes</li>
+      <li>AI infrastructure</li>
+    </ul>
     <div class="hero-actions flex flex-wrap gap-3">
       <a href="/projects/" class="button button-primary">Explore My Work <Icon name="arrow" size={18} /></a>
       <a href={site.social.github} target="_blank" rel="noopener noreferrer" class="button button-secondary"><Icon name="github" size={18} /> GitHub</a>
@@ -15,5 +19,9 @@ import { site } from '../data/site';
   </div>
   <figure class="portrait">
     <img src="/images/haseeb.jpg" alt="Haseeb Sultan smiling outdoors, wearing a navy blazer and white shirt" width="1254" height="1254" fetchpriority="high" decoding="async" />
+    <figcaption>
+      <strong>Senior DevOps / AIOps Engineer</strong>
+      <span>Dubai, UAE</span>
+    </figcaption>
   </figure>
 </section>
