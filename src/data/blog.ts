@@ -1,7 +1,8 @@
 import type { ImageMetadata } from 'astro';
-import controlProblemImage from '../assets/images/writing/the-control-problem/control-problem.png';
-import specDrivenImage from '../assets/images/writing/spec-driven-development.jpg';
-import jevImage from '../assets/images/writing/unlocking-system-1-ai-jev/system-1-vs-system-2.png';
+import controlProblemImage from '../assets/images/blog/the-control-problem/control-problem.png';
+import specDrivenImage from '../assets/images/blog/spec-driven-development.jpg';
+import jevImage from '../assets/images/blog/unlocking-system-1-ai-jev/system-1-vs-system-2.png';
+import gtcBerlinImage from '../assets/images/blog/nvidia-gtc-berlin/keynote-robots.jpg';
 
 export interface Post {
   title: string;
@@ -14,17 +15,31 @@ export interface Post {
   // Lead image under the article header, also used for social previews. Optional.
   image?: ImageMetadata;
   imageAlt?: string;
+  // Shown under the lead image, for credits.
+  imageCaption?: string;
 }
 
 export const controlProblemArticle: Post = {
-  title: 'Will AI Kill Us — Or Are We Really Afraid of Losing Control?',
+  title: 'Will AI Kill Us? Or Are We Really Afraid of Losing Control?',
   coverTitle: 'The Control Problem',
   description: 'What a missing watermark can teach us about AI alignment, reliable constraints, and the growing debate over control.',
   category: 'AI Safety',
-  href: '/writing/the-control-problem/',
+  href: '/blog/the-control-problem/',
   published: '2026-09-21',
   image: controlProblemImage,
   imageAlt: 'The Control Problem, illustrated by an arrow breaking through a boundary on its way to a target.',
+};
+
+export const gtcBerlinArticle: Post = {
+  title: 'Beyond Chatbots: Inside NVIDIA’s GTC Berlin Keynote and the Blueprint for the Agentic AI Revolution',
+  coverTitle: 'Inside GTC Berlin',
+  description: 'Six takeaways from Jensen Huang’s keynote, from AI factories that manufacture tokens to agent security enforced in hardware.',
+  category: 'AI Infrastructure',
+  href: '/blog/nvidia-gtc-berlin-keynote/',
+  published: '2026-10-26',
+  image: gtcBerlinImage,
+  imageAlt: 'Jensen Huang kneels on the GTC Berlin stage holding a laptop beside three small walking robots, with humanoid robots from Disney Research and Enchanted Tools behind him.',
+  imageCaption: 'Jensen Huang on stage at GTC Berlin with a group of walking robots. Image: NVIDIA',
 };
 
 export const specDrivenLesson: Post = {
@@ -58,9 +73,10 @@ export const mcpLesson: Post = {
   published: '2026-10-26',
 };
 
-// Articles: my own views on AI, what it is, and where it is heading. Pages live in src/pages/writing/.
+// Articles: my own views on AI, what it is, and where it is heading. Pages live in src/pages/blog/.
 export const articles = [
   controlProblemArticle,
+  gtcBerlinArticle,
 ];
 
 // Lessons: new ideas in AI engineering, broken down step by step. Pages live in src/pages/learning/.

@@ -14,7 +14,7 @@ interface Props {
   noindex?: boolean;
 }
 const {
-  title = `${site.name} — ${site.title}`,
+  title = `${site.name} | ${site.title}`,
   description = site.description,
   canonical = new URL(Astro.url.pathname, Astro.site).href,
   image = '/og-default.jpg',
@@ -57,7 +57,7 @@ const structuredData = article ? {
     <meta name="theme-color" content="#fafbfc" />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Writing`} href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} | Blog`} href="/rss.xml" />
     <link rel="preload" href="/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content="HaseebSultan.ai" />

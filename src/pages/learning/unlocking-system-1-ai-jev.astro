@@ -1,12 +1,12 @@
 ---
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
-import { jevLesson as post } from '../../data/writing';
+import { jevLesson as post } from '../../data/blog';
 ---
 <ArticleLayout post={post}>
   <section aria-labelledby="introduction">
     <h2 id="introduction">Introduction</h2>
     <p>What if you could run an AI model that makes thousands of split-second decisions for your application every day, costs next to nothing, and completely eliminates the slow, expensive bottleneck of text generation?</p>
-    <p>In this lesson, you will learn how <strong>Jev</strong>—a specialized model designed by Typesafe AI—shifts the paradigm of how application code interacts with artificial intelligence.</p>
+    <p>In this lesson, you will learn how <strong>Jev</strong>, a specialized model designed by Typesafe AI, shifts the paradigm of how application code interacts with artificial intelligence.</p>
   </section>
 
   <aside class="learning-objectives" aria-labelledby="learning-objectives">
@@ -33,10 +33,10 @@ import { jevLesson as post } from '../../data/writing';
 
   <section aria-labelledby="traditional-llm-bottleneck">
     <h2 id="traditional-llm-bottleneck">The Bottleneck of Traditional LLMs</h2>
-    <p>Most mainstream large language models (LLMs) today behave like <strong>System 2</strong> thinkers. Based on the cognitive science concepts popularized by Daniel Kahneman, System 2 thinking is slow, deliberate, and effortful—like calculating 17 × 24 in your head. Traditional LLMs are designed to generate conversational text for human consumption, which makes them slow, expensive, and difficult for application code to parse.</p>
+    <p>Most mainstream large language models (LLMs) today behave like <strong>System 2</strong> thinkers. Based on the cognitive science concepts popularized by Daniel Kahneman, System 2 thinking is slow, deliberate, and effortful, like calculating 17 × 24 in your head. Traditional LLMs are designed to generate conversational text for human consumption, which makes them slow, expensive, and difficult for application code to parse.</p>
     <p>If you try to use a standard LLM to categorize 2,000 support tickets, it might return a wordy paragraph instead of a simple label. Even if you force it into a strict JSON schema to get a single word like “billing,” you face another hurdle: <strong>unreliable confidence scores</strong>.</p>
     <p>Traditional models are trained using <strong>Reinforcement Learning from Human Feedback (RLHF)</strong>. This tuning process rewards answers that human testers <em>prefer</em>, which does not necessarily align with mathematical accuracy. Consequently, if you ask a standard LLM how sure it is, its confidence score is essentially a guess.</p>
-    <p>To solve this, Typesafe AI introduced <strong>Jev</strong>, a model built from the ground up for <strong>System 1</strong> thinking. System 1 is fast, automatic, and intuitive—like instantly recognizing a friend’s face. Jev is optimized to be consumed by code, not humans.</p>
+    <p>To solve this, Typesafe AI introduced <strong>Jev</strong>, a model built from the ground up for <strong>System 1</strong> thinking. System 1 is fast, automatic, and intuitive, like instantly recognizing a friend’s face. Jev is optimized to be consumed by code, not humans.</p>
   </section>
 
   <section aria-labelledby="how-jev-thinks">
@@ -46,7 +46,7 @@ import { jevLesson as post } from '../../data/writing';
       <li><strong>The State:</strong> The raw text or data that needs to be judged, such as a customer support ticket.</li>
       <li><strong>The Questions:</strong> The specific dimensions you want evaluated, along with defined criteria.</li>
     </ol>
-    <p>Jev evaluates these inputs and outputs a clean <strong>probability spread</strong> and a <strong>confidence score</strong> instead of text. Jev achieves highly calibrated probabilities through <strong>Reinforcement Learning for Calibrated Decisions (RLCD)</strong>. Instead of human ratings, RLCD uses self-generated training data where the correct answer is already known. This allows the model’s confidence scores to map directly to real-world accuracy—an 80% probability means the answer will be correct exactly 80% of the time.</p>
+    <p>Jev evaluates these inputs and outputs a clean <strong>probability spread</strong> and a <strong>confidence score</strong> instead of text. Jev achieves highly calibrated probabilities through <strong>Reinforcement Learning for Calibrated Decisions (RLCD)</strong>. Instead of human ratings, RLCD uses self-generated training data where the correct answer is already known. This allows the model’s confidence scores to map directly to real-world accuracy: an 80% probability means the answer will be correct exactly 80% of the time.</p>
     <p>When querying Jev, you can use three distinct question types:</p>
     <ul>
       <li><strong>Choice:</strong> Selects one option from a predefined list, such as routing to Billing, Technical, or Sales.</li>
@@ -61,7 +61,7 @@ import { jevLesson as post } from '../../data/writing';
     <p>Because Jev only outputs numbers and probabilities, <strong>its output tokens are completely free</strong>. Its input cost is also incredibly low, sitting at about 4 cents per million tokens ($42 per billion).</p>
     <p>This unique pricing and architecture enables developers to leverage highly efficient patterns:</p>
     <ul>
-      <li><strong>Speculative Fan-Out:</strong> Since Jev answers all questions in a single, parallel pass, you can ask multiple questions at once for virtually the same cost. You can ask whether the customer is angry, whether they mentioned a competitor, and whether they are planning to cancel—all in one call.</li>
+      <li><strong>Speculative Fan-Out:</strong> Since Jev answers all questions in a single, parallel pass, you can ask multiple questions at once for virtually the same cost. You can ask whether the customer is angry, whether they mentioned a competitor, and whether they are planning to cancel, all in one call.</li>
       <li><strong>Confidence-Gated Routing:</strong> You can build automated gates in your code based on Jev’s calibrated confidence scores. For example, if confidence is above 0.9, automatically route the ticket. If it is between 0.5 and 0.9, ask the user to confirm. If it is below 0.5, escalate the ticket to a human agent or a heavier System 2 LLM.</li>
     </ul>
   </section>

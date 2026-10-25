@@ -1,0 +1,221 @@
+---
+import { Image } from 'astro:assets';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { gtcBerlinArticle as post } from '../../data/blog';
+import openShellSentry from '../../assets/images/blog/nvidia-gtc-berlin/openshell-sentry.png';
+import dsxPod from '../../assets/images/blog/nvidia-gtc-berlin/dsx-pod.png';
+
+// The five layers of the AI economy, listed from the bottom up.
+const layers = [
+  { name: 'Energy', text: 'The power grid that drives everything above it.' },
+  { name: 'AI factories', text: 'Gigawatt-scale facilities that house the computers, liquid cooling, and optical networking.' },
+  { name: 'Tokens', text: 'The raw product that models generate on the factory floor.' },
+  { name: 'AI models', text: 'The reasoning engines for language, physics, biology, and spatial intelligence.' },
+  { name: 'Applications', text: 'The workflows, agents, and industrial systems that consume tokens to get work done.' },
+];
+
+const coDesignNumbers = [
+  { value: '1,000,000×', label: 'Growth in AI compute over one decade' },
+  { value: '30×', label: 'Vera Rubin over Blackwell for LLM and agent workloads' },
+  { value: '0', unit: 'cables', label: 'Inside a Vera Rubin compute node, so it can be fully liquid cooled' },
+  { value: '1.44', unit: 'exaflops', label: 'From 72 GPUs working as one' },
+];
+---
+<ArticleLayout post={post}>
+  <p class="article-lead">For the past few years, most of us have met AI as a text box. You type a prompt, and a model writes back.</p>
+  <p>That era is ending. Enterprises are moving past chatbots toward autonomous agents and physical robots: systems that reason continuously, run entire workflows, and take real action in the world. That puts enormous pressure on the infrastructure underneath. Data centers, networks, and enterprise IT stacks were built to host software, not to run AI that thinks and acts around the clock.</p>
+  <p>At NVIDIA’s GTC Berlin keynote, Jensen Huang laid out how that infrastructure has to change. He did not frame it as a faster chip. He described a new industrial revolution, in which computing stops being a passive host for applications and becomes a factory that produces intelligence, one token at a time, at planetary scale.</p>
+  <p>Here are the six takeaways that stood out to me, from gigawatt-scale data center pods and hardware-enforced agent security to supercomputers that fit on a desk.</p>
+
+  <nav class="article-contents" aria-label="The six takeaways">
+    <p>The six takeaways</p>
+    <ol>
+      <li><a href="#manufacturing">AI is a manufacturing industry</a></li>
+      <li><a href="#co-design">Extreme co-design beat Moore’s Law</a></li>
+      <li><a href="#super-agent">The anatomy of a super agent</a></li>
+      <li><a href="#agent-security">Agent security moves into hardware</a></li>
+      <li><a href="#dsx-pods">Modular pods for AI factories</a></li>
+      <li><a href="#desktop">Supercomputing on the desktop</a></li>
+      <li><a href="#road-ahead">The road ahead</a></li>
+    </ol>
+  </nav>
+
+  <section aria-labelledby="manufacturing">
+    <header class="takeaway-head">
+      <p class="takeaway-no">Takeaway 01</p>
+      <h2 id="manufacturing">AI Isn’t Software. It’s a Manufacturing Industry.</h2>
+    </header>
+    <p>Huang’s central argument is that treating AI like traditional software is a strategic mistake. Software is a tool that people license and use. Modern AI behaves more like an industrial process, running on a factory floor that never stops. Instead of shipping code, it manufactures tokens, the basic units of digital intelligence.</p>
+    <p>To explain the shift, he described the AI economy as a five-layer cake, built from the ground up:</p>
+    <ol class="layer-cake" aria-label="The five layers of the AI economy, from the bottom up">
+      {layers.map((layer, index) => (
+        <li>
+          <span class="layer-no">{String(index + 1).padStart(2, '0')}</span>
+          <strong>{layer.name}</strong>
+          <span class="layer-text">{layer.text}</span>
+        </li>
+      ))}
+    </ol>
+    <p>In this picture, intelligence works like electricity. To take part in the digital economy, nations and companies need to move from consuming AI built somewhere else to manufacturing their own tokens. That is the idea behind sovereign AI.</p>
+    <p>The message landed especially hard in Europe. Huang pointed to $10 billion in recent European investment, more than 12,000 regional partnerships, and regional clouds such as Nebius, Firebird, and Cassava, and argued that European industry needs to own its token pipelines. He also highlighted the continent’s telecom networks: more than 100,000 telco sites, with 100 gigawatts of distributed power, ready to become a distributed network of AI factories.</p>
+    <figure class="pull-quote">
+      <blockquote><p>“AI is a manufacturing industry. AI is not just software technology... Factories that are producing intelligence that are integrated into every single industry and application.”</p></blockquote>
+      <figcaption>Jensen Huang</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="co-design">
+    <header class="takeaway-head">
+      <p class="takeaway-no">Takeaway 02</p>
+      <h2 id="co-design">How Extreme Co-Design Beat Moore’s Law by a Million Times</h2>
+    </header>
+    <p>Classic Moore’s Law scaling delivers roughly a 10x gain every five years, or about 100x in a decade. Over the same decade, across six GPU generations from Pascal in 2016 through Volta, Ampere, Hopper, and Blackwell to Vera Rubin in 2026, NVIDIA says its AI compute performance has grown by 1,000,000x.</p>
+    <p>That did not come from silicon alone. It came from what Huang calls extreme co-design: improving the chips, the optical interconnects, the cooling, the system software, and the algorithms together, as one system.</p>
+    <dl class="numbers">
+      {coDesignNumbers.map(item => (
+        <div>
+          <dt>{item.label}</dt>
+          <dd>{item.value}{item.unit && <span class="unit">{item.unit}</span>}</dd>
+        </div>
+      ))}
+    </dl>
+    <p>Vera Rubin shows why designing a chip in isolation no longer works:</p>
+    <ul>
+      <li><strong>A 30x generational jump.</strong> Vera Rubin delivers 30x the performance of Blackwell for large language models and agentic workloads, and Blackwell was itself 30x faster than Hopper just two years earlier.</li>
+      <li><strong>The Vera CPU.</strong> A custom CPU that executes eight instructions per clock, backed by LPDDR memory and what NVIDIA calls the industry’s fastest on-chip fabric. It is built to speed up agent session setup and data processing.</li>
+      <li><strong>No internal cables.</strong> Vera Rubin compute nodes have no internal signal wires or cables at all. That enables 100% liquid cooling and cuts node assembly from two hours on Grace Blackwell to under five minutes.</li>
+      <li><strong>One logical GPU.</strong> The NVLink Switch Tray connects 72 Vera Rubin GPUs, each delivering 20 petaflops, into a single logical GPU with 1.44 exaflops in total.</li>
+      <li><strong>Light instead of copper.</strong> Spectrum-X with co-packaged optics, developed with TSMC using its COUPE technology, mounts silicon photonics directly on the chip package. Signals skip the printed circuit board entirely, powering a 512-port, 200 Gb/s Ethernet switch with the optical transceivers built into the chip.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="super-agent">
+    <header class="takeaway-head">
+      <p class="takeaway-no">Takeaway 03</p>
+      <h2 id="super-agent">The Anatomy of a Super Agent: Five Building Blocks</h2>
+    </header>
+    <p>As agents replace one-off prompts, the system around the model matters as much as the model itself. An enterprise agent is not just a large language model. The LLM is the reasoning engine at the center of a much larger machine.</p>
+    <p>An enterprise-ready super agent needs five building blocks:</p>
+    <ol class="blocks">
+      <li><strong>Model.</strong> The engine for perception, reasoning, and planning, such as Nemotron for language, Cosmos for world physics, and GR00T for humanoid robots.</li>
+      <li><strong>Harness.</strong> The exoskeleton, such as OpenClaw, that orchestrates the agent’s tasks, manages its working memory, and keeps its long-term state.</li>
+      <li><strong>Sandbox.</strong> The isolated environment the agent runs inside, so everything it does stays contained.</li>
+      <li><strong>Knowledge.</strong> The systems that bring in enterprise context: Nemotron Parse to understand documents, Nemotron Embed and Rerank for relevant retrieval, and Kumo for predictions over structured SQL databases.</li>
+      <li><strong>Tools.</strong> Accelerated domain libraries in CUDA-X that let agents do real work, from physics simulation and chemistry to compiling code.</li>
+    </ol>
+    <p>This does not destroy the enterprise software industry. It changes it. Specialized vendors are not being replaced. Companies from Cadence and CrowdStrike to Dassault Systèmes are becoming agent companies by building their domain algorithms into agent workflows, such as BioNeMo for RNA optimization, SIMULIA for structural mechanics, and Omniverse for digital twins.</p>
+  </section>
+
+  <section aria-labelledby="agent-security">
+    <header class="takeaway-head">
+      <p class="takeaway-no">Takeaway 04</p>
+      <h2 id="agent-security">Asking Nicely Doesn’t Work: Agent Security Moves Into Hardware</h2>
+    </header>
+    <p>Give an agent access to file systems, company databases, and network APIs, and you create serious security risk. Instructions in a prompt, like “please don’t delete files” or “please don’t touch the SSH keys”, are not a security strategy.</p>
+    <p>NVIDIA’s answer is to take agent containment out of the prompt and enforce it in the kernel and in hardware.</p>
+    <figure class="article-figure">
+      <Image src={openShellSentry} alt="Diagram: NVIDIA OpenShell wraps the agent harness with a gateway, supervisor, and policy prover. NVIDIA Sentry runs on a BlueField-4 DPU between the agent and the model, and records communications, policy decisions, and runtime evidence for operators." widths={[720, 1440, 2148]} sizes="(max-width: 767px) calc(100vw - 40px), 720px" />
+      <figcaption>OpenShell sandboxes the agent harness. Sentry, running on a BlueField-4 DPU, sits between the agent and the model and keeps a record of communications, policy decisions, and runtime evidence for operators. Image: NVIDIA</figcaption>
+    </figure>
+    <ul>
+      <li><strong>OpenShell runtime.</strong> An open-source runtime, released under Apache 2.0, that confines the agent harness inside a Linux kernel sandbox and acts as an external supervisor. Every outbound network request, system call, and file access is checked against strict permission limits using formal verification, and credentials and encryption keys stay outside the sandbox.</li>
+      <li><strong>NVIDIA Sentry on BlueField-4.</strong> A monitoring layer that runs on BlueField-4 data processing units (DPUs), completely separate from the host CPU. The agent’s traffic to the model passes through Sentry, so it can inspect the agent’s planning in real time. If the agent tries something that breaks company policy, Sentry cuts its connection to the model and quarantines it within milliseconds.</li>
+    </ul>
+    <figure class="pull-quote">
+      <blockquote><p>“Hope isn’t security. Safety isn’t an aspiration, it’s technology and engineering.”</p></blockquote>
+      <figcaption>Jensen Huang</figcaption>
+    </figure>
+    <aside class="article-note">
+      <p>This is the same principle I built <a href="/projects/k8s-agent/">k8s-agent</a> around: the limits on an AI agent should be enforced by the platform, not written into the prompt.</p>
+    </aside>
+  </section>
+
+  <section aria-labelledby="dsx-pods">
+    <header class="takeaway-head">
+      <p class="takeaway-no">Takeaway 05</p>
+      <h2 id="dsx-pods">Modular DSX Pods Tackle the $10 Billion Bottleneck</h2>
+    </header>
+    <p>Building a one-gigawatt AI factory costs roughly $50 billion. At that scale, the speed of going live decides the economics. A three- or four-month delay for on-site assembly and manual cabling can cost an operator more than $10 billion in token revenue it never collects.</p>
+    <p>NVIDIA’s answer is the DSX Pod: a containerized unit that is built and tested in the factory, then delivered to the site ready to connect.</p>
+    <figure class="article-figure">
+      <Image src={dsxPod} alt="A rendering of the NVIDIA Vera Rubin DSX POD, a white and green shipping container labelled 28,500 kg and 10 million components." widths={[720, 1440, 1564]} sizes="(max-width: 767px) calc(100vw - 40px), 720px" />
+      <figcaption>A Vera Rubin DSX POD: 28,500 kg and 10 million components, shipped as one pre-tested unit. Image: NVIDIA</figcaption>
+    </figure>
+    <ul>
+      <li><strong>Cabled in the factory.</strong> Each pod contains a complete Vera Rubin NVL72 system, and its 17 kilometers of Spectrum-X optical cabling are installed on the factory line instead of on site.</li>
+      <li><strong>Days, not months.</strong> Once power and utilities are connected, a site can be commissioned in days instead of four to five months.</li>
+      <li><strong>800V DC power.</strong> Power reaches the racks at 800V DC, which avoids conversion losses, and Max LPS dynamic control loops cut power draw by 30% for the same workload.</li>
+      <li><strong>No water lost to cooling.</strong> Closed-loop liquid cooling runs with coolant at up to 45°C, paired with outdoor dry coolers. At two-gigawatt scale, that avoids evaporating 54 million liters of water a day, about what 180,000 households use.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="desktop">
+    <header class="takeaway-head">
+      <p class="takeaway-no">Takeaway 06</p>
+      <h2 id="desktop">Supercomputing Shrinks to the Desktop</h2>
+    </header>
+    <p>Physical AI and robotics rely on a clear division of labor that NVIDIA calls the three-computer model:</p>
+    <ol class="blocks">
+      <li><strong>The cloud supercomputer</strong> trains the foundation models, such as Cosmos for physics, Nemotron for language, and GR00T for humanoid robots.</li>
+      <li><strong>The digital twin simulator</strong> runs in NVIDIA Omniverse and Isaac Lab, where robots practice balance, friction, and handling objects across millions of parallel virtual trials before they meet the real world.</li>
+      <li><strong>The edge computer</strong> inside the robot runs real-time inference on the hardware itself, as in the newly announced NVIDIA Agile One reference robot, developed with Agile Robotics.</li>
+    </ol>
+    <p>To put this model in the hands of individual developers, NVIDIA introduced personal supercomputers that can run physical simulation locally.</p>
+    <p>In 2016, one petaflop of compute meant the original DGX-1, a chassis so heavy it took two people to carry. The new RTX Spark, powered by the N1X processor, delivers one petaflop and 128GB of unified memory in a standalone desktop. Developers can design, simulate, and orchestrate complex agents right at their desk, like Pollen Robotics’ Micro Duck, which was trained in the cloud with Isaac Lab and orchestrated on an RTX Spark workstation. For more local power, the DGX Station scales up to 20 petaflops and 754GB of unified memory, running local agent stacks alongside Windows.</p>
+  </section>
+
+  <section aria-labelledby="road-ahead">
+    <h2 id="road-ahead">The Road Ahead: Sovereign Token Factories</h2>
+    <p>The keynote made one shift clear. We have moved past typing prompts into a web page and into a full-stack, agentic token economy. The lasting advantage will not go to organizations that simply license someone else’s chatbot. It will go to those that build, secure, and run their own token pipelines.</p>
+    <p>European industrial companies, regional clouds, and telecom networks are already turning energy into sovereign digital intelligence. As physical simulation, hardware-enforced security, and desktop supercomputing come together, every enterprise leader faces the same question:</p>
+    <p class="closing-question">Is your organization built only to consume software, or is it ready to build the secure token factories of the agentic era?</p>
+  </section>
+</ArticleLayout>
+
+<style>
+  .takeaway-head { margin-block: 64px 18px; }
+  .takeaway-no { font: 500 12px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
+  .takeaway-head h2 { margin: 6px 0 0; }
+
+  /* The layer cake: listed bottom-up for screen readers, drawn as a stack that narrows towards the top. */
+  .layer-cake { display: flex; flex-direction: column-reverse; gap: 6px; margin-block: 24px 28px; padding: 0; list-style: none; }
+  .layer-cake li { display: grid; grid-template-columns: 34px 132px minmax(0, 1fr); gap: 12px; align-items: baseline; margin: 0; padding: 14px 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); font-size: 15px; line-height: 1.55; }
+  .layer-cake li:nth-child(2) { margin-inline: 14px; }
+  .layer-cake li:nth-child(3) { margin-inline: 28px; }
+  .layer-cake li:nth-child(4) { margin-inline: 42px; }
+  .layer-cake li:nth-child(5) { margin-inline: 56px; border-color: var(--signal); background: var(--signal-soft); }
+  .layer-cake li:first-child { background: var(--night); border-color: var(--night); color: var(--night-ink); }
+  .layer-cake li:first-child strong { color: var(--night-ink); }
+  .layer-cake li:first-child .layer-text { color: var(--night-muted); }
+  .layer-no { font: 400 12px/1.5 var(--font-utility); color: var(--signal); }
+  .layer-cake li:first-child .layer-no { color: var(--night-signal); }
+  .layer-cake strong { font-family: var(--font-display); font-weight: 600; }
+  .layer-text { color: var(--slate); }
+
+  .numbers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-block: 28px 32px; border-top: 1px solid var(--ink); }
+  .numbers div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; padding: 20px 20px 20px 0; border-bottom: 1px solid var(--rule); }
+  .numbers div:nth-child(even) { padding-left: 20px; border-left: 1px solid var(--rule); }
+  .numbers dd { margin: 0; display: flex; align-items: baseline; gap: 6px; font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 4vw, 36px); line-height: 1; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .numbers .unit { font: 400 12px/1 var(--font-utility); letter-spacing: 0; color: var(--slate); }
+  .numbers dt { font-size: 14px; line-height: 1.5; color: var(--slate); }
+
+  .blocks { counter-reset: block; padding: 0 !important; list-style: none !important; }
+  .blocks li { position: relative; padding-left: 44px; }
+  .blocks li::before { counter-increment: block; content: counter(block); position: absolute; left: 0; top: .15em; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 12px/1 var(--font-utility); }
+  .blocks li + li { margin-top: 14px; }
+
+  .article-note p { margin: 0; font-size: 16px; line-height: 1.7; }
+
+  .closing-question { margin-top: 24px !important; padding: 22px 24px; border-left: 3px solid var(--signal); background: var(--signal-soft); font-family: var(--font-display); font-weight: 600; font-size: clamp(19px, 2.2vw, 22px); line-height: 1.45; letter-spacing: -.01em; color: var(--ink); }
+
+  @media (max-width: 640px) {
+    .layer-cake li { grid-template-columns: 30px minmax(0, 1fr); row-gap: 2px; padding: 12px 14px; }
+    .layer-text { grid-column: 2; }
+    .layer-cake li:nth-child(2) { margin-inline: 6px; }
+    .layer-cake li:nth-child(3) { margin-inline: 12px; }
+    .layer-cake li:nth-child(4) { margin-inline: 18px; }
+    .layer-cake li:nth-child(5) { margin-inline: 24px; }
+    .numbers div { padding-right: 12px; }
+    .numbers div:nth-child(even) { padding-left: 12px; }
+  }
+</style>

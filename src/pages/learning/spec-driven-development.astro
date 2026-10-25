@@ -1,10 +1,10 @@
 ---
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
-import { specDrivenLesson as post } from '../../data/writing';
+import { specDrivenLesson as post } from '../../data/blog';
 ---
 <ArticleLayout post={post}>
   <p class="article-lead">Did you know that giving an AI coding agent a short prompt like “create a login page” can generate technical debt faster than an entire team of human developers?</p>
-  <p>While <strong>vibe coding</strong>—building software through quick prompts and trial and error—feels like magic for tiny experiments, it quickly falls apart on serious production projects. To build scalable, maintainable applications with AI, we must shift from prompting-first to spec-first.</p>
+  <p>While <strong>vibe coding</strong> (building software through quick prompts and trial and error) feels like magic for tiny experiments, it quickly falls apart on serious production projects. To build scalable, maintainable applications with AI, we must shift from prompting-first to spec-first.</p>
   <p>Welcome to <strong>Spec-Driven Development (SDD)</strong>, where the specification becomes the shared brain and the AI agent provides the execution muscle.</p>
 
   <aside class="learning-objectives" aria-labelledby="learning-objectives-title">
@@ -61,12 +61,12 @@ import { specDrivenLesson as post } from '../../data/writing';
       <article>
         <p class="card-label">What and why</p>
         <h3>The Specification</h3>
-        <p>Defines what should be built and why—for example, “Users must be able to sign in securely using an email address and password.”</p>
+        <p>Defines what should be built and why. For example: “Users must be able to sign in securely using an email address and password.”</p>
       </article>
       <article>
         <p class="card-label">How</p>
         <h3>The Implementation</h3>
-        <p>Defines the technical approach—for example, whether the application uses SQLite with Prisma ORM or MongoDB.</p>
+        <p>Defines the technical approach, for example whether the application uses SQLite with Prisma ORM or MongoDB.</p>
       </article>
     </div>
 

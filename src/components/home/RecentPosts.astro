@@ -2,16 +2,16 @@
 import { formatDate } from '../../utils/date';
 import Icon from '../Icon.astro';
 import PostCover from '../PostCover.astro';
-import { posts, postLabel } from '../../data/writing';
+import { posts, postLabel } from '../../data/blog';
 
 // The three newest posts, articles and lessons together.
 const [lead, ...rest] = posts.slice(0, 3);
 ---
-<section id="writing" class="h-section shell" aria-labelledby="writing-title">
+<section id="blog" class="h-section shell" aria-labelledby="blog-title">
   <div class="h-grid">
-    <p class="h-label">Writing</p>
+    <p class="h-label">Blog</p>
     <div>
-      <h2 id="writing-title" class="h-title">What I think about AI, and lessons you can follow.</h2>
+      <h2 id="blog-title" class="h-title">What I think about AI, and lessons you can follow.</h2>
       <p class="intro">Articles share my view of where AI is heading. Numbered lessons break down new ideas in AI engineering, step by step, so you can learn them alongside me.</p>
       <div class="writing">
         <article class="lead">
@@ -31,7 +31,7 @@ const [lead, ...rest] = posts.slice(0, 3);
         </div>
       </div>
       <p class="more">
-        <a href="/writing/" class="h-more">All writing <Icon name="arrow" size={16} /></a>
+        <a href="/blog/" class="h-more">All posts <Icon name="arrow" size={16} /></a>
         <a href="/learning/" class="h-more">Let's learn together: the lesson series <Icon name="arrow" size={16} /></a>
       </p>
     </div>

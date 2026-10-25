@@ -1,9 +1,9 @@
 ---
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
-// Lessons sit under Writing in the navigation; /learning/ is the lesson series page.
+// Lessons sit under Blog in the navigation; /learning/ is the lesson series page.
 const links = [
   { href: '/', label: 'Home', match: (p: string) => p === '/' },
-  { href: '/writing/', label: 'Writing', match: (p: string) => p.startsWith('/writing') || p.startsWith('/learning') },
+  { href: '/blog/', label: 'Blog', match: (p: string) => p.startsWith('/blog') || p.startsWith('/learning') },
   { href: '/projects/', label: 'Projects', match: (p: string) => p.startsWith('/projects') },
   { href: '/experience/', label: 'Experience', match: (p: string) => p === '/experience' },
   { href: '/about/', label: 'About', match: (p: string) => p === '/about' },

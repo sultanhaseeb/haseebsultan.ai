@@ -132,7 +132,7 @@ export const certifications = [
 
 export const education = [
   { qualification: 'Artificial Intelligence: Generative AI, Cloud and MLOps', institution: 'University of Oxford', detail: 'Professional development programme', logo: oxfordLogo },
-  { qualification: 'B.S. in Computer Science', institution: 'FAST — National University of Computer and Emerging Sciences', detail: 'Bachelor’s degree', logo: fastLogo },
+  { qualification: 'B.S. in Computer Science', institution: 'FAST National University of Computer and Emerging Sciences', detail: 'Bachelor’s degree', logo: fastLogo },
   { qualification: 'Intermediate (Pre-Engineering)', institution: 'Punjab Group of Colleges', detail: 'Higher secondary education', logo: punjabLogo },
   { qualification: 'Matriculation (Science)', institution: 'Sadiq Public School, Bahawalpur', detail: 'Secondary education', logo: sadiqLogo },
 ];

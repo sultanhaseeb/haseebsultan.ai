@@ -1,6 +1,6 @@
 # HaseebSultan.ai
 
-A personal homepage for Haseeb Sultan, AI Platform Engineer. Built with Astro and TypeScript, styled with plain CSS. Astro generates plain HTML and CSS; this page ships no executable browser JavaScript and needs no backend, database, authentication, or environment variables.
+A personal homepage for Haseeb Sultan, AI Platform Engineer. Built with Astro and TypeScript, styled with plain CSS. Astro generates plain HTML and CSS; this site ships no executable browser JavaScript and needs no backend, database, authentication, or environment variables.
 
 ## Local development
 
@@ -21,19 +21,22 @@ npm run preview  # Serve the production output locally
 
 ## Update content
 
-- **Portrait:** replace `public/images/haseeb.jpg`. The file is an optimized JPEG of the provided photo; the homepage shows it cropped to a 4:5 portrait (square on phones). A square image works best; update width/height in `src/components/home/HomeHero.astro` if its dimensions change.
-- **Social links:** update your GitHub, LinkedIn, Topmate, and email in `src/data/site.ts`. These are shared by the navigation, hero, and footer.
-- **Current experiments and topics:** edit `src/data/site.ts`. The topics appear in the AI platforms layer of the homepage stack.
-- **Writing and Learning:** both are listed in `src/data/writing.ts`. `writingArticles` holds opinion articles about AI (pages in `src/pages/writing/`); `learningLessons` holds lessons from what you are studying (pages in `src/pages/learning/`), numbered in the order listed, so add new lessons to the end. To move a page between the two, move its file, update its `href`, and add a redirect from the old URL in `astro.config.mjs`. Article images live in `public/images/writing/`. Add every new page to `public/sitemap.xml`.
-- **Professional background:** edit `src/data/resume.ts` for career history through 2025, nine delivered projects, expertise, contact details, certifications/exams, and education. Employer and client identities are deliberately omitted. Career history and skills are at `/experience/`, the portfolio at `/projects/`, articles at `/writing/`, and the journey and qualifications at `/about/`. Phone numbers are not published.
-- **Homepage:** sections live in `src/components/home/` (hero, platform stack, track record, projects, writing, contact); the homepage design tokens are in `src/pages/index.astro`.
+- **Images:** put images in `src/assets/images/` and import them; Astro resizes them and converts them to WebP at build time, so a large original is fine. Only files that need a fixed URL live in `public/`: the favicon, fonts, and the social card.
+- **Portrait:** replace `src/assets/images/haseeb.jpg` (a square photo works best). It appears in the hero, on About, in the author box under each post, and in the Person structured data. The social card `public/og-default.jpg` (1200×630) also shows the portrait and the hero headline; replace it if either changes.
+- **Social links:** update GitHub, LinkedIn, Topmate, and email in `src/data/site.ts`. They are shared by the navigation, footer, contact sections, and the `sameAs` profiles in the structured data.
+- **Blog:** posts are listed in `src/data/blog.ts`. `articles` are opinion pieces (pages in `src/pages/blog/`); `lessons` are step-by-step lessons (pages in `src/pages/learning/`), numbered in the order listed, so add new lessons to the end. Each post needs a short `coverTitle` for its cover card in listings. The optional `image`, with `imageAlt` and `imageCaption`, appears under the post header and becomes the post's social preview; posts without one use the site card. Post pages wrap their body in `src/layouts/ArticleLayout.astro`, which adds the header, author box, and read next. The RSS feed at `/rss.xml` updates itself; add every new page to `public/sitemap.xml`.
+- **Moving a page:** move its file, update its `href`, and add a redirect from the old URL in `astro.config.mjs`. Old `/writing/` links already redirect to `/blog/` and `/learning/`.
+- **Projects:** `aiProjects` in `src/data/site.ts` holds open-source AI work; the first entry is the flagship featured on the homepage, with its case study at `src/pages/projects/k8s-agent.astro`. `experiments` holds work in progress. Delivered projects are in `src/data/resume.ts`; each has an `id`, used as its anchor on `/projects/` and to choose the homepage's selected projects in `src/components/home/SelectedProjects.astro`.
+- **Upcoming lesson topics:** edit `topics` in `src/data/site.ts`. They appear on `/learning/`.
+- **Professional background:** edit `src/data/resume.ts` for career history, delivered projects, expertise, contact details, certifications, and education. Employer and client identities are deliberately omitted, and phone numbers are not published. `profile.title` is the current job title shown on `/experience/`; the positioning title, AI Platform Engineer, is `site.title`.
+- **Homepage:** sections live in `src/components/home/` (hero, platform stack, track record, selected projects, recent posts, contact). The years of experience and the career timeline are calculated at build time.
 - **Visual style:** colours, fonts, header, footer, page headers, and article styles are tokens and rules in `src/styles/global.css`. Every page uses the same label-rail grid (`.h-grid`, `.h-label`).
-- **Typography:** Inter (body), Archivo SemiExpanded 600 (homepage headings), and JetBrains Mono (homepage labels) are served locally from `public/fonts/`. All three use the SIL Open Font License (Inter’s copy is in `public/fonts/OFL.txt`); no external font service is contacted.
-- **SEO:** the default title/description live in `src/data/site.ts`, with metadata and Person structured data in `src/layouts/BaseLayout.astro`. The layout accepts optional title, description, and canonical props. No generated social image is included.
+- **Typography:** Inter (body), Archivo SemiExpanded 600 (headings), and JetBrains Mono (labels) are served locally from `public/fonts/`. All three use the SIL Open Font License (Inter’s copy is in `public/fonts/OFL.txt`); no external font service is contacted.
+- **SEO:** the default title and description live in `src/data/site.ts`; `src/layouts/BaseLayout.astro` adds the metadata, social image, and Person or BlogPosting structured data. Pages accept optional title, description, canonical, and image props.
 - **Domain:** update `site` in `astro.config.mjs`, `public/robots.txt`, and `public/sitemap.xml` together if the domain changes.
 - **Favicon:** replace `public/favicon.svg`.
 
-The top navigation opens dedicated Home, Writing, Learning, Projects, Experience, and About pages. The homepage has an introduction with the portrait, a platform-stack overview of the four layers of work, headline results with a career timeline, three selected projects, the latest articles, the latest lesson, and contact links. Each section links to its dedicated page. All nine résumé projects and current experiments are on `/projects/`. The Writing page lists articles on what you think about AI. The Learning page (“Let's learn together”) lists numbered lessons, explains how the lessons work, and shows the topics on your learning list. The Jev lesson moved from `/writing/` to `/learning/`; its old URL redirects. `/about/` contains the journey, certifications, education, and contact links for email and Topmate. Career dates and qualifications reflect the résumé through 2025; update them only when newer information is available. GitHub, LinkedIn, and Topmate links open in new tabs.
+The top navigation opens Home, Blog, Projects, Experience, and About, with a Contact button. The Blog lists articles and numbered lessons together, newest first; `/learning/` is the lesson series page (“Let's learn together”), which explains how the lessons work and lists upcoming topics. The homepage has the hero, the platform stack, headline results with a career timeline, selected projects led by the k8s-agent case study, the latest posts, and contact links. `/about/` tells the story behind the work, followed by certifications, education, and contact links. Unknown URLs show the 404 page. GitHub, LinkedIn, and Topmate links open in new tabs.
 
 ## Deploy to Cloudflare
 
@@ -41,7 +44,7 @@ The site is published at `https://haseebsultan.ai`. Pushing to `main` on the Git
 
 ### Workers static assets
 
-`wrangler.jsonc` serves `dist/` as static assets, without a Worker script or framework adapter:
+`wrangler.jsonc` serves `dist/` as static assets, without a Worker script or framework adapter, and serves `dist/404.html` for paths that have no page:
 
 ```sh
 npm run build
@@ -52,6 +55,6 @@ Wrangler will prompt you to authenticate with your Cloudflare account when neede
 
 ### Cloudflare Pages
 
-Connect the future GitHub repository to Cloudflare Pages. Use `npm run build` as the build command and `dist` as the output directory. Configure a supported Node.js version matching the requirement above. No server adapter or runtime secrets are needed.
+Connect the GitHub repository to Cloudflare Pages. Use `npm run build` as the build command and `dist` as the output directory. Configure a supported Node.js version matching the requirement above. No server adapter or runtime secrets are needed.
 
-Commit source and `package-lock.json`; keep generated output, dependencies, and local configuration ignored by Git. Use `npm ci` for reproducible installs once a lockfile exists.
+Commit source and `package-lock.json`; keep generated output, dependencies, and local configuration ignored by Git. Use `npm ci` for reproducible installs.

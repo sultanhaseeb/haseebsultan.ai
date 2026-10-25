@@ -5,7 +5,7 @@ import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticleEnd from '../components/ArticleEnd.astro';
-import { type Post, isLesson, postLabel } from '../data/writing';
+import { type Post, isLesson, postLabel } from '../data/blog';
 import { formatDate } from '../utils/date';
 interface Props {
   post: Post;
@@ -20,7 +20,7 @@ const socialImage = post.image ? await getImage({ src: post.image, width: 1200, 
   <main id="main" class="shell article-page">
     <article aria-labelledby="article-title">
       <header class="article-heading reading-column">
-        <a href={lesson ? '/learning/' : '/writing/'} class="article-back"><span aria-hidden="true">←</span> {lesson ? 'All lessons' : 'All writing'}</a>
+        <a href={lesson ? '/learning/' : '/blog/'} class="article-back"><span aria-hidden="true">←</span> {lesson ? 'All lessons' : 'All posts'}</a>
         <p class="eyebrow">{postLabel(post)}</p>
         <h1 id="article-title">{post.title}</h1>
         <p class="article-deck">{post.description}</p>
@@ -36,6 +36,7 @@ const socialImage = post.image ? await getImage({ src: post.image, width: 1200, 
             loading="eager"
             fetchpriority="high"
           />
+          {post.imageCaption && <figcaption>{post.imageCaption}</figcaption>}
         </figure>
       )}
       <div class="article-body reading-column">
