@@ -1,0 +1,78 @@
+---
+import Icon from '../Icon.astro';
+import { resumeProjects } from '../../data/resume';
+
+const selected = resumeProjects.slice(0, 3).map((project, index) => ({
+  ...project,
+  href: `/projects/#project-${index + 1}`,
+  summary: `${project.description.split('. ')[0].replace(/\.$/, '')}.`,
+}));
+---
+<section id="projects" class="h-section shell" aria-labelledby="projects-title">
+  <div class="h-grid">
+    <p class="h-label">Selected projects</p>
+    <div>
+      <h2 id="projects-title" class="h-title">Platforms I have designed and delivered.</h2>
+      <ul class="projects">
+        {selected.map(project => (
+          <li>
+            <a class="project" href={project.href}>
+              <div class="project-main">
+                <p class="role">{project.role}</p>
+                <h3>{project.title}</h3>
+                <p class="summary">{project.summary}</p>
+              </div>
+              <div class="project-side">
+                <p class="flow">
+                  {project.flow.map((step, i) => <><span>{step}</span>{i < project.flow.length - 1 && <span class="arrow" aria-hidden="true">→</span>}</>)}
+                </p>
+                <p class="tags">{project.topics.slice(0, 5).join(' · ')}</p>
+              </div>
+              <span class="go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/projects/" class="h-more">All {resumeProjects.length} projects <Icon name="arrow" size={16} /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects { margin: 36px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+  .projects li { border-bottom: 1px solid var(--rule); }
+  .project {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 24px;
+    gap: 36px;
+    align-items: start;
+    padding-block: 30px;
+    color: var(--ink);
+  }
+  .role { font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
+  .project h3 {
+    margin-top: 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    transition: color 160ms ease;
+  }
+  .summary { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--slate); max-width: 58ch; }
+  .project-side { display: grid; gap: 14px; padding-top: 26px; }
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font: 400 12px/1.5 var(--font-utility); }
+  .flow span:not(.arrow) { padding: 4px 8px; background: var(--signal-soft); border-radius: 3px; color: var(--ink); }
+  .arrow { color: var(--signal); }
+  .tags { font-size: 13px; line-height: 1.6; color: var(--slate); }
+  .go { padding-top: 30px; color: var(--slate); transition: color 160ms ease, translate 160ms ease; }
+  .project:hover h3, .project:hover .go { color: var(--signal); }
+  .project:hover .go { translate: 3px 0; }
+  .project:focus-visible { outline-offset: 2px; }
+
+  @media (max-width: 760px) {
+    .project { grid-template-columns: 1fr; gap: 16px; padding-block: 26px; }
+    .project-side { padding-top: 0; }
+    .go { display: none; }
+  }
+</style>

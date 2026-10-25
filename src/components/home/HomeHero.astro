@@ -1,0 +1,120 @@
+---
+import Icon from '../Icon.astro';
+import { profile } from '../../data/resume';
+
+// Career start (June 2019). Counted at build time, so the figure rises after each anniversary once the site is rebuilt.
+const careerStart = new Date(Date.UTC(2019, 5, 1));
+const now = new Date();
+const yearsOfExperience = now.getUTCFullYear() - careerStart.getUTCFullYear() - (now.getUTCMonth() < careerStart.getUTCMonth() ? 1 : 0);
+---
+<section class="home-hero shell" aria-labelledby="hero-title">
+  <div class="copy">
+    <p class="kicker"><span>AI Platform Engineer</span><span aria-hidden="true">/</span><span>{profile.location}</span></p>
+    <h1 id="hero-title">I build the infrastructure AI runs on.</h1>
+    <p class="lede">Since 2019 I've built cloud and Kubernetes platforms across Azure, AWS, and Google Cloud. Now I focus on what AI systems need underneath: LLMOps, agent infrastructure, and AI security.</p>
+    <div class="actions">
+      <a href="/projects/" class="btn btn-primary">See selected work <Icon name="arrow" size={17} /></a>
+      <a href="#contact" class="btn btn-quiet">Get in touch</a>
+    </div>
+    <dl class="facts">
+      <div><dt>Certified</dt><dd>Kubernetes Administrator (CKA)<br />Azure DevOps Engineer Expert</dd></div>
+      <div><dt>Clouds</dt><dd>Azure, AWS,<br />Google Cloud</dd></div>
+      <div><dt>Experience</dt><dd class="year">{yearsOfExperience}+ years</dd></div>
+    </dl>
+  </div>
+  <figure class="photo">
+    <img src="/images/haseeb.jpg" alt="Haseeb Sultan smiling outdoors, wearing a navy blazer and white shirt" width="1254" height="1254" fetchpriority="high" decoding="async" />
+    <figcaption><strong>Haseeb Sultan</strong><span>{profile.title}</span></figcaption>
+  </figure>
+</section>
+
+<style>
+  .home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    gap: clamp(40px, 7vw, 96px);
+    align-items: end;
+    padding-block: clamp(48px, 7vw, 88px) 0;
+  }
+  .kicker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font: 500 12px/1.5 var(--font-utility);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+  .kicker span:first-child { color: var(--signal); }
+  h1 {
+    margin-top: 22px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(42px, 6.2vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -.035em;
+    text-wrap: balance;
+    max-width: 13ch;
+  }
+  .lede {
+    margin-top: 26px;
+    max-width: 54ch;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--slate);
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+  .facts {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr .8fr;
+    gap: 24px;
+    margin: 48px 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+  }
+  .facts dt {
+    font: 500 11px/1.5 var(--font-utility);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+  .facts dd { margin: 8px 0 0; font-size: 14px; line-height: 1.55; font-weight: 500; }
+  .facts .year { font-family: var(--font-display); font-size: 22px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+
+  .photo { margin: 0; }
+  .photo img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 30%;
+    border-radius: 2px;
+    background: var(--rule);
+  }
+  .photo figcaption {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink);
+    margin-top: 14px;
+    font: 400 12px/1.5 var(--font-utility);
+    color: var(--slate);
+  }
+  .photo figcaption strong { color: var(--ink); font-weight: 500; }
+
+  @media (max-width: 900px) {
+    .home-hero { grid-template-columns: 1fr; align-items: start; }
+    .photo { order: -1; width: min(100%, 260px); }
+    .photo img { aspect-ratio: 1 / 1; }
+  }
+  @media (max-width: 560px) {
+    .lede { font-size: 17px; }
+    .facts { grid-template-columns: 1fr 1fr; }
+    .facts > div:first-child { grid-column: 1 / -1; }
+  }
+</style>

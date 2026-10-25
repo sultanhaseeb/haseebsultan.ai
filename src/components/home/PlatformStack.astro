@@ -1,0 +1,115 @@
+---
+import { topics } from '../../data/site';
+
+// Listed top to bottom, the way a platform stack is drawn: each layer runs on the one below it.
+const layers = [
+  {
+    id: '04', name: 'AI platforms', since: 'Now', current: true,
+    tools: topics,
+    proof: 'Deploying, evaluating, and securing LLM applications and agents, building on MLOps and LLMOps pipelines I have automated.',
+  },
+  {
+    id: '03', name: 'Delivery', since: 'Since 2020',
+    tools: ['Azure DevOps', 'GitHub Actions', 'GitLab CI', 'Argo CD', 'SonarQube'],
+    proof: 'DevSecOps in the pipeline for 23+ microservices, with GitOps releases to every environment.',
+  },
+  {
+    id: '02', name: 'Orchestration', since: 'Since 2020',
+    tools: ['Kubernetes', 'AKS', 'EKS', 'GKE', 'Helm', 'Istio'],
+    proof: '25+ Kubernetes clusters migrated to Azure across 11 environments.',
+  },
+  {
+    id: '01', name: 'Cloud & IaC', since: 'Since 2019',
+    tools: ['Azure', 'AWS', 'Google Cloud', 'Terraform', 'Ansible'],
+    proof: 'Azure infrastructure costs cut by up to 45% through scaling and reserved capacity.',
+  },
+];
+---
+<section class="band" aria-labelledby="stack-title">
+  <div class="shell">
+    <div class="h-grid">
+      <p class="h-label">Platform stack</p>
+      <div>
+        <h2 id="stack-title" class="h-title">I started at the bottom of the stack. Now I work at the top.</h2>
+        <p class="intro">Every AI system runs on cloud, orchestration, and delivery. I have spent years in each of those layers, and that work shapes how I build platforms for AI.</p>
+      </div>
+    </div>
+
+    <ol class="stack" aria-label="Platform layers, from top to bottom">
+      {layers.map(layer => (
+        <li class:list={['layer', { current: layer.current }]}>
+          <div class="layer-head">
+            <span class="layer-id">L{layer.id}</span>
+            <h3>{layer.name}</h3>
+            <span class="since">{layer.current && <span class="live" aria-hidden="true"></span>}{layer.since}</span>
+          </div>
+          <ul class="tools" aria-label={`${layer.name} tools`}>{layer.tools.map(tool => <li>{tool}</li>)}</ul>
+          <p class="proof">{layer.proof}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .band {
+    margin-top: var(--section-gap);
+    padding-block: clamp(64px, 8vw, 104px);
+    background: var(--night);
+    color: var(--night-ink);
+  }
+  .band .h-label { color: var(--night-muted); }
+  .band h2, .band h3 { color: var(--night-ink); }
+  .intro { margin-top: 18px; max-width: 60ch; font-size: 16px; line-height: 1.75; color: var(--night-muted); }
+
+  .stack { display: grid; gap: 8px; margin: 48px 0 0; padding: 0; list-style: none; }
+  .layer {
+    display: grid;
+    /* First column is sized so the tools column lines up with the section title above. */
+    grid-template-columns: calc(var(--rail) - 16px) minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+    padding: 24px;
+    border: 1px solid transparent;
+    border-top-color: var(--night-rule);
+    border-radius: 4px;
+  }
+  .layer-head { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; }
+  .layer-id { font: 500 12px/1.9 var(--font-utility); color: var(--night-muted); grid-row: span 2; }
+  .layer h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.35; letter-spacing: -.01em; }
+  .since { display: inline-flex; align-items: center; gap: 8px; font: 400 12px/1.5 var(--font-utility); color: var(--night-muted); }
+  .tools { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .tools li {
+    padding: 5px 9px;
+    border: 1px solid var(--night-rule);
+    border-radius: 3px;
+    font: 400 12px/1.4 var(--font-utility);
+    color: var(--night-ink);
+  }
+  .proof { font-size: 15px; line-height: 1.65; color: var(--night-muted); }
+
+  .layer.current {
+    margin-bottom: 8px;
+    border-color: color-mix(in srgb, var(--night-signal) 45%, transparent);
+    background: var(--night-raised);
+  }
+  .layer.current h3, .layer.current .since { color: var(--night-signal); }
+  .layer.current .tools li { border-color: color-mix(in srgb, var(--night-signal) 35%, transparent); }
+  .layer.current .proof { color: var(--night-ink); }
+
+  .live { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--live); }
+  .live::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--live);
+    animation: ping 2.4s ease-out infinite;
+  }
+  @keyframes ping { 0% { transform: scale(1); opacity: .6; } 70%, 100% { transform: scale(2.8); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .live::after { animation: none; } }
+
+  @media (max-width: 900px) {
+    .layer { grid-template-columns: 1fr; gap: 14px; padding: 22px 18px; }
+  }
+</style>

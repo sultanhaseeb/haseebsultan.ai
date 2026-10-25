@@ -1,8 +1,10 @@
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://haseebsultan.ai',
   output: 'static',
-  vite: { plugins: [tailwindcss()] },
+  // Lessons moved from /writing/ to /learning/; keep the old links working.
+  redirects: {
+    '/writing/unlocking-system-1-ai-jev': '/learning/unlocking-system-1-ai-jev/',
+  },
 });

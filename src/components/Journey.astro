@@ -1,19 +1,32 @@
 ---
 import Icon from './Icon.astro';
-interface Props { preview?: boolean; }
-const { preview = false } = Astro.props;
 ---
-<section id="about" class="section journey" aria-labelledby="journey-title">
-  <div>
-    <h2 id="journey-title">From Infrastructure<br class="desktop-break" /> to AI Platforms</h2>
-    <div class="journey-direction" aria-hidden="true"><span>Infrastructure</span><Icon name="arrow" size={18} /><span>AI Platforms</span></div>
-  </div>
-  <div class="journey-copy">
-    <p>{preview
-      ? 'I started in full-stack and cloud engineering in 2019, before moving into senior DevOps roles. My experience with cloud migrations, Kubernetes, and secure software delivery now shapes my work on AI platforms.'
-      : 'I started in full-stack and cloud engineering in 2019, building with React, Node.js, and MySQL before moving into senior DevOps roles. My work has included cloud migrations, Kubernetes platforms, secure CI/CD, technical leadership, and automated MLOps and LLMOps pipelines. That experience now informs my focus on the infrastructure and operations behind AI systems.'}</p>
-    {preview
-      ? <a href="/about/" class="text-link" aria-label="Explore more about me">Explore more <Icon name="arrow" size={17} /></a>
-      : <a href="/experience/" class="text-link">Read my professional background <Icon name="arrow" size={17} /></a>}
+<section id="journey" class="h-section" aria-labelledby="journey-title">
+  <div class="h-grid">
+    <p class="h-label">Journey</p>
+    <div class="journey">
+      <h2 id="journey-title" class="h-title">From infrastructure to AI platforms.</h2>
+      <p class="story">I started in full-stack and cloud engineering in 2019, building with React, Node.js, and MySQL before moving into senior DevOps roles. My work has included cloud migrations, Kubernetes platforms, secure CI/CD, technical leadership, and automated MLOps and LLMOps pipelines. That experience now informs my focus on the infrastructure and operations behind AI systems.</p>
+      <ol class="path" aria-label="Career path">
+        <li><span>2019</span>Full-stack &amp; cloud</li>
+        <li><span>2020</span>Senior DevOps</li>
+        <li><span>2023</span>Azure &amp; DevSecOps</li>
+        <li class="now"><span>Now</span>AI platforms</li>
+      </ol>
+      <a href="/experience/" class="text-link">Read my professional background <Icon name="arrow" size={16} /></a>
+    </div>
   </div>
 </section>
+
+<style>
+  .story { margin-top: 20px; max-width: 64ch; font-size: 17px; line-height: 1.8; color: var(--slate); }
+  .path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 36px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+  .path li { position: relative; padding: 18px 16px 0 0; font-size: 14px; font-weight: 500; line-height: 1.4; }
+  .path li::before { content: ''; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink); }
+  .path li.now::before { background: var(--signal); border-color: var(--signal); }
+  .path span { display: block; margin-bottom: 4px; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
+  .path li.now span { color: var(--signal); }
+  @media (max-width: 560px) {
+    .path { grid-template-columns: 1fr 1fr; row-gap: 24px; }
+  }
+</style>

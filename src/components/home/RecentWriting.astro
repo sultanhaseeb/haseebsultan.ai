@@ -1,0 +1,88 @@
+---
+import { formatDate } from '../../utils/date';
+import Icon from '../Icon.astro';
+import { writingArticles } from '../../data/writing';
+
+
+const [lead, ...rest] = writingArticles;
+---
+<section id="writing" class="h-section shell" aria-labelledby="writing-title">
+  <div class="h-grid">
+    <p class="h-label">Writing</p>
+    <div>
+      <h2 id="writing-title" class="h-title">What I think about AI, and where it is heading.</h2>
+      <div class="writing">
+        <article class="lead">
+          <a href={lead.href} class="cover" tabindex="-1" aria-hidden="true">
+            <img src={lead.image} alt="" width={lead.imageWidth} height={lead.imageHeight} loading="lazy" decoding="async" style={`object-position: ${lead.imagePosition}`} />
+          </a>
+          <p class="meta"><span>{lead.category}</span><time datetime={lead.published}>{formatDate(lead.published)}</time></p>
+          <h3><a href={lead.href}>{lead.title}</a></h3>
+          <p class="desc">{lead.description}</p>
+        </article>
+        <div class="others">
+          {rest.map(article => (
+            <article class="other">
+              <p class="meta"><span>{article.category}</span><time datetime={article.published}>{formatDate(article.published)}</time></p>
+              <h3><a href={article.href}>{article.title}</a></h3>
+              <p class="desc">{article.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <a href="/writing/" class="h-more">All writing <Icon name="arrow" size={16} /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .writing {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 40px;
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--ink);
+  }
+  .cover {
+    display: block;
+    aspect-ratio: 16 / 9;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: var(--surface);
+  }
+  .cover img { display: block; width: 100%; height: 100%; object-fit: cover; transition: scale 400ms ease; }
+  .lead:hover .cover img { scale: 1.02; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font: 400 12px/1.5 var(--font-utility);
+    color: var(--slate);
+  }
+  .meta span { color: var(--signal); }
+  .lead .meta { margin-top: 20px; }
+  h3 {
+    margin-top: 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    text-wrap: balance;
+  }
+  .lead h3 { font-size: 23px; }
+  .other h3 { font-size: 18px; }
+  h3 a { color: var(--ink); }
+  h3 a:hover { color: var(--signal); }
+  .desc { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--slate); }
+  .others { display: grid; align-content: start; }
+  .other { padding-block: 0 26px; }
+  .other + .other { padding-top: 26px; border-top: 1px solid var(--rule); }
+
+  @media (max-width: 760px) {
+    .writing { grid-template-columns: 1fr; gap: 28px; }
+    .others { border-top: 1px solid var(--rule); padding-top: 26px; }
+  }
+</style>

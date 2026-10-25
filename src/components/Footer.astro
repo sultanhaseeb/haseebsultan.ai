@@ -1,16 +1,37 @@
 ---
-import { site } from '../data/site';
 import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { profile } from '../data/resume';
+const pages = [
+  { href: '/writing/', label: 'Writing' },
+  { href: '/learning/', label: 'Learning' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/experience/', label: 'Experience' },
+  { href: '/about/', label: 'About' },
+];
+const elsewhere = [
+  { href: site.social.email, label: profile.email },
+  { href: site.social.linkedin, label: 'LinkedIn', external: true },
+  { href: site.social.github, label: 'GitHub', external: true },
+  { href: site.social.topmate, label: 'Topmate', external: true },
+];
 ---
-<footer class="site-footer shell">
-  <div class="footer-main">
-    <div><a href="/" class="wordmark">Haseeb Sultan<span aria-hidden="true">.</span></a><p>AI Platform Engineer</p></div>
-    <nav aria-label="Social links" class="flex flex-wrap gap-6">
-      <a href={site.social.github} target="_blank" rel="noopener noreferrer">GitHub <Icon name="external" size={14} /></a>
-      <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="external" size={14} /></a>
-      <a href={site.social.topmate} target="_blank" rel="noopener noreferrer">Topmate <Icon name="external" size={14} /></a>
-      <a href={site.social.email}>hello@haseebsultan.ai <Icon name="external" size={14} /></a>
-    </nav>
+<footer class="site-footer">
+  <div class="shell">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="wordmark"><span class="wordmark-mark" aria-hidden="true">HS</span>Haseeb Sultan</a>
+        <p>{site.title} in {profile.location}. I build cloud, Kubernetes, and AI platforms, and write about what I learn.</p>
+      </div>
+      <nav class="footer-col" aria-labelledby="footer-pages">
+        <h2 id="footer-pages">Pages</h2>
+        <ul>{pages.map(page => <li><a href={page.href}>{page.label}</a></li>)}</ul>
+      </nav>
+      <nav class="footer-col" aria-labelledby="footer-elsewhere">
+        <h2 id="footer-elsewhere">Contact</h2>
+        <ul>{elsewhere.map(link => <li><a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{link.label}{link.external && <Icon name="external" size={13} />}</a></li>)}</ul>
+      </nav>
+    </div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} Haseeb Sultan</span><span>Built with Astro</span></div>
   </div>
-  <div class="footer-bottom"><span>© Haseeb Sultan</span><span>Built with Astro.</span></div>
 </footer>

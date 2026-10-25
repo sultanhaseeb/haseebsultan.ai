@@ -1,71 +1,70 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import PageLayout from '../layouts/PageLayout.astro';
 import { profile, expertise, experience, additionalSkills } from '../data/resume';
 ---
-<BaseLayout title="Experience & Skills | Haseeb Sultan" description="Haseeb Sultan’s career experience and skills through 2025 in DevOps, cloud architecture, Kubernetes, MLOps, and LLMOps.">
-  <Header />
-  <main id="main" class="shell profile-page">
-    <header class="profile-intro">
-      <p class="eyebrow">Professional background · Through 2025</p>
-      <h1>Experience &amp; Skills</h1>
-      <p class="profile-role">{profile.title}</p>
-      <p class="profile-summary">{profile.summary}</p>
-      <div class="profile-contact">
-        <span>{profile.location}</span>
-        <a href={`mailto:${profile.email}`}>{profile.email}</a>
-      </div>
-      <nav aria-label="Experience page sections" class="profile-nav">
-        <a href="#expertise">Expertise</a><a href="#career">Career</a><a href="/projects/">Projects</a><a href="/about/#credentials">Certifications</a><a href="/about/#education">Education</a><a href="/writing/">Articles</a>
-      </nav>
-    </header>
+<PageLayout title="Experience & Skills" label="Through 2025" description="Haseeb Sultan’s career experience and skills through 2025 in DevOps, cloud architecture, Kubernetes, MLOps, and LLMOps." intro={profile.summary}>
+  <dl slot="head" class="profile-facts">
+    <div><dt>Role</dt><dd>{profile.title}</dd></div>
+    <div><dt>Location</dt><dd>{profile.location}</dd></div>
+    <div><dt>Email</dt><dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd></div>
+  </dl>
 
-    <section id="expertise" class="section" aria-labelledby="expertise-title">
-      <div class="section-heading"><h2 id="expertise-title">Areas of Expertise</h2></div>
-      <ul class="flex flex-wrap gap-2">{expertise.map(item => <li class="topic">{item}</li>)}</ul>
-      <div class="additional-skills">
-        {additionalSkills.map(skill => <article><h3>{skill.title}</h3><p>{skill.description}</p></article>)}
-      </div>
-    </section>
+  <section id="career" class="h-section" aria-labelledby="career-title">
+    <div class="h-grid">
+      <h2 id="career-title" class="h-label">Career</h2>
+      <ol class="career rule-top">
+        {experience.map(job => (
+          <li class="job">
+            <div class="job-head">
+              <p class="period">{job.period}</p>
+              <h3>{job.role}</h3>
+              <p class="focus">{job.focus}</p>
+            </div>
+            <ul class="highlights">{job.highlights.map(highlight => <li>{highlight}</li>)}</ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
 
-    <section id="career" class="section" aria-labelledby="career-title">
-      <div class="section-heading"><h2 id="career-title">Career Experience</h2><p class="section-note">Career history as recorded in 2025</p></div>
-      <div class="career-list">
-        {experience.map(job => <article class="career-row">
-          <div><p class="career-period">{job.period}</p><h3>{job.role}</h3><p class="career-focus">{job.focus}</p></div>
-          <ul class="career-highlights">{job.highlights.map(highlight => <li>{highlight}</li>)}</ul>
-        </article>)}
+  <section id="expertise" class="h-section" aria-labelledby="expertise-title">
+    <div class="h-grid">
+      <h2 id="expertise-title" class="h-label">Expertise</h2>
+      <div>
+        <ul class="chip-list">{expertise.map(item => <li class="chip">{item}</li>)}</ul>
+        <div class="skills">
+          {additionalSkills.map(skill => <article><h3>{skill.title}</h3><p>{skill.description}</p></article>)}
+        </div>
+        <p class="more">See also <a href="/projects/">projects</a>, <a href="/about/#credentials">certifications</a>, and <a href="/about/#education">education</a>.</p>
       </div>
-    </section>
-
-  </main>
-  <Footer />
-</BaseLayout>
+    </div>
+  </section>
+</PageLayout>
 
 <style>
-  .profile-page { padding-bottom: 76px; }
-  .profile-intro { padding-top: 64px; }
-  .profile-intro h1 { font-size: clamp(40px, 6vw, 68px); margin-top: 20px; }
-  .profile-role { margin-top: 24px; font-size: 22px; font-weight: 550; }
-  .profile-summary { max-width: 780px; font-size: 18px; line-height: 1.85; color: var(--color-muted); margin-top: 16px; }
-  .profile-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: 22px; font-size: 14px; color: var(--color-muted); }
-  .profile-contact a { color: var(--color-accent); overflow-wrap: anywhere; padding-block: 10px; }
-  .profile-nav { display: flex; flex-wrap: wrap; gap: 8px 26px; border-block: 1px solid var(--color-line); padding-block: 14px; margin-top: 32px; }
-  .profile-nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-accent); font-size: 14px; font-weight: 550; }
-  .additional-skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; margin-top: 30px; }
-  .additional-skills p { margin-top: 10px; color: var(--color-muted); line-height: 1.8; }
-  .career-list { border-top: 1px solid var(--color-line); }
-  .career-row { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.5fr); gap: 45px; padding-block: 34px; border-bottom: 1px solid var(--color-line); }
-  .career-period { font-size: 13px; color: var(--color-accent); margin-bottom: 12px; }
-  .career-focus { color: var(--color-muted); margin-top: 10px; font-size: 14px; line-height: 1.7; }
-  .career-highlights { padding-inline-start: 20px; list-style: disc; color: var(--color-muted); line-height: 1.8; }
-  .career-highlights li + li { margin-top: 12px; }
-  @media (max-width: 767px) {
-    .profile-page { padding-bottom: 48px; }
-    .profile-intro { padding-top: 36px; }
-    .profile-role { font-size: 19px; }
-    .profile-summary { font-size: 16px; }
-    .career-row, .additional-skills { grid-template-columns: 1fr; gap: 24px; }
+  .profile-facts { display: flex; flex-wrap: wrap; gap: 16px 48px; margin: 32px 0 0; }
+  .profile-facts dt { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .profile-facts dd { margin: 6px 0 0; font-size: 15px; font-weight: 500; overflow-wrap: anywhere; }
+  .profile-facts a { color: var(--signal); }
+  .profile-facts a:hover { color: var(--signal-strong); }
+
+  .career { margin: 0; padding: 0; list-style: none; }
+  .job { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.5fr); gap: 40px; padding-block: 34px; border-bottom: 1px solid var(--rule); }
+  .period { font: 400 12px/1.5 var(--font-utility); color: var(--signal); font-variant-numeric: tabular-nums; }
+  .job h3 { margin-top: 8px; font-size: 20px; }
+  .focus { margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--slate); }
+  .highlights { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .highlights li { position: relative; padding-left: 20px; font-size: 15px; line-height: 1.7; color: #344053; }
+  .highlights li::before { content: ''; position: absolute; left: 0; top: .72em; width: 8px; height: 1px; background: var(--slate); }
+
+  .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--rule); }
+  .skills h3 { font-size: 17px; }
+  .skills p { margin-top: 8px; font-size: 15px; line-height: 1.7; color: var(--slate); }
+  .more { margin-top: 32px; font-size: 14px; color: var(--slate); }
+  .more a { color: var(--signal); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 760px) {
+    .job { grid-template-columns: 1fr; gap: 18px; padding-block: 28px; }
+    .skills { grid-template-columns: 1fr; gap: 24px; }
   }
 </style>

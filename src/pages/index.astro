@@ -1,23 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Topics from '../components/Topics.astro';
-import Explore from '../components/Explore.astro';
-import ExperienceOverview from '../components/ExperienceOverview.astro';
-import WorkAreas from '../components/WorkAreas.astro';
-import LearningInPublic from '../components/LearningInPublic.astro';
 import Footer from '../components/Footer.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import PlatformStack from '../components/home/PlatformStack.astro';
+import TrackRecord from '../components/home/TrackRecord.astro';
+import SelectedProjects from '../components/home/SelectedProjects.astro';
+import RecentWriting from '../components/home/RecentWriting.astro';
+import HomeLearning from '../components/home/HomeLearning.astro';
+import HomeContact from '../components/home/HomeContact.astro';
 ---
 <BaseLayout>
   <Header />
-  <main id="main" class="shell">
-    <Hero />
-    <Topics />
-    <ExperienceOverview />
-    <Explore />
-    <WorkAreas />
-    <LearningInPublic />
+  <main id="main">
+    <HomeHero />
+    <PlatformStack />
+    <TrackRecord />
+    <SelectedProjects />
+    <RecentWriting />
+    <HomeLearning />
+    <HomeContact />
   </main>
   <Footer />
 </BaseLayout>
+

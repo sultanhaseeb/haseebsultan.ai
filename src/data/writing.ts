@@ -1,9 +1,8 @@
 export const jevArticle = {
   title: 'Unlocking System 1 AI: Jev',
   description: 'How Jev replaces slow text generation with fast, calibrated decisions for high-volume application workflows.',
-  format: 'featured' as const,
   category: 'AI Engineering',
-  href: '/writing/unlocking-system-1-ai-jev/',
+  href: '/learning/unlocking-system-1-ai-jev/',
   publication: 'HaseebSultan.ai',
   published: '2026-10-01',
   image: '/images/writing/unlocking-system-1-ai-jev/system-1-vs-system-2.png',
@@ -16,7 +15,6 @@ export const jevArticle = {
 export const specDrivenArticle = {
   title: 'Vibe Coding vs. Spec-Driven Development: From Chaos to Clarity',
   description: 'Why production AI engineering needs durable specifications, a Project Constitution, disciplined validation, and agent-independent workflows.',
-  format: 'featured' as const,
   category: 'AI Engineering',
   href: '/writing/spec-driven-development/',
   publication: 'HaseebSultan.ai',
@@ -31,7 +29,6 @@ export const specDrivenArticle = {
 export const controlProblemArticle = {
   title: 'Will AI Kill Us — Or Are We Really Afraid of Losing Control?',
   description: 'What a missing watermark can teach us about AI alignment, reliable constraints, and the growing debate over control.',
-  format: 'featured' as const,
   category: 'AI Safety',
   href: '/writing/the-control-problem/',
   publication: 'HaseebSultan.ai',
@@ -43,8 +40,13 @@ export const controlProblemArticle = {
   imagePosition: 'center',
 };
 
+// Writing: my own views on AI, what it is, and where it is heading.
 export const writingArticles = [
-  jevArticle,
   controlProblemArticle,
   specDrivenArticle,
+];
+
+// Learning: lessons from what I am studying, written so readers can learn alongside me. Oldest first.
+export const learningLessons = [
+  jevArticle,
 ];

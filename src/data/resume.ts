@@ -1,9 +1,9 @@
 // Public résumé content through 2025. Employer and client identities are omitted.
 export const profile = {
-  title: 'Senior DevOps / AIOps Engineer',
+  title: 'Senior DevOps / LLMOps Engineer',
   location: 'Dubai, UAE',
   email: 'hello@haseebsultan.ai',
-  summary: 'My background spans full-stack development, cloud architecture, DevOps, and AI operations. I build automated, secure platforms across Azure, AWS, and Google Cloud, with hands-on work in Kubernetes, infrastructure as code, CI/CD, MLOps, and LLM applications.',
+  summary: 'My background spans full-stack development, cloud architecture, DevOps, and LLMOps. I build automated, secure platforms across Azure, AWS, and Google Cloud, with hands-on work in Kubernetes, infrastructure as code, CI/CD, MLOps, and LLM applications.',
 };
 
 export const expertise = [
