@@ -1,12 +1,10 @@
 ---
-import Icon from './Icon.astro';
-import { site } from '../data/site';
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+// Lessons sit under Writing in the navigation; /learning/ is the lesson series page.
 const links = [
   { href: '/', label: 'Home', match: (p: string) => p === '/' },
-  { href: '/writing/', label: 'Writing', match: (p: string) => p.startsWith('/writing') },
-  { href: '/learning/', label: 'Learning', match: (p: string) => p.startsWith('/learning') },
-  { href: '/projects/', label: 'Projects', match: (p: string) => p === '/projects' },
+  { href: '/writing/', label: 'Writing', match: (p: string) => p.startsWith('/writing') || p.startsWith('/learning') },
+  { href: '/projects/', label: 'Projects', match: (p: string) => p.startsWith('/projects') },
   { href: '/experience/', label: 'Experience', match: (p: string) => p === '/experience' },
   { href: '/about/', label: 'About', match: (p: string) => p === '/about' },
 ];
@@ -17,10 +15,10 @@ const ariaCurrent = (link: (typeof links)[number]) => {
 ---
 <header class="site-header">
   <div class="site-header-inner shell">
-    <a href="/" class="wordmark" aria-label="Haseeb Sultan home"><span class="wordmark-mark" aria-hidden="true">HS</span>Haseeb Sultan</a>
+    <a href="/" class="wordmark"><span class="wordmark-mark" aria-hidden="true">HS</span>Haseeb Sultan</a>
     <nav class="site-nav" aria-label="Main navigation">
       {links.map(link => <a href={link.href} aria-current={ariaCurrent(link)}>{link.label}</a>)}
-      <a href={site.social.github} target="_blank" rel="noopener noreferrer" class="nav-cta">GitHub <Icon name="external" size={14} /></a>
+      <a href="/#contact" class="nav-cta">Contact</a>
     </nav>
   </div>
 </header>

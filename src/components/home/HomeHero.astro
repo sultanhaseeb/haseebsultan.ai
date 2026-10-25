@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
+import portrait from '../../assets/images/haseeb.jpg';
 import { profile } from '../../data/resume';
 
 // Career start (June 2019). Counted at build time, so the figure rises after each anniversary once the site is rebuilt.
@@ -22,10 +24,16 @@ const yearsOfExperience = now.getUTCFullYear() - careerStart.getUTCFullYear() - 
       <div><dt>Experience</dt><dd class="year">{yearsOfExperience}+ years</dd></div>
     </dl>
   </div>
-  <figure class="photo">
-    <img src="/images/haseeb.jpg" alt="Haseeb Sultan smiling outdoors, wearing a navy blazer and white shirt" width="1254" height="1254" fetchpriority="high" decoding="async" />
-    <figcaption><strong>Haseeb Sultan</strong><span>{profile.title}</span></figcaption>
-  </figure>
+  <div class="photo">
+    <Image
+      src={portrait}
+      alt="Haseeb Sultan smiling outdoors, wearing a navy blazer and white shirt"
+      widths={[144, 340, 680]}
+      sizes="(max-width: 900px) 72px, 340px"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
 </section>
 
 <style>
@@ -82,7 +90,8 @@ const yearsOfExperience = now.getUTCFullYear() - careerStart.getUTCFullYear() - 
   .facts dd { margin: 8px 0 0; font-size: 14px; line-height: 1.55; font-weight: 500; }
   .facts .year { font-family: var(--font-display); font-size: 22px; line-height: 1.15; font-variant-numeric: tabular-nums; }
 
-  .photo { margin: 0; }
+  /* Pushes the portrait level with the facts row, where the caption used to sit. */
+  .photo { margin-bottom: 30px; }
   .photo img {
     display: block;
     width: 100%;
@@ -94,23 +103,12 @@ const yearsOfExperience = now.getUTCFullYear() - careerStart.getUTCFullYear() - 
     border-radius: 2px;
     background: var(--rule);
   }
-  .photo figcaption {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 4px 12px;
-    padding-top: 14px;
-    border-top: 1px solid var(--ink);
-    margin-top: 14px;
-    font: 400 12px/1.5 var(--font-utility);
-    color: var(--slate);
-  }
-  .photo figcaption strong { color: var(--ink); font-weight: 500; }
 
+  /* Phones and tablets: the headline comes first; the portrait shrinks to an avatar above it. */
   @media (max-width: 900px) {
-    .home-hero { grid-template-columns: 1fr; align-items: start; }
-    .photo { order: -1; width: min(100%, 260px); }
-    .photo img { aspect-ratio: 1 / 1; }
+    .home-hero { grid-template-columns: 1fr; align-items: start; gap: 20px; }
+    .photo { order: -1; width: 72px; margin-bottom: 0; }
+    .photo img { aspect-ratio: 1 / 1; border-radius: 50%; }
   }
   @media (max-width: 560px) {
     .lede { font-size: 17px; }

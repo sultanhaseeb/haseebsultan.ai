@@ -1,12 +1,28 @@
 ---
 import Icon from '../Icon.astro';
+import { aiProjects } from '../../data/site';
 import { resumeProjects } from '../../data/resume';
 
-const selected = resumeProjects.slice(0, 3).map((project, index) => ({
-  ...project,
-  href: `/projects/#project-${index + 1}`,
-  summary: `${project.description.split('. ')[0].replace(/\.$/, '')}.`,
-}));
+// The flagship AI project, then two delivered platforms, chosen by id.
+const selectedIds = ['aws-microservices-platform', 'on-premises-to-azure-migration'];
+const [flagship] = aiProjects;
+const delivered = selectedIds.map(id => {
+  const project = resumeProjects.find(candidate => candidate.id === id);
+  if (!project) throw new Error(`Unknown selected project: ${id}`);
+  return project;
+});
+const selected = [
+  { role: flagship.role, title: flagship.title, summary: flagship.summary, flow: flagship.flow, topics: flagship.topics, href: flagship.href },
+  ...delivered.map(project => ({
+    role: project.role,
+    title: project.title,
+    summary: `${project.description.split('. ')[0].replace(/\.$/, '')}.`,
+    flow: project.flow,
+    topics: project.topics,
+    href: `/projects/#${project.id}`,
+  })),
+];
+const projectCount = aiProjects.length + resumeProjects.length;
 ---
 <section id="projects" class="h-section shell" aria-labelledby="projects-title">
   <div class="h-grid">
@@ -33,7 +49,7 @@ const selected = resumeProjects.slice(0, 3).map((project, index) => ({
           </li>
         ))}
       </ul>
-      <a href="/projects/" class="h-more">All {resumeProjects.length} projects <Icon name="arrow" size={16} /></a>
+      <a href="/projects/" class="h-more">All {projectCount} projects <Icon name="arrow" size={16} /></a>
     </div>
   </div>
 </section>

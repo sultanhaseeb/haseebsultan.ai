@@ -1,14 +1,68 @@
 ---
+import { Image } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import Journey from '../components/Journey.astro';
 import Qualifications from '../components/Qualifications.astro';
 import Icon from '../components/Icon.astro';
+import portrait from '../assets/images/haseeb.jpg';
 import { profile } from '../data/resume';
 import { site } from '../data/site';
+
+const values = [
+  { title: 'Guardrails that hold when things go wrong', text: 'Limits belong in the platform, not in a checklist or a prompt. In k8s-agent the AI agent’s permissions come from Kubernetes RBAC, so they hold even when the model gets it wrong.' },
+  { title: 'Automate it, then write it down', text: 'Everything I build runs on infrastructure as code and CI/CD, and comes with documentation the next engineer can actually use.' },
+  { title: 'Cost is part of the design', text: 'A platform should be affordable to run, not just to build. On Azure I cut infrastructure costs by up to 45% through resource management, scaling, and reserved instances.' },
+];
 ---
-<PageLayout title="About" description="Haseeb Sultan’s journey from full-stack and cloud engineering to AI platforms, with education and professional certifications." intro={`I'm Haseeb Sultan, an AI Platform Engineer based in ${profile.location}. I build and run the cloud and Kubernetes platforms that AI systems depend on.`}>
+<PageLayout
+  title="About"
+  heading="Hi, I'm Haseeb."
+  description="Haseeb Sultan is an AI Platform Engineer in Dubai: his story from full-stack development to AI platforms, what he cares about, his certifications, and education."
+  intro={`I'm an AI Platform Engineer in ${profile.location}. I build the infrastructure AI systems run on, and the guardrails that let AI agents act on real systems safely.`}
+>
+  <section id="story" class="h-section" aria-labelledby="story-title">
+    <div class="h-grid">
+      <p class="h-label">My story</p>
+      <div class="story">
+        <div class="story-text">
+          <h2 id="story-title" class="h-title">How I got here.</h2>
+          <p>I started in 2019 as a full-stack developer, building products with React, Node.js, and MySQL. In 2020 I moved into DevOps, and I have worked on the platforms underneath applications ever since: cloud, Kubernetes, delivery pipelines, and security.</p>
+          <p>Since then I have migrated more than 100 virtual machines and 25 Kubernetes clusters to Azure, built DevSecOps pipelines for more than 23 microservices, cut Azure infrastructure costs by up to 45%, and led a team of eight. The work has taken me across Azure, AWS, and Google Cloud, and into fintech, healthcare, and banking.</p>
+          <p>Now I focus on AI platforms. AI agents are starting to act on real systems, and the questions that matter most there are ones I have worked on for years: who is allowed to do what, how every action is recorded, and what happens when something goes wrong. I am most interested in taking AI systems from experiment to secure, reliable production. <a href="/projects/k8s-agent/">k8s-agent</a>, my open-source Kubernetes agent, is that idea in code.</p>
+          <p>I also write. <a href="/writing/">Articles</a> share what I think about where AI is heading, and <a href="/learning/">lessons</a> break down new ideas in AI engineering so you can learn them with me. If you want to go deeper on something, you can <a href={site.social.topmate} target="_blank" rel="noopener noreferrer">book a one-to-one session</a> with me on Topmate.</p>
+        </div>
+        <Image
+          src={portrait}
+          alt="Haseeb Sultan smiling outdoors, wearing a navy blazer and white shirt"
+          widths={[240, 480]}
+          sizes="(max-width: 900px) 120px, 240px"
+          class="story-photo"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section id="values" class="h-section" aria-labelledby="values-title">
+    <div class="h-grid">
+      <p class="h-label">What I care about</p>
+      <div>
+        <h2 id="values-title" class="h-title">How I like to build.</h2>
+        <ol class="values">
+          {values.map((value, index) => (
+            <li>
+              <span class="value-no" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              <h3>{value.title}</h3>
+              <p>{value.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
   <Journey />
   <Qualifications />
+
   <section id="contact" class="h-section" aria-labelledby="contact-title">
     <div class="h-grid">
       <p class="h-label">Contact</p>
@@ -23,7 +77,28 @@ import { site } from '../data/site';
     </div>
   </section>
 </PageLayout>
+
 <style>
+  .story { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 56px; align-items: start; }
+  .story-text p { max-width: 64ch; margin-top: 18px; font-size: 17px; line-height: 1.8; color: var(--slate); }
+  .story-text a { color: var(--signal); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .story-text a:hover { color: var(--signal-strong); }
+  .story-photo { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; border-radius: 2px; background: var(--rule); }
+
+  .values { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 32px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+  .values li { padding: 22px 24px 0 0; }
+  .values li + li { padding-left: 24px; border-left: 1px solid var(--rule); }
+  .value-no { font: 400 12px/1.5 var(--font-utility); color: var(--signal); }
+  .values h3 { margin-top: 8px; font-size: 18px; }
+  .values p { margin-top: 8px; font-size: 15px; line-height: 1.65; color: var(--slate); }
+
   .contact-copy { margin-top: 14px; max-width: 56ch; font-size: 16px; line-height: 1.7; color: var(--slate); }
   .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+  @media (max-width: 900px) {
+    .story { grid-template-columns: 1fr; gap: 24px; }
+    .story-photo { order: -1; width: 120px; aspect-ratio: 1 / 1; border-radius: 50%; }
+    .values { grid-template-columns: 1fr; }
+    .values li, .values li + li { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--rule); }
+  }
 </style>

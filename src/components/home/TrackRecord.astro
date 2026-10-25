@@ -8,17 +8,18 @@ const metrics = [
   { value: '10+', label: 'DevOps projects led, with a team of 8' },
 ];
 
-// Timeline scale: January 2019 to January 2026. Dates are decimal years.
+// Timeline scale: January 2019 to the January after the build date, in decimal years, so the
+// current role reaches the right edge again each time the site is rebuilt.
 const start = 2019;
-const end = 2026;
+const end = new Date().getUTCFullYear() + 1;
 const pct = (year: number) => ((year - start) / (end - start)) * 100;
-const ticks = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
+const ticks = Array.from({ length: end - start }, (_, i) => start + i);
 
 const roles = [
   { role: 'Cloud / Full Stack Engineer', focus: 'React, Node.js, MySQL', from: 2019 + 5 / 12, to: 2020 + 9 / 12, dates: 'Jun 2019 – Sep 2020' },
   { role: 'Senior DevOps Engineer', focus: 'Cloud migrations and team lead', from: 2020 + 9 / 12, to: 2023 + 10 / 12, dates: 'Oct 2020 – Oct 2023' },
   { role: 'Senior DevOps Engineer', focus: 'Azure optimization and DevSecOps', from: 2023 + 9 / 12, to: 2025 + 1 / 12, dates: 'Oct 2023 – Feb 2025' },
-  { role: 'Senior DevOps Engineer', focus: 'AWS platform automation', from: 2025 + 1 / 12, to: 2026, dates: 'Feb 2025 – present', ongoing: true },
+  { role: 'Senior DevOps Engineer', focus: 'AWS platform automation', from: 2025 + 1 / 12, to: end, dates: 'Feb 2025 – present', ongoing: true },
 ];
 ---
 <section id="experience" class="h-section shell" aria-labelledby="record-title">
@@ -143,11 +144,14 @@ const roles = [
 
   @media (max-width: 900px) {
     .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .metric:nth-child(3) { padding-left: 0; border-left: 0; }
+    /* Needs the sibling combinator to outrank `.metric + .metric` once styles are scoped. */
+    .metric + .metric:nth-child(3) { padding-left: 0; border-left: 0; }
     .metric:nth-child(n + 3) { margin-top: 24px; border-top: 1px solid var(--rule); }
   }
   @media (max-width: 640px) {
     .axis, .track { margin-left: 0; }
+    /* Every other year, so the labels don't collide on a narrow axis. */
+    .axis span:nth-child(even) { display: none; }
     .row { padding-top: 14px; }
     .row-label { position: static; width: auto; }
     .track { height: 56px; }

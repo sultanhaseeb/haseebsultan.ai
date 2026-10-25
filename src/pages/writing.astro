@@ -1,7 +1,17 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
-import FeaturedWriting from '../components/FeaturedWriting.astro';
+import PostList from '../components/PostList.astro';
+import Icon from '../components/Icon.astro';
+import { posts } from '../data/writing';
 ---
-<PageLayout title="Writing" description="Articles by Haseeb Sultan on what AI is, how it is changing software engineering, and where it is heading." intro="What I think about AI: what it is, how it is changing the way we build software, and where it is heading. For step-by-step lessons, see Learning.">
-  <FeaturedWriting />
+<PageLayout title="Writing" label="Articles & lessons" description="Articles by Haseeb Sultan on where AI is heading, and step-by-step lessons on AI engineering: AI agents, MCP, LLMOps, and AI infrastructure." intro="What I think about AI and where it is heading, plus numbered lessons that break down new ideas in AI engineering, step by step.">
+  <p slot="head" class="head-links">
+    <a href="/learning/" class="text-link">Follow the lesson series <Icon name="arrow" size={16} /></a>
+    <a href="/rss.xml" class="text-link">RSS feed</a>
+  </p>
+  <PostList posts={posts} label={`All posts · ${posts.length}`} />
 </PageLayout>
+
+<style>
+  .head-links { display: flex; flex-wrap: wrap; gap: 0 28px; margin-top: 8px; }
+</style>

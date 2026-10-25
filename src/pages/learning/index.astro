@@ -1,18 +1,17 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
 import Icon from '../../components/Icon.astro';
-import { learningLessons } from '../../data/writing';
+import PostCover from '../../components/PostCover.astro';
+import { lessons, postLabel } from '../../data/writing';
 import { topics } from '../../data/site';
 import { profile } from '../../data/resume';
 import { formatDate } from '../../utils/date';
 
-// Lessons are numbered in the order they were published; the newest is listed first.
-const lessons = learningLessons
-  .map((lesson, index) => ({ ...lesson, number: String(index + 1).padStart(2, '0') }))
-  .reverse();
+// Newest lesson first; numbers still follow publication order.
+const newestFirst = [...lessons].reverse();
 
 const steps = [
-  { title: 'I study a topic', text: 'Something I am working through myself, usually in LLMOps, AI agents, or AI infrastructure.' },
+  { title: 'I dig into a topic', text: 'A new idea in AI engineering, usually in AI agents, LLMOps, or AI infrastructure.' },
   { title: 'I turn it into a lesson', text: 'Clear learning objectives, plain explanations, diagrams, and the key takeaways at the end.' },
   { title: 'We learn it together', text: 'Read at your own pace, then tell me what was unclear or what you want to learn next.' },
 ];
@@ -21,27 +20,29 @@ const suggestHref = `mailto:${profile.email}?subject=${encodeURIComponent('Lesso
 ---
 <PageLayout
   title="Let's learn together"
-  label="Learning"
-  description="Learn AI engineering with Haseeb Sultan: lessons on LLMOps, AI agents, and AI infrastructure, written while he learns them."
-  intro="I'm learning in public. Each lesson here is something I'm studying right now, written up so you can learn it alongside me, one topic at a time."
+  label="Lesson series"
+  description="Step-by-step lessons on AI engineering by Haseeb Sultan: AI agents, MCP, LLMOps, and AI infrastructure, explained so you can learn alongside him."
+  intro="Each lesson breaks down a new idea in AI engineering, step by step, so you can learn it alongside me, one topic at a time."
 >
+  <p slot="head" class="head-links">
+    <a href={newestFirst[0].href} class="text-link">Start with the latest lesson <Icon name="arrow" size={16} /></a>
+    <a href="/rss.xml" class="text-link">Follow via RSS</a>
+  </p>
+
   <section class="h-section" aria-labelledby="lessons-title">
     <div class="h-grid">
       <h2 id="lessons-title" class="h-label">Lessons · {lessons.length}</h2>
       <ol class="lessons rule-top">
-        {lessons.map(lesson => (
+        {newestFirst.map(lesson => (
           <li>
             <article class="lesson">
-              <p class="lesson-no" aria-hidden="true">{lesson.number}</p>
               <div class="lesson-copy">
-                <p class="meta"><span>Lesson {lesson.number} · {lesson.category}</span><time datetime={lesson.published}>{formatDate(lesson.published)}</time></p>
+                <p class="meta"><span>{postLabel(lesson)}</span><time datetime={lesson.published}>{formatDate(lesson.published)}</time></p>
                 <h3><a href={lesson.href}>{lesson.title}</a></h3>
                 <p class="desc">{lesson.description}</p>
                 <a href={lesson.href} class="btn btn-primary start" aria-label={`Start lesson: ${lesson.title}`}>Start lesson <Icon name="arrow" size={16} /></a>
               </div>
-              <a href={lesson.href} class="thumb" tabindex="-1" aria-hidden="true">
-                <img src={lesson.image} alt="" width={lesson.imageWidth} height={lesson.imageHeight} loading="lazy" decoding="async" />
-              </a>
+              <a href={lesson.href} class="thumb" tabindex="-1" aria-hidden="true"><PostCover post={lesson} /></a>
             </article>
           </li>
         ))}
@@ -68,7 +69,7 @@ const suggestHref = `mailto:${profile.email}?subject=${encodeURIComponent('Lesso
     <div class="h-grid">
       <h2 id="next-title" class="h-label">Coming up</h2>
       <div class="next">
-        <p class="next-title">Topics on my learning list</p>
+        <p class="next-title">Next on the lesson list</p>
         <ul class="chip-list">{topics.map(topic => <li class="chip">{topic}</li>)}</ul>
         <p class="suggest">Is there something you want us to learn next? Email me at <a href={suggestHref}>{profile.email}</a> with your idea.</p>
       </div>
@@ -77,19 +78,18 @@ const suggestHref = `mailto:${profile.email}?subject=${encodeURIComponent('Lesso
 </PageLayout>
 
 <style>
+  .head-links { display: flex; flex-wrap: wrap; gap: 0 28px; margin-top: 8px; }
   .lessons { margin: 0; padding: 0; list-style: none; }
   .lessons > li { border-bottom: 1px solid var(--rule); }
-  .lesson { display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(0, 300px); gap: 32px; align-items: start; padding-block: 36px; }
-  .lesson-no { font-family: var(--font-display); font-weight: 600; font-size: 44px; line-height: 1; letter-spacing: -.03em; color: var(--signal); font-variant-numeric: tabular-nums; }
-  .meta { display: flex; flex-wrap: wrap; gap: 12px; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
+  .lesson { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 40px; align-items: start; padding-block: 36px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
   .meta span { color: var(--signal); }
   .lesson h3 { margin-top: 10px; font-size: 24px; line-height: 1.25; }
   .lesson h3 a:hover { color: var(--signal); }
   .desc { margin-top: 10px; max-width: 54ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
   .start { margin-top: 22px; }
-  .thumb { display: block; aspect-ratio: 16 / 10; max-width: 100%; overflow: hidden; border: 1px solid var(--rule); border-radius: 2px; background: var(--surface); }
-  .thumb img { display: block; width: 100%; height: 100%; object-fit: cover; transition: scale 400ms ease; }
-  .lesson:hover .thumb img { scale: 1.03; }
+  .thumb { display: block; transition: opacity 160ms ease; }
+  .lesson:hover .thumb { opacity: .92; }
 
   .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
   .steps li { padding: 22px 24px 0 0; }
@@ -103,14 +103,11 @@ const suggestHref = `mailto:${profile.email}?subject=${encodeURIComponent('Lesso
   .suggest a { color: var(--signal); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
 
   @media (max-width: 900px) {
-    .lesson { grid-template-columns: 56px minmax(0, 1fr); }
-    .lesson-no { font-size: 34px; }
-    .thumb { grid-column: 2; max-width: 420px; }
+    .lesson { grid-template-columns: minmax(0, 1fr) minmax(0, 220px); gap: 28px; }
   }
   @media (max-width: 700px) {
-    .lesson { grid-template-columns: 1fr; gap: 16px; padding-block: 28px; }
-    .lesson-no { display: none; }
-    .thumb { grid-column: auto; }
+    .lesson { grid-template-columns: 1fr; gap: 20px; padding-block: 28px; }
+    .thumb { order: -1; max-width: 420px; }
     .steps { grid-template-columns: 1fr; }
     .steps li, .steps li + li { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--rule); }
   }

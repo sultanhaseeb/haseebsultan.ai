@@ -2,6 +2,8 @@
   "name": "haseebsultan-ai",
   "compatibility_date": "2026-09-13",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    // Serve dist/404.html, with a 404 status, for any path that has no page.
+    "not_found_handling": "404-page"
   }
 }

@@ -1,0 +1,87 @@
+---
+// Closes every article and lesson: who wrote it, how to respond or follow, and what to read next.
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import portrait from '../assets/images/haseeb.jpg';
+import { site } from '../data/site';
+import { profile } from '../data/resume';
+import { type Post, isLesson, postLabel, readNext } from '../data/writing';
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const next = readNext(post);
+const emailHref = `mailto:${profile.email}?subject=${encodeURIComponent(post.title)}`;
+---
+<div class="article-end reading-column">
+  <aside class="author" aria-labelledby="author-name">
+    <Image src={portrait} alt="" width={128} class="author-photo" />
+    <div>
+      <p class="author-kicker">Written by</p>
+      <p id="author-name" class="author-name">{site.name}</p>
+      <p class="author-bio">{site.title} in {profile.location}. I build the infrastructure AI runs on: Kubernetes platforms, LLMOps, and secure tooling for AI agents.</p>
+      <ul class="author-links">
+        <li><a href={emailHref}>{isLesson(post) ? 'Questions about this lesson? Email me' : 'Thoughts on this? Email me'}</a></li>
+        <li><a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">Follow on LinkedIn <Icon name="external" size={13} /></a></li>
+        <li><a href="/rss.xml">RSS feed</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  {next && (
+    <nav class="next" aria-label={next.label}>
+      <p class="next-label">{next.label}</p>
+      <a href={next.post.href} class="next-link">
+        <span class="next-meta">{postLabel(next.post)}</span>
+        <span class="next-title">{next.post.title}</span>
+        <span class="next-desc">{next.post.description}</span>
+        <span class="next-go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
+      </a>
+    </nav>
+  )}
+</div>
+
+<style>
+  .article-end { display: grid; gap: 40px; margin-top: 64px; }
+  .author {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    padding: 24px 26px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--surface);
+  }
+  .author-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: 50% 30%; }
+  .author-kicker { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .author-name { margin-top: 2px; font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.3; }
+  .author-bio { margin-top: 6px; font-size: 15px; line-height: 1.65; color: var(--slate); }
+  .author-links { display: flex; flex-wrap: wrap; gap: 0 20px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .author-links a { display: inline-flex; align-items: center; gap: 5px; min-height: 36px; font-size: 14px; font-weight: 600; color: var(--signal); }
+  .author-links a:hover { color: var(--signal-strong); }
+
+  .next-label { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .next-link {
+    position: relative;
+    display: grid;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 22px 56px 22px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+  }
+  .next-meta { font: 400 12px/1.5 var(--font-utility); color: var(--signal); }
+  .next-title { font-family: var(--font-display); font-weight: 600; font-size: 21px; line-height: 1.3; letter-spacing: -.015em; transition: color 160ms ease; }
+  .next-desc { font-size: 15px; line-height: 1.65; color: var(--slate); }
+  .next-go { position: absolute; top: 50%; right: 4px; translate: 0 -50%; color: var(--slate); transition: color 160ms ease, translate 160ms ease; }
+  .next-link:hover .next-title, .next-link:hover .next-go { color: var(--signal); }
+  .next-link:hover .next-go { translate: 3px -50%; }
+
+  @media (max-width: 560px) {
+    .author { grid-template-columns: 1fr; gap: 14px; padding: 20px; }
+    .next-link { padding-right: 0; }
+    .next-go { display: none; }
+  }
+</style>

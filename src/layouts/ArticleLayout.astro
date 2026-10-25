@@ -1,0 +1,48 @@
+---
+// Shared frame for articles and lessons: header, lead image, body, author box, and read next.
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ArticleEnd from '../components/ArticleEnd.astro';
+import { type Post, isLesson, postLabel } from '../data/writing';
+import { formatDate } from '../utils/date';
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const lesson = isLesson(post);
+// Social previews get a 1200px JPEG of the lead image; posts without one use the site card.
+const socialImage = post.image ? await getImage({ src: post.image, width: 1200, format: 'jpg' }) : undefined;
+---
+<BaseLayout title={`${post.title} | Haseeb Sultan`} description={post.description} image={socialImage?.src} article={{ published: post.published, headline: post.title }}>
+  <Header />
+  <main id="main" class="shell article-page">
+    <article aria-labelledby="article-title">
+      <header class="article-heading reading-column">
+        <a href={lesson ? '/learning/' : '/writing/'} class="article-back"><span aria-hidden="true">←</span> {lesson ? 'All lessons' : 'All writing'}</a>
+        <p class="eyebrow">{postLabel(post)}</p>
+        <h1 id="article-title">{post.title}</h1>
+        <p class="article-deck">{post.description}</p>
+        <p class="article-byline">Haseeb Sultan <span aria-hidden="true">·</span> <time datetime={post.published}>{formatDate(post.published)}</time></p>
+      </header>
+      {post.image && (
+        <figure class="article-cover">
+          <Image
+            src={post.image}
+            alt={post.imageAlt ?? ''}
+            widths={[720, 960, 1440, 1920]}
+            sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1040px) calc(100vw - 80px), 960px"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </figure>
+      )}
+      <div class="article-body reading-column">
+        <slot />
+      </div>
+    </article>
+    <ArticleEnd post={post} />
+  </main>
+  <Footer />
+</BaseLayout>

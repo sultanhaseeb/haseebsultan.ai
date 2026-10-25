@@ -1,12 +1,13 @@
 ---
-import { topics } from '../../data/site';
+import Icon from '../Icon.astro';
 
 // Listed top to bottom, the way a platform stack is drawn: each layer runs on the one below it.
 const layers = [
   {
     id: '04', name: 'AI platforms', since: 'Now', current: true,
-    tools: topics,
-    proof: 'Deploying, evaluating, and securing LLM applications and agents, building on MLOps and LLMOps pipelines I have automated.',
+    tools: ['Claude Code', 'MCP', 'AI agents', 'FastAPI', 'Python', 'Go', 'MLflow'],
+    proof: 'Built k8s-agent: a Claude Code agent that operates Kubernetes inside guardrails enforced by RBAC, not by the prompt.',
+    link: { href: '/projects/k8s-agent/', label: 'Read the case study' },
   },
   {
     id: '03', name: 'Delivery', since: 'Since 2020',
@@ -44,7 +45,10 @@ const layers = [
             <span class="since">{layer.current && <span class="live" aria-hidden="true"></span>}{layer.since}</span>
           </div>
           <ul class="tools" aria-label={`${layer.name} tools`}>{layer.tools.map(tool => <li>{tool}</li>)}</ul>
-          <p class="proof">{layer.proof}</p>
+          <div class="proof">
+            <p>{layer.proof}</p>
+            {layer.link && <a href={layer.link.href} class="proof-link">{layer.link.label} <Icon name="arrow" size={15} /></a>}
+          </div>
         </li>
       ))}
     </ol>
@@ -87,6 +91,11 @@ const layers = [
     color: var(--night-ink);
   }
   .proof { font-size: 15px; line-height: 1.65; color: var(--night-muted); }
+  .proof-link { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; margin-top: 4px; font-size: 14px; font-weight: 600; color: var(--night-signal); }
+  .proof-link svg { transition: translate 160ms ease; }
+  .proof-link:hover { color: var(--night-ink); }
+  .proof-link:hover svg { translate: 3px 0; }
+  .band .proof-link:focus-visible { outline-color: var(--night-signal); }
 
   .layer.current {
     margin-bottom: 8px;

@@ -1,0 +1,21 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+<PageLayout
+  title="Page not found"
+  label="404"
+  description="This page does not exist or has moved."
+  intro="This page doesn't exist or has moved. These are good places to start instead."
+  noindex
+>
+  <div slot="head" class="actions">
+    <a href="/" class="btn btn-primary">Go to the homepage <Icon name="arrow" size={16} /></a>
+    <a href="/writing/" class="btn btn-quiet">Read the writing</a>
+    <a href="/projects/" class="btn btn-quiet">See the projects</a>
+  </div>
+</PageLayout>
+
+<style>
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+</style>

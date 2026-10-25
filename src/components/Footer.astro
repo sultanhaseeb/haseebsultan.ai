@@ -4,7 +4,7 @@ import { site } from '../data/site';
 import { profile } from '../data/resume';
 const pages = [
   { href: '/writing/', label: 'Writing' },
-  { href: '/learning/', label: 'Learning' },
+  { href: '/learning/', label: 'Lessons' },
   { href: '/projects/', label: 'Projects' },
   { href: '/experience/', label: 'Experience' },
   { href: '/about/', label: 'About' },
@@ -32,6 +32,6 @@ const elsewhere = [
         <ul>{elsewhere.map(link => <li><a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{link.label}{link.external && <Icon name="external" size={13} />}</a></li>)}</ul>
       </nav>
     </div>
-    <div class="footer-bottom"><span>© {new Date().getFullYear()} Haseeb Sultan</span><span>Built with Astro</span></div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} Haseeb Sultan</span><span><a href="/rss.xml">RSS feed</a> · Built with Astro</span></div>
   </div>
 </footer>

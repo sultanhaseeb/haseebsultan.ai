@@ -2,17 +2,26 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-interface Props { title: string; description: string; intro?: string; label?: string; }
-const { title, description, intro, label = title } = Astro.props;
+interface Props {
+  title: string;
+  description: string;
+  intro?: string;
+  label?: string;
+  // Visible page heading, when it should differ from the browser title.
+  heading?: string;
+  image?: string;
+  noindex?: boolean;
+}
+const { title, description, intro, label = title, heading = title, image, noindex } = Astro.props;
 ---
-<BaseLayout title={`${title} | Haseeb Sultan`} description={description}>
+<BaseLayout title={`${title} | Haseeb Sultan`} description={description} image={image} noindex={noindex}>
   <Header />
   <main id="main">
     <header class="page-head shell">
       <div class="h-grid">
         <p class="h-label">{label}</p>
         <div>
-          <h1>{title}</h1>
+          <h1>{heading}</h1>
           {intro && <p class="lede">{intro}</p>}
           <slot name="head" />
         </div>

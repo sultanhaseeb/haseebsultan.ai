@@ -1,35 +1,49 @@
 ---
 import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import portrait from '../assets/images/haseeb.jpg';
 import { site } from '../data/site';
 interface Props {
   title?: string;
   description?: string;
   canonical?: string;
-  article?: { published: string; image: string; headline: string };
+  // Social preview image path. Pages without their own use the site card in public/.
+  image?: string;
+  article?: { published: string; headline: string };
+  // For pages search engines should skip, such as the 404 page.
+  noindex?: boolean;
 }
 const {
   title = `${site.name} — ${site.title}`,
   description = site.description,
   canonical = new URL(Astro.url.pathname, Astro.site).href,
+  image = '/og-default.jpg',
   article,
+  noindex = false,
 } = Astro.props;
-const articleImage = article ? new URL(article.image, Astro.site).href : undefined;
+const imageUrl = new URL(image, Astro.site).href;
+const portraitImage = await getImage({ src: portrait, width: 600, format: 'jpg' });
+const person = {
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.title,
+  url: Astro.site?.href,
+  image: new URL(portraitImage.src, Astro.site).href,
+  // Profiles that belong to the same person, for search engines.
+  sameAs: [site.social.linkedin, site.social.github, site.social.topmate],
+};
 const structuredData = article ? {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: article.headline,
   description,
   datePublished: article.published,
-  image: articleImage,
-  author: { '@type': 'Person', name: site.name, url: Astro.site?.href },
+  image: imageUrl,
+  author: person,
   mainEntityOfPage: canonical,
 } : {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: site.name,
-  jobTitle: site.title,
-  url: Astro.site?.href,
-  image: new URL('/images/haseeb.jpg', Astro.site).href,
+  ...person,
   description,
   knowsAbout: ['AI Platforms', 'DevOps', 'Kubernetes', 'LLMOps', 'Agentic AI', 'MCP', 'AI Security'],
 };
@@ -41,20 +55,21 @@ const structuredData = article ? {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#fafbfc" />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Writing`} href="/rss.xml" />
     <link rel="preload" href="/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content="HaseebSultan.ai" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
     {article && <meta property="article:published_time" content={article.published} />}
-    {articleImage && <meta property="og:image" content={articleImage} />}
-    {articleImage && <meta name="twitter:image" content={articleImage} />}
-    <meta name="twitter:card" content={article ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
     <title>{title}</title>
   </head>

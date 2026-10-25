@@ -1,0 +1,234 @@
+---
+import { Code } from 'astro:components';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { mcpLesson as post } from '../../data/writing';
+
+const repo = 'https://github.com/sultanhaseeb/taskboard-mcp';
+const theme = 'github-dark-default';
+
+// Code samples are taken from the taskboard-mcp repository.
+const setupCode = `from mcp.server import MCPServer
+
+mcp = MCPServer("taskboard-mcp")`;
+
+const addTaskCode = `@mcp.tool()
+def add_task(title: str) -> dict[str, str]:
+    """Create an open task and return it."""
+    task_id = str(uuid4())
+    task = {"id": task_id, "title": title, "status": "open"}
+    with _database() as connection:
+        connection.execute(
+            "INSERT INTO tasks (id, title, status) VALUES (?, ?, ?)",
+            (task_id, title, "open"),
+        )
+    return task`;
+
+const listTasksCode = `@mcp.tool()
+def list_tasks(status: Literal["open", "completed"] | None = None) -> list[dict[str, str]]:
+    """Return all tasks, or filter by open or completed status."""`;
+
+const completeTaskCode = `@mcp.tool()
+def complete_task(task_id: str) -> dict[str, str]:
+    """Mark a task complete and return the updated task."""
+    with _database() as connection:
+        row = connection.execute(
+            "SELECT title FROM tasks WHERE id = ?", (task_id,)
+        ).fetchone()
+        if row is None:
+            raise ToolError(f"Task not found: {task_id}")
+        connection.execute(
+            "UPDATE tasks SET status = ? WHERE id = ?", ("complete", task_id)
+        )
+    return {"id": task_id, "title": row[0], "status": "complete"}`;
+
+const resourceCode = `@mcp.resource("taskboard://tasks")
+def tasks_resource() -> list[dict[str, str]]:
+    """Show the current tasks on the taskboard."""
+    return list_tasks()`;
+
+const promptCode = `@mcp.prompt()
+def plan_open_tasks(goal: str) -> str:
+    """Create a planning prompt using the current open tasks."""
+    return (
+        f"Help me make a practical plan for this goal: {goal}\\n\\n"
+        'Use the taskboard-mcp \`list_tasks\` tool with status="open" to retrieve '
+        "the current open tasks. Then order them into a practical plan and say "
+        "what to do first. Do not change any task statuses."
+    )`;
+
+const runCode = `if args.http:
+    mcp.run(
+        transport="streamable-http",
+        host="127.0.0.1",
+        port=8000,
+        streamable_http_path="/mcp",
+    )
+else:
+    mcp.run()`;
+
+const installCode = `python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+
+python server.py           # STDIO, for clients that launch the server
+python server.py --http    # Streamable HTTP at http://127.0.0.1:8000/mcp`;
+
+const inspectorCode = `npx @modelcontextprotocol/inspector@latest .venv/bin/python server.py`;
+
+const clientCode = `server = StdioServerParameters(
+    command=sys.executable,
+    args=[str(SERVER_PATH)],
+    cwd=str(SERVER_PATH.parent),
+)
+
+async with Client(server) as client:
+    result = await client.read_resource("taskboard://tasks")`;
+---
+<ArticleLayout post={post}>
+  <section aria-labelledby="introduction">
+    <h2 id="introduction">Introduction</h2>
+    <p>An AI assistant that can “use tools” needs a standard way to reach the outside world. The <strong>Model Context Protocol (MCP)</strong> is an open standard for that connection: you write a server once, and any MCP client, such as an AI desktop app, an IDE, or an agent, can use it.</p>
+    <p>In this lesson we walk through a small taskboard server written in Python. It comes from my <a href={repo} target="_blank" rel="noopener noreferrer">taskboard-mcp</a> repository, and it is deliberately tiny, so we can focus on the part that is easiest to mix up: MCP’s three building blocks, and when to use each one.</p>
+  </section>
+
+  <aside class="learning-objectives" aria-labelledby="learning-objectives">
+    <h2 id="learning-objectives">Learning Objectives</h2>
+    <p>By completing this lesson, you will be able to:</p>
+    <ul>
+      <li><strong>Explain</strong> what an MCP server is and how a client connects to it.</li>
+      <li><strong>Distinguish</strong> tools, resources, and prompts, and choose the right one for a capability.</li>
+      <li><strong>Implement</strong> each building block in Python with the official MCP SDK.</li>
+      <li><strong>Run</strong> a server over STDIO and Streamable HTTP, and test it with MCP Inspector.</li>
+      <li><strong>Recognize</strong> the risk of exposing an MCP server without authentication.</li>
+    </ul>
+  </aside>
+
+  <nav class="article-contents" aria-label="In this lesson">
+    <p>In this lesson</p>
+    <ol>
+      <li><a href="#what-is-mcp">What an MCP server is</a></li>
+      <li><a href="#building-blocks">The three building blocks</a></li>
+      <li><a href="#tools">Tools: actions the model can take</a></li>
+      <li><a href="#resources">Resources: data the application reads</a></li>
+      <li><a href="#prompts">Prompts: templates the user picks</a></li>
+      <li><a href="#transports">Running it: STDIO and Streamable HTTP</a></li>
+      <li><a href="#testing">Testing with MCP Inspector</a></li>
+      <li><a href="#summary">Key takeaways</a></li>
+    </ol>
+  </nav>
+
+  <section aria-labelledby="what-is-mcp">
+    <h2 id="what-is-mcp">What an MCP Server Is</h2>
+    <p>An MCP server is a small program that exposes capabilities to AI applications. The application, called the <strong>client</strong>, connects to the server, asks what it offers, and decides when to use it. The server does not need to know which model is on the other side.</p>
+
+    <figure class="mcp-diagram">
+      <ol aria-label="How the pieces connect">
+        <li><strong>MCP client</strong><span>MCP Inspector, ChatGPT Desktop, an IDE, or an agent</span></li>
+        <li><strong>taskboard-mcp</strong><span>Tools · Resources · Prompts</span></li>
+        <li><strong>tasks.db</strong><span>SQLite file beside server.py</span></li>
+      </ol>
+      <figcaption>The client talks MCP to the server; only the server touches the database.</figcaption>
+    </figure>
+
+    <p>Our server keeps tasks in a SQLite database. Setting it up takes two lines with the official Python SDK (version 2):</p>
+    <Code code={setupCode} lang="python" theme={theme} />
+    <p>Everything else is ordinary Python functions with a decorator on top.</p>
+  </section>
+
+  <section aria-labelledby="building-blocks">
+    <h2 id="building-blocks">The Three Building Blocks</h2>
+    <p>MCP servers can expose three kinds of capability. The clearest way to tell them apart is to ask <strong>who decides when each one is used</strong>.</p>
+    <div class="article-table">
+      <table>
+        <thead>
+          <tr><th scope="col">Building block</th><th scope="col">Who decides</th><th scope="col">In this server</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Tool</strong></td><td>The model chooses to call it</td><td><code>add_task</code>, <code>list_tasks</code>, <code>complete_task</code>, <code>say_hello</code></td></tr>
+          <tr><td><strong>Resource</strong></td><td>The application reads it</td><td><code>taskboard://tasks</code></td></tr>
+          <tr><td><strong>Prompt</strong></td><td>The user picks it</td><td><code>plan_open_tasks(goal)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>If a capability <em>does</em> something, such as changing data, it is a tool. If it <em>provides</em> context to read, it is a resource. If it is a reusable way to <em>ask</em> for something, it is a prompt.</p>
+  </section>
+
+  <section aria-labelledby="tools">
+    <h2 id="tools">Tools: Actions the Model Can Take</h2>
+    <p>A tool is a function the model can choose to call. The decorator registers it, and the function’s name, parameters, and docstring describe it to the client. That description is what the model reads when deciding whether to call the tool, so a clear docstring matters.</p>
+    <Code code={addTaskCode} lang="python" theme={theme} />
+    <p>Type hints do real work here. In <code>list_tasks</code>, the <code>Literal</code> type limits the status filter to two values, so the model cannot invent a third:</p>
+    <Code code={listTasksCode} lang="python" theme={theme} />
+    <p>When something goes wrong, raise <code>ToolError</code>. The client receives a clear error message instead of a crashed server:</p>
+    <Code code={completeTaskCode} lang="python" theme={theme} />
+  </section>
+
+  <section aria-labelledby="resources">
+    <h2 id="resources">Resources: Data the Application Reads</h2>
+    <p>A resource is data that the client reads and can hand to the model as context. It has a URI, and reading it is not a tool call: nothing changes.</p>
+    <Code code={resourceCode} lang="python" theme={theme} />
+    <p>Use a resource when the application should decide what context to load, for example showing the current tasks before the conversation starts.</p>
+  </section>
+
+  <section aria-labelledby="prompts">
+    <h2 id="prompts">Prompts: Templates the User Picks</h2>
+    <p>A prompt is a reusable message template. The user selects it, the client fills in the arguments, and the result is sent to the model. The prompt itself does not call tools or change data; it only writes the request.</p>
+    <Code code={promptCode} lang="python" theme={theme} />
+    <p>Notice that this prompt tells the model which tool to use and what not to do. Prompts are a good place to package instructions your users would otherwise have to type every time.</p>
+  </section>
+
+  <section aria-labelledby="transports">
+    <h2 id="transports">Running It: STDIO and Streamable HTTP</h2>
+    <p>The same server can talk to clients in two ways, chosen when it starts:</p>
+    <Code code={runCode} lang="python" theme={theme} />
+    <ul>
+      <li><strong>STDIO</strong> (the default): the client launches the server as a local process and exchanges messages over standard input and output. This suits desktop apps on your own machine.</li>
+      <li><strong>Streamable HTTP</strong>: the server listens at <code>http://127.0.0.1:8000/mcp</code>, for clients that connect over a network.</li>
+    </ul>
+    <p>To try it, install the dependencies and start the server in either mode:</p>
+    <Code code={installCode} lang="bash" theme={theme} />
+    <p>Any client that can launch a local process connects the same way over STDIO: point it at your virtual environment’s Python as the command, and at the absolute path to <code>server.py</code> as the argument.</p>
+  </section>
+
+  <section aria-labelledby="testing">
+    <h2 id="testing">Testing With MCP Inspector</h2>
+    <p>Before connecting a real AI client, test every building block with <strong>MCP Inspector</strong>. It launches the server over STDIO and opens a browser interface:</p>
+    <Code code={inspectorCode} lang="bash" theme={theme} />
+    <p>Use the <strong>Tools</strong> tab to call <code>add_task</code> or <code>list_tasks</code>, the <strong>Resources</strong> tab to read <code>taskboard://tasks</code>, and the <strong>Prompts</strong> tab to fill in <code>plan_open_tasks</code> with a goal such as “Prepare the demo by Friday”.</p>
+    <p>You can also use the server from your own code. The repository’s <code>client.py</code> launches the server and reads the resource:</p>
+    <Code code={clientCode} lang="python" theme={theme} />
+  </section>
+
+  <aside class="limitations" aria-labelledby="security-note">
+    <h2 id="security-note">A Note on Security</h2>
+    <p>This server has no authentication. Over STDIO that is acceptable, because only the app that launched it can talk to it. Over HTTP, anyone who can reach the URL can add and complete tasks. If you expose it through a public tunnel for testing, keep the URL private and stop the tunnel when you finish, and put authentication in front of any MCP server that can change data.</p>
+  </aside>
+
+  <section aria-labelledby="summary">
+    <h2 id="summary">Summary</h2>
+    <h3>Key Takeaways</h3>
+    <ul>
+      <li><strong>One server, many clients:</strong> MCP standardizes how AI applications connect to tools and data, so a server you build once works with any MCP client.</li>
+      <li><strong>Ask who decides:</strong> tools are actions the model chooses, resources are context the application reads, and prompts are templates the user picks.</li>
+      <li><strong>Python makes it small:</strong> a decorator, type hints, and a clear docstring are enough to expose each building block.</li>
+      <li><strong>Pick the transport for the client:</strong> STDIO suits local apps; Streamable HTTP suits networked clients and needs authentication before it is exposed.</li>
+      <li><strong>Test first:</strong> MCP Inspector lets you exercise every tool, resource, and prompt before a real AI client uses them.</li>
+    </ul>
+    <p>The complete server, tests, and setup guides for ChatGPT Desktop and the web are in the <a href={repo} target="_blank" rel="noopener noreferrer">taskboard-mcp repository</a>.</p>
+  </section>
+</ArticleLayout>
+
+<style>
+  .mcp-diagram { margin-block: 28px 32px; }
+  .mcp-diagram ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 0; padding: 0; list-style: none; }
+  .mcp-diagram li { position: relative; display: grid; gap: 6px; margin: 0; padding: 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); font-size: 14px; line-height: 1.5; }
+  .mcp-diagram li + li::before { content: '⇄'; position: absolute; top: 50%; left: -24px; translate: 0 -50%; font: 16px/1 var(--font-utility); color: var(--signal); }
+  .mcp-diagram li:nth-child(2) { border-color: var(--signal); }
+  .mcp-diagram strong { font-family: var(--font-display); font-size: 16px; }
+  .mcp-diagram span { color: var(--slate); }
+  .mcp-diagram figcaption { margin-top: 12px; font-size: 13px; line-height: 1.6; color: var(--slate); }
+  @media (max-width: 640px) {
+    .mcp-diagram ol { grid-template-columns: 1fr; gap: 28px; }
+    .mcp-diagram li + li::before { content: '⇅'; top: -23px; left: 18px; translate: 0 0; }
+  }
+</style>

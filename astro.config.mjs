@@ -6,5 +6,6 @@ export default defineConfig({
   // Lessons moved from /writing/ to /learning/; keep the old links working.
   redirects: {
     '/writing/unlocking-system-1-ai-jev': '/learning/unlocking-system-1-ai-jev/',
+    '/writing/spec-driven-development': '/learning/spec-driven-development/',
   },
 });

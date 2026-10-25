@@ -1,0 +1,159 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { aiProjects } from '../../data/site';
+
+const project = aiProjects.find(candidate => candidate.id === 'k8s-agent')!;
+
+// The path an agent action takes, left to right, with the access each part holds.
+const path = [
+  { name: 'Browser UI', tech: 'Static page · nginx', access: 'No cluster access' },
+  { name: 'go-svc', tech: 'Go API · policy gate', access: 'Read-only, cluster-wide' },
+  { name: 'agent-svc', tech: 'FastAPI · Claude Code', access: 'Delete pods, allowed namespaces only' },
+  { name: 'Kubernetes API', tech: 'RBAC', access: 'Has the final say' },
+];
+
+const components = [
+  { name: 'Frontend', text: 'A static browser UI served by nginx. It shows the cluster’s resources and sends questions and actions to the API.' },
+  { name: 'go-svc (Go)', text: 'Lists cluster information and resources through a read-only ServiceAccount. For agent actions it is the policy gate: it validates and audit-logs every request, then hands allowed ones to the agent. It has no write permissions, so a bug here cannot change the cluster.' },
+  { name: 'agent-svc (Python, FastAPI)', text: 'Runs Claude Code headless, with kubectl, under its own ServiceAccount. It runs one task at a time with a timeout, and keeps the session so you can ask follow-up questions.' },
+  { name: 'Helm chart', text: 'Installs all three services with their RBAC, a volume that keeps the Claude Code login across restarts, and an optional ingress.' },
+];
+
+const guardrails = [
+  { title: 'A policy gate in Go', text: 'Every action must be a known action on a valid object in an allowed namespace. kube-system, kube-public, and kube-node-lease are always refused, whatever the configuration. Questions are capped at 2,000 characters. Every decision goes to an audit log, denials as loudly as approvals, recording the length of a question but never its text.' },
+  { title: 'Checked again by the agent service', text: 'agent-svc repeats every check instead of trusting its caller, so a misconfigured allow-list cannot point the agent at the control plane.' },
+  { title: 'A tool allow-list for each action', text: 'Each Claude Code run gets only the tools its action needs. A question gets read-only kubectl: get, describe, logs, top, and explain. Only the delete action adds kubectl delete pod. Pipes, redirects, and shell helpers are refused.' },
+  { title: 'Managed settings', text: 'A managed settings file, which outranks any user setting, allows only kubectl commands and explicitly denies apply, edit, deleting namespaces or nodes, curl, and web access.' },
+  { title: 'Kubernetes RBAC: the layer that binds', text: 'The agent’s ServiceAccount gets a Role only in the allowed namespaces: delete on pods, read-only access to common workload resources, and no access to Secrets at all. If someone talks the model into printing secret values, the API server refuses. The limit does not depend on the model cooperating.' },
+];
+---
+<PageLayout
+  title="k8s-agent case study"
+  heading="Giving an AI agent kubectl, without giving it the cluster."
+  label="Case study"
+  description="How k8s-agent lets a Claude Code agent inspect and act on a Kubernetes cluster through layered guardrails, with RBAC as the final boundary."
+  intro="k8s-agent is an open-source Kubernetes dashboard with a built-in Claude Code agent. You can ask it about any resource or have it delete a failing pod, and every action passes through layered checks, with Kubernetes RBAC as the boundary that actually holds."
+>
+  <div slot="head">
+    <dl class="facts">
+      <div><dt>Project</dt><dd>Open source, 2026</dd></div>
+      <div><dt>Built with</dt><dd>Go, Python (FastAPI), Claude Code, Helm</dd></div>
+      <div><dt>Runs on</dt><dd>Kubernetes</dd></div>
+    </dl>
+    <div class="actions">
+      <a href={project.repo} class="btn btn-primary" target="_blank" rel="noopener noreferrer">View code on GitHub <Icon name="external" size={15} /></a>
+      <a href="/projects/" class="btn btn-quiet">All projects</a>
+    </div>
+  </div>
+
+  <section class="h-section" aria-labelledby="problem-title">
+    <div class="h-grid">
+      <p class="h-label">Problem</p>
+      <div class="prose">
+        <h2 id="problem-title" class="h-title">Useful agents need real access. Real access is risky.</h2>
+        <p>AI agents are now good at operating Kubernetes. They can read logs, explain why a deployment is failing, and clean up a crashed pod in seconds. To do that they need kubectl and credentials, and that is the risk: a misunderstood instruction, or a manipulated prompt, can become a real change in a real cluster.</p>
+        <p>It is tempting to write the rules into the prompt and trust the model to follow them. I wanted the opposite: an agent that is genuinely useful, with limits that still hold if the model does the wrong thing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="h-section" aria-labelledby="architecture-title">
+    <div class="h-grid">
+      <p class="h-label">Architecture</p>
+      <div>
+        <h2 id="architecture-title" class="h-title">Three small services, each with only the access it needs.</h2>
+        <ol class="path" aria-label="The path an agent action takes">
+          {path.map(step => (
+            <li>
+              <strong>{step.name}</strong>
+              <span class="tech">{step.tech}</span>
+              <span class="access">{step.access}</span>
+            </li>
+          ))}
+        </ol>
+        <dl class="components">
+          {components.map(item => <div><dt>{item.name}</dt><dd>{item.text}</dd></div>)}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="h-section" aria-labelledby="guardrails-title">
+    <div class="h-grid">
+      <p class="h-label">Guardrails</p>
+      <div>
+        <h2 id="guardrails-title" class="h-title">Five layers of checks. The last one is the one that holds.</h2>
+        <ol class="guardrails">
+          {guardrails.map((item, index) => (
+            <li class:list={{ binding: index === guardrails.length - 1 }}>
+              <span class="no" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="hardening">Every container also runs as a non-root user with a read-only root filesystem, no privilege escalation, and all Linux capabilities dropped. The agent itself is optional: switch it off and k8s-agent is a read-only dashboard.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="h-section" aria-labelledby="run-title">
+    <div class="h-grid">
+      <p class="h-label">Run it</p>
+      <div class="prose">
+        <h2 id="run-title" class="h-title">One Helm command to install.</h2>
+        <p>Choose the namespaces the agent may act in, then install the chart. The allow-list starts with a single <code>demo</code> namespace.</p>
+        <pre><code>helm upgrade --install k8sagnet ./charts/k8sagnet \
+  --namespace k8sagnet --create-namespace</code></pre>
+        <p>The README covers building the images, logging the agent in, and running the Go API on its own.</p>
+        <a href={project.repo} class="text-link" target="_blank" rel="noopener noreferrer">Read the code and README on GitHub <Icon name="external" size={14} /></a>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .facts { display: flex; flex-wrap: wrap; gap: 16px 48px; margin: 32px 0 0; }
+  .facts dt { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .facts dd { margin: 6px 0 0; font-size: 15px; font-weight: 500; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+  .prose > p { max-width: 64ch; margin-top: 18px; font-size: 16px; line-height: 1.75; color: var(--slate); }
+  .prose p code { padding: 2px 5px; border-radius: 3px; background: var(--signal-soft); font: .88em var(--font-utility); color: var(--ink); }
+  pre { margin-top: 18px; padding: 18px 20px; overflow-x: auto; border-radius: 3px; background: var(--night); color: var(--night-ink); font: 13px/1.7 var(--font-utility); }
+
+  /* Request path: boxes joined by arrows, stacked vertically on narrow screens. */
+  .path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin: 32px 0 0; padding: 0; list-style: none; }
+  .path li { position: relative; display: grid; align-content: start; gap: 6px; padding: 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  .path li + li::before { content: '→'; position: absolute; top: 50%; left: -21px; translate: 0 -50%; font: 16px/1 var(--font-utility); color: var(--signal); }
+  .path li:last-child { border-color: var(--ink); }
+  .path strong { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+  .tech { font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
+  .access { margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.5; color: var(--ink); }
+
+  .components { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin: 36px 0 0; padding-top: 28px; border-top: 1px solid var(--rule); }
+  .components dt { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+  .components dd { margin: 8px 0 0; font-size: 15px; line-height: 1.7; color: var(--slate); }
+
+  .guardrails { margin: 32px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+  .guardrails li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 16px; padding-block: 24px; border-bottom: 1px solid var(--rule); }
+  .guardrails .no { font: 400 12px/1.9 var(--font-utility); color: var(--signal); }
+  .guardrails h3 { font-size: 18px; }
+  .guardrails p { margin-top: 8px; max-width: 66ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
+  .guardrails .binding { margin-top: 12px; padding: 24px; border: 1px solid color-mix(in srgb, var(--signal) 45%, var(--rule)); border-radius: 3px; background: var(--signal-soft); }
+  .guardrails .binding p { color: var(--ink); }
+  .hardening { margin-top: 24px; max-width: 66ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
+
+  @media (max-width: 900px) {
+    .path { grid-template-columns: 1fr; gap: 26px; }
+    .path li + li::before { content: '↓'; top: -22px; left: 18px; translate: 0 0; }
+    .components { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .guardrails li { grid-template-columns: 1fr; gap: 4px; }
+    .guardrails .binding { padding: 20px; }
+  }
+</style>

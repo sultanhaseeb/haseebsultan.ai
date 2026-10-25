@@ -2,9 +2,9 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import { profile, expertise, experience, additionalSkills } from '../data/resume';
 ---
-<PageLayout title="Experience & Skills" label="Through 2025" description="Haseeb Sultan’s career experience and skills through 2025 in DevOps, cloud architecture, Kubernetes, MLOps, and LLMOps." intro={profile.summary}>
+<PageLayout title="Experience & Skills" label="Since 2019" description="Haseeb Sultan’s career experience and skills in DevOps, cloud architecture, Kubernetes, MLOps, and LLMOps." intro={profile.summary}>
   <dl slot="head" class="profile-facts">
-    <div><dt>Role</dt><dd>{profile.title}</dd></div>
+    <div><dt>Current role</dt><dd>{profile.title}</dd></div>
     <div><dt>Location</dt><dd>{profile.location}</dd></div>
     <div><dt>Email</dt><dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd></div>
   </dl>

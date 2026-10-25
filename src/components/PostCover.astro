@@ -1,0 +1,69 @@
+---
+// Typographic cover card for article and lesson listings. It is decorative (the listing
+// repeats the title as text), so it is hidden from assistive technology.
+import { type Post, isLesson, lessonNumber } from '../data/writing';
+interface Props {
+  post: Post;
+  class?: string;
+}
+const { post, class: className } = Astro.props;
+const lesson = isLesson(post);
+---
+<div class:list={['cover', className]} aria-hidden="true">
+  <span class="kind">{lesson ? `Lesson ${lessonNumber(post)}` : 'Article'}</span>
+  {lesson && <span class="number">{lessonNumber(post)}</span>}
+  <span class="title">{post.coverTitle}</span>
+  <span class="category">{post.category}</span>
+</div>
+
+<style>
+  .cover {
+    position: relative;
+    container-type: inline-size;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 6px;
+    aspect-ratio: 16 / 10;
+    padding: clamp(14px, 6cqi, 26px);
+    overflow: hidden;
+    border-radius: 3px;
+    background:
+      linear-gradient(var(--night-grid) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(90deg, var(--night-grid) 1px, transparent 1px) 0 0 / 28px 28px,
+      var(--night);
+    color: var(--night-ink);
+    --night-grid: color-mix(in srgb, var(--night-rule) 55%, transparent);
+  }
+  .kind, .category {
+    position: relative;
+    font: 500 11px/1.4 var(--font-utility);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .kind { color: var(--night-signal); }
+  .category { color: var(--night-muted); }
+  .title {
+    position: relative;
+    align-self: end;
+    max-width: 14ch;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(18px, 8.5cqi, 44px);
+    line-height: 1.08;
+    letter-spacing: -.025em;
+    text-wrap: balance;
+  }
+  /* Large outlined lesson number, the series motif. */
+  .number {
+    position: absolute;
+    top: -.12em;
+    right: .04em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 46cqi;
+    line-height: 1;
+    letter-spacing: -.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--night-signal) 45%, transparent);
+  }
+</style>
