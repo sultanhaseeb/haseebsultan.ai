@@ -36,7 +36,7 @@ npm run preview  # Serve the production output locally
 - **Domain:** update `site` in `astro.config.mjs`, `public/robots.txt`, and `public/sitemap.xml` together if the domain changes.
 - **Favicon:** replace `public/favicon.svg`.
 
-The top navigation opens Home, Blog, Projects, Experience, and About, with a Contact button. The Blog lists articles and numbered lessons together, newest first; `/learning/` is the lesson series page (“Let's learn together”), which explains how the lessons work and lists upcoming topics. The homepage has the hero, the platform stack, headline results with a career timeline, selected projects led by the k8s-agent case study, the latest posts, and contact links. `/about/` tells the story behind the work, followed by certifications, education, and contact links. Unknown URLs show the 404 page. GitHub, LinkedIn, and Topmate links open in new tabs.
+The top navigation opens Home, Blog, Lessons, Projects, Experience, and About, with a Contact button. The Blog lists articles and numbered lessons together, newest first; Lessons opens `/learning/`, the lesson series page (“Let's learn together”), which explains how the lessons work and lists upcoming topics. The homepage has the hero, the platform stack, headline results with a career timeline, selected projects led by the k8s-agent case study, the latest posts, and contact links. `/about/` tells the story behind the work, followed by certifications, education, and contact links. Unknown URLs show the 404 page. GitHub, LinkedIn, and Topmate links open in new tabs.
 
 ## Deploy to Cloudflare
 
