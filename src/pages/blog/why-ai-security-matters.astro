@@ -1,0 +1,222 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { aiSecurityArticle as post } from '../../data/blog';
+
+// How each bank responded between October 13 and 16, 2026.
+const bankMoves = [
+  { bank: 'JPMorgan Chase', stance: 'Went first', text: 'CEO Jamie Dimon warned that there could be thousands of “rogue agents” and said outside agents would not be allowed in.' },
+  { bank: 'Bank of America', stance: 'Deposits limited', text: 'Limited agents’ access to deposits while it works out who is responsible when an AI approves a payment.' },
+  { bank: 'Citi', stance: 'No log-ins', text: 'Said third-party AI agents cannot log in or make transactions on its platforms.' },
+  { bank: 'Charles Schwab', stance: 'Blocked every week', text: 'Said it blocks unauthorized agents, including Meta’s AI assistant Muse, dozens of times a week.' },
+  { bank: 'Wells Fargo', stance: 'Risk on you', text: 'Updated its terms: if you let an AI agent into your account, you carry the risk.' },
+];
+
+const worldwide = [
+  { country: 'South Korea', bank: 'Shinhan Bank', text: 'Breaches hit seven financial firms. At Shinhan Bank, loan application data for about 25,000 people leaked. Attackers got in through loan-agent websites, not the banks’ main systems, and regulators are looking into whether they used AI.' },
+  { country: 'India', bank: 'State Bank of India', text: 'The country’s largest bank is investigating after nearly 4,000 customer records showed up on the dark web.' },
+  { country: 'Bangladesh', bank: 'Janata Bank', text: 'The bank’s website was attacked even after the bank took it offline as a precaution.' },
+];
+
+const checklists = [
+  {
+    title: 'If you use AI tools personally',
+    items: [
+      'Never give an AI agent your banking password.',
+      'Give read-only access where you can. Let AI look, but approve every payment yourself.',
+      'Read what an app can actually do before you connect it.',
+    ],
+  },
+  {
+    title: 'If you run a business using AI',
+    items: [
+      '<strong>Least privilege.</strong> Give each agent only the access it needs, nothing more.',
+      '<strong>Human in the loop.</strong> Require a person to approve high-risk actions like payments or deletions.',
+      '<strong>Guardrails.</strong> Put a security layer between your AI and your systems that checks every request.',
+      '<strong>Logs and a kill switch.</strong> Record what every agent does, and make sure you can stop it instantly.',
+      '<strong>Check your vendors.</strong> Many breaches start with a partner, not with you.',
+    ],
+  },
+];
+
+const sources = [
+  { title: 'Big Banks Won’t Let Outside AI Agents Move Money', outlet: 'PYMNTS', href: 'https://www.pymnts.com/news/artificial-intelligence/2026/big-banks-will-not-let-outside-ai-agents-move-money/' },
+  { title: 'Banks Crack Down on Unauthorized AI Agents', outlet: 'PYMNTS', href: 'https://www.pymnts.com/news/banking/2026/banks-crack-down-on-unauthorized-ai-agents-operating-inside-customer-accounts/' },
+  { title: 'The Access Tax Amazon Imposed on Shopping Agents Just Arrived at Your Bank', outlet: 'Forkast', href: 'https://forkast.news/the-access-tax-amazon-imposed-on-shopping-agents-just-arrived-at-your-bank/' },
+  { title: 'Can Banks Shut Down a Rogue AI Agent? Regulators Are Starting to Ask', outlet: 'Profile News', href: 'https://www.profilenews.com/en/ai-agents-in-banks/' },
+  { title: 'Korean banks on high alert after wave of cyberattacks', outlet: 'The Korea Herald', href: 'https://www.koreaherald.com/article/10893326' },
+  { title: 'Cyberattack Hits India’s Largest Bank, Exposes Customer Data', outlet: 'Bloomberg', href: 'https://www.bloomberg.com/news/articles/2026-10-21/cyberattack-hits-india-s-largest-bank-exposes-customer-records' },
+  { title: 'Janata Bank website targeted in cyberattack despite precautionary shutdown', outlet: 'bdnews24', href: 'https://bdnews24.com/business/tqt24otsx1' },
+];
+---
+<ArticleLayout post={post}>
+  <p class="article-lead">In October 2026, America’s biggest banks did something surprising: they locked AI agents out of customer accounts. JPMorgan Chase, Bank of America, Citi, Charles Schwab and Wells Fargo all said the same thing.</p>
+  <figure class="pull-quote">
+    <blockquote><p>AI can look at your balance, but it cannot move your money.</p></blockquote>
+    <figcaption>The message from five of America’s biggest banks</figcaption>
+  </figure>
+  <p>This is not a small tech story. It is a warning about what happens when we give AI the power to act before we know how to keep it safe. In this post, I explain what happened in simple words, and why AI security now matters to everyone.</p>
+
+  <section aria-labelledby="what-happened">
+    <h2 id="what-happened">What happened</h2>
+    <p>Between October 13 and 16, 2026, five major US banks moved to restrict outside AI agents from customer accounts.</p>
+    <ol class="bank-moves" aria-label="How each bank responded">
+      {bankMoves.map(move => (
+        <li>
+          <div class="bank-name">
+            <strong>{move.bank}</strong>
+            <span class="bank-stance">{move.stance}</span>
+          </div>
+          <p>{move.text}</p>
+        </li>
+      ))}
+    </ol>
+    <p>A week later, Reuters reported something more worrying. Banks were finding and removing AI agents inside customer accounts, and some of them had tried to do things the customer never asked for.</p>
+    <p>At the same time, the Federal Reserve, FDIC and OCC began asking banks a simple question: <strong>if an AI agent goes wrong, can you stop it?</strong></p>
+  </section>
+
+  <section aria-labelledby="what-is-an-agent">
+    <h2 id="what-is-an-agent">What is an AI agent?</h2>
+    <dl class="compare">
+      <div>
+        <dt>A chatbot</dt>
+        <dd>Answers your questions.</dd>
+      </div>
+      <div class="compare-agent">
+        <dt>An AI agent</dt>
+        <dd>Goes one step further: it takes actions for you.</dd>
+      </div>
+    </dl>
+    <p>Think of it like a personal assistant. You say “pay my electricity bill” or “move my spare cash to a savings account,” and the agent logs in and does it. No clicking, no forms.</p>
+    <p>That is very convenient. But it also means you are handing your keys to software. If the software makes a mistake, gets tricked, or is controlled by a hacker, it can act with your full permissions.</p>
+  </section>
+
+  <section aria-labelledby="why-worried">
+    <h2 id="why-worried">Why the banks are worried</h2>
+    <p>The banks gave three main reasons.</p>
+    <ol class="blocks">
+      <li><strong>Rogue actions.</strong> Some agents did things the user never asked for. When software can move money, one wrong step can cost real money in seconds.</li>
+      <li><strong>No clear rules on who pays.</strong> If an AI sends money to the wrong place, is it the customer’s fault, the bank’s, or the AI company’s? Today, nobody has a clear answer.</li>
+      <li><strong>Telling good from bad.</strong> A helpful agent and a hacker’s bot can look the same to a bank. Both log in with the customer’s password. That makes fraud much harder to spot.</li>
+    </ol>
+    <p>There is also a business reason. Banks worry that smart agents could quickly move customers’ idle cash to accounts that pay higher interest elsewhere. So this is partly about security, and partly about control.</p>
+  </section>
+
+  <section aria-labelledby="bigger-picture">
+    <h2 id="bigger-picture">The bigger picture: banks under attack worldwide</h2>
+    <p>The US story is part of a wider trend. In just the last month:</p>
+    <ul class="worldwide">
+      {worldwide.map(item => (
+        <li>
+          <div class="worldwide-place">
+            <span class="worldwide-country">{item.country}</span>
+            <strong>{item.bank}</strong>
+          </div>
+          <p>{item.text}</p>
+        </li>
+      ))}
+    </ul>
+    <p>The pattern is clear. Attackers look for the weakest door: a partner’s website, an old system, a stolen password. AI helps them find those doors faster and cheaper than ever.</p>
+  </section>
+
+  <section aria-labelledby="why-it-matters">
+    <h2 id="why-it-matters">Why AI security is important</h2>
+    <p>For years, AI security meant stopping a chatbot from saying something wrong. Now AI can act, and that changes everything.</p>
+    <ul>
+      <li><strong>AI now has hands, not just a voice.</strong> A wrong answer is embarrassing. A wrong action, like sending money, deleting data or sharing private files, causes real damage.</li>
+      <li><strong>Mistakes happen at machine speed.</strong> A human might make one bad payment. A broken or hijacked agent can make thousands before anyone notices.</li>
+      <li><strong>Trust is the whole business.</strong> Banks, hospitals and governments run on trust. One AI-driven breach can undo years of reputation.</li>
+      <li><strong>The rules are still being written.</strong> Bills in the US Congress on AI agent accountability are still waiting. Until the law catches up, companies must protect themselves.</li>
+      <li><strong>Attackers use AI too.</strong> Defenders cannot use yesterday’s tools against tomorrow’s threats.</li>
+    </ul>
+    <figure class="pull-quote">
+      <blockquote><p>The more power we give AI, the more we must control, watch and limit it.</p></blockquote>
+    </figure>
+  </section>
+
+  <section aria-labelledby="what-you-can-do">
+    <h2 id="what-you-can-do">What you can do</h2>
+    <div class="checklists">
+      {checklists.map(list => (
+        <div class="checklist">
+          <h3>{list.title}</h3>
+          <ul>
+            {list.items.map(item => <li set:html={item} />)}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <aside class="article-note">
+      <p>Least privilege, a guardrail layer that checks every request, and a log of every action are the controls I built into <a href="/projects/k8s-agent/">k8s-agent</a>, an open-source project that lets an AI agent work on Kubernetes without handing it the whole cluster.</p>
+    </aside>
+  </section>
+
+  <section aria-labelledby="final-thoughts">
+    <h2 id="final-thoughts">Final thoughts</h2>
+    <p>AI agents are coming, and they will make life easier. But the banks’ decision shows that convenience without control is a risk nobody wants to carry.</p>
+    <p>The winners will not be the companies that use AI fastest. They will be the ones that use it safely. AI security is no longer a feature to add later. It is the foundation everything else stands on.</p>
+    <p class="closing-question">What do you think: would you let an AI agent manage your money?</p>
+    <p>Tell me on LinkedIn or by email. You will find both links at the end of this post.</p>
+  </section>
+
+  <section aria-labelledby="sources" class="sources">
+    <h2 id="sources">Sources</h2>
+    <ul>
+      {sources.map(source => (
+        <li><a href={source.href} target="_blank" rel="noopener noreferrer">{source.title}</a> <span class="source-outlet">{source.outlet}</span></li>
+      ))}
+    </ul>
+  </section>
+</ArticleLayout>
+
+<style>
+  /* One row per bank: the name and its stance on the left, what it said on the right. */
+  .bank-moves { display: grid; gap: 8px; margin-block: 24px 28px; padding: 0 !important; list-style: none !important; }
+  .bank-moves li { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 20px; align-items: baseline; margin: 0; padding: 16px 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  .bank-name { display: flex; flex-direction: column; gap: 4px; }
+  .bank-name strong { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.35; }
+  .bank-stance { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
+  .bank-moves p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--slate); }
+
+  .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-block: 24px 28px; }
+  .compare div { padding: 20px 22px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  .compare dt { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .compare dd { margin: 8px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.4; color: var(--ink); }
+  .compare .compare-agent { border-color: var(--night); background: var(--night); }
+  .compare .compare-agent dt { color: var(--night-signal); }
+  .compare .compare-agent dd { color: var(--night-ink); }
+
+  .blocks { counter-reset: block; padding: 0 !important; list-style: none !important; }
+  .blocks li { position: relative; padding-left: 44px; }
+  .blocks li::before { counter-increment: block; content: counter(block); position: absolute; left: 0; top: .15em; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 12px/1 var(--font-utility); }
+  .blocks li + li { margin-top: 14px; }
+
+  /* Same row layout as the bank list, with the country above the bank's name. */
+  .worldwide { display: grid; gap: 8px; margin-block: 24px 28px; padding: 0 !important; list-style: none !important; }
+  .worldwide li { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 20px; align-items: baseline; margin: 0 !important; padding: 16px 18px; border: 1px solid var(--rule); border-left: 3px solid var(--signal); border-radius: 3px; background: var(--surface); }
+  .worldwide-place { display: flex; flex-direction: column; gap: 4px; }
+  .worldwide-country { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
+  .worldwide-place strong { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.35; }
+  .worldwide li > p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--slate); }
+
+  .checklists { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-block: 24px 28px; }
+  .checklist { padding: 20px 22px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  .checklist h3 { margin: 0 0 12px; font-size: 17px; }
+  .checklist ul { margin: 0; padding: 0; list-style: none; font-size: 15px; line-height: 1.65; }
+  .checklist li { position: relative; padding-left: 26px; }
+  .checklist li::before { content: ''; position: absolute; left: 2px; top: .5em; width: 10px; height: 6px; border-left: 2px solid var(--signal); border-bottom: 2px solid var(--signal); transform: rotate(-45deg); }
+
+  .article-note p { margin: 0; font-size: 16px; line-height: 1.7; }
+
+  .closing-question { margin-top: 24px !important; padding: 22px 24px; border-left: 3px solid var(--signal); background: var(--signal-soft); font-family: var(--font-display); font-weight: 600; font-size: clamp(19px, 2.2vw, 22px); line-height: 1.45; letter-spacing: -.01em; color: var(--ink); }
+
+  .sources h2 { font-size: 20px; }
+  .sources ul { padding: 0; list-style: none; font-size: 15px; line-height: 1.6; }
+  .sources li + li { margin-top: 12px; }
+  .source-outlet { display: block; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
+
+  @media (max-width: 640px) {
+    .bank-moves li, .worldwide li { grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 14px 16px; }
+    .bank-name { flex-direction: row; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+    .compare, .checklists { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

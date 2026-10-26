@@ -42,6 +42,15 @@ export const gtcBerlinArticle: Post = {
   imageCaption: 'Jensen Huang on stage at GTC Berlin with a group of walking robots. Image: NVIDIA',
 };
 
+export const aiSecurityArticle: Post = {
+  title: 'Why AI Security Matters: Big Banks Just Locked Out AI Agents',
+  coverTitle: 'Banks Lock Out AI Agents',
+  description: 'In one week, five of America’s biggest banks stopped AI agents from moving customer money. What happened, why it matters, and how to use AI agents safely.',
+  category: 'AI Security',
+  href: '/blog/why-ai-security-matters/',
+  published: '2026-10-26',
+};
+
 export const specDrivenLesson: Post = {
   title: 'Vibe Coding vs. Spec-Driven Development: From Chaos to Clarity',
   coverTitle: 'Spec-Driven Development',
@@ -74,8 +83,10 @@ export const mcpLesson: Post = {
 };
 
 // Articles: my own views on AI, what it is, and where it is heading. Pages live in src/pages/blog/.
+// Posts published on the same day are listed in this order, so put the newest first among them.
 export const articles = [
   controlProblemArticle,
+  aiSecurityArticle,
   gtcBerlinArticle,
 ];
 
