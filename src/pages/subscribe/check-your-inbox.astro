@@ -1,0 +1,27 @@
+---
+// Kit redirects here after someone submits the signup form.
+import PageLayout from '../../layouts/PageLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { profile } from '../../data/resume';
+---
+<PageLayout
+  title="Check your inbox"
+  label="Almost there"
+  heading="Check your inbox."
+  description="Confirm your email address to get new posts and lessons from Haseeb Sultan."
+  intro={`I just sent you a confirmation email from ${profile.email}. Click the button in it, and you will get an email whenever I publish a new article or lesson.`}
+  noindex
+>
+  <div slot="head">
+    <p class="note">Not there after a few minutes? Check your spam or promotions folder.</p>
+    <div class="actions">
+      <a href="/blog/" class="btn btn-primary">Back to the blog <Icon name="arrow" size={16} /></a>
+      <a href="/" class="btn btn-quiet">Go to the homepage</a>
+    </div>
+  </div>
+</PageLayout>
+
+<style>
+  .note { margin-top: 16px; font-size: 15px; line-height: 1.65; color: var(--slate); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+</style>

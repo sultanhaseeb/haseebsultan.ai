@@ -138,6 +138,7 @@ h3 { font-size: 19px; line-height: 1.35; letter-spacing: -.01em; }
 .footer-brand .wordmark { color: var(--night-ink); }
 .footer-brand .wordmark-mark { background: var(--night-ink); color: var(--night); }
 .footer-brand p { margin-top: 16px; max-width: 36ch; font-size: 14px; line-height: 1.7; color: var(--night-muted); }
+.footer-subscribe { margin-top: 28px; max-width: 420px; }
 .footer-col h2 { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--night-muted); }
 .footer-col ul { display: grid; gap: 2px; margin: 14px 0 0; padding: 0; list-style: none; }
 .footer-col a { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; font-size: 14px; color: var(--night-ink); transition: color 160ms ease; overflow-wrap: anywhere; }

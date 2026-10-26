@@ -2,14 +2,25 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import PostList from '../components/PostList.astro';
 import Icon from '../components/Icon.astro';
+import SubscribeForm from '../components/SubscribeForm.astro';
+import { newsletter } from '../data/site';
 import { posts } from '../data/blog';
 ---
 <PageLayout title="Blog" label="Articles & lessons" description="Haseeb Sultan’s blog: articles on where AI and its infrastructure are heading, and step-by-step lessons on AI engineering, from AI agents and MCP to LLMOps." intro="What I think about AI and the infrastructure underneath it, plus numbered lessons that break down new ideas in AI engineering, step by step.">
   <p slot="head" class="head-links">
     <a href="/learning/" class="text-link">Follow the lesson series <Icon name="arrow" size={16} /></a>
+    {newsletter.formId && <a href="#subscribe" class="text-link">Get posts by email</a>}
     <a href="/rss.xml" class="text-link">RSS feed</a>
   </p>
   <PostList posts={posts} label={`All posts · ${posts.length}`} />
+  {newsletter.formId && (
+    <section id="subscribe" class="h-section" aria-labelledby="subscribe-title">
+      <div class="h-grid">
+        <h2 id="subscribe-title" class="h-label">Subscribe</h2>
+        <SubscribeForm id="subscribe-blog" />
+      </div>
+    </section>
+  )}
 </PageLayout>
 
 <style>

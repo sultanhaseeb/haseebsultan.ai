@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
-import { site } from '../data/site';
+import SubscribeForm from './SubscribeForm.astro';
+import { site, newsletter } from '../data/site';
 import { profile } from '../data/resume';
 const pages = [
   { href: '/blog/', label: 'Blog' },
@@ -22,6 +23,7 @@ const elsewhere = [
       <div class="footer-brand">
         <a href="/" class="wordmark"><span class="wordmark-mark" aria-hidden="true">HS</span>Haseeb Sultan</a>
         <p>{site.title} in {profile.location}. I build cloud, Kubernetes, and AI platforms, and write about what I learn.</p>
+        {newsletter.formId && <div class="footer-subscribe"><SubscribeForm id="subscribe-footer" tone="dark" /></div>}
       </div>
       <nav class="footer-col" aria-labelledby="footer-pages">
         <h2 id="footer-pages">Pages</h2>

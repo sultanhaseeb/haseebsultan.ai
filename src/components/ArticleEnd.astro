@@ -1,9 +1,10 @@
 ---
-// Closes every article and lesson: who wrote it, how to respond or follow, and what to read next.
+// Closes every article and lesson: who wrote it, how to respond or subscribe, and what to read next.
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
+import SubscribeForm from './SubscribeForm.astro';
 import portrait from '../assets/images/haseeb.jpg';
-import { site } from '../data/site';
+import { site, newsletter } from '../data/site';
 import { profile } from '../data/resume';
 import { type Post, isLesson, postLabel, readNext } from '../data/blog';
 interface Props {
@@ -27,6 +28,12 @@ const emailHref = `mailto:${profile.email}?subject=${encodeURIComponent(post.tit
       </ul>
     </div>
   </aside>
+
+  {newsletter.formId && (
+    <div class="subscribe-card">
+      <SubscribeForm id="subscribe-article" title={isLesson(post) ? 'Get the next lesson by email' : 'Get new posts by email'} />
+    </div>
+  )}
 
   {next && (
     <nav class="next" aria-label={next.label}>
@@ -61,6 +68,8 @@ const emailHref = `mailto:${profile.email}?subject=${encodeURIComponent(post.tit
   .author-links a { display: inline-flex; align-items: center; gap: 5px; min-height: 36px; font-size: 14px; font-weight: 600; color: var(--signal); }
   .author-links a:hover { color: var(--signal-strong); }
 
+  .subscribe-card { padding: 24px 26px; border: 1px solid var(--rule); border-left: 3px solid var(--signal); border-radius: 3px; background: var(--surface); }
+
   .next-label { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
   .next-link {
     position: relative;
@@ -81,6 +90,7 @@ const emailHref = `mailto:${profile.email}?subject=${encodeURIComponent(post.tit
 
   @media (max-width: 560px) {
     .author { grid-template-columns: 1fr; gap: 14px; padding: 20px; }
+    .subscribe-card { padding: 20px; }
     .next-link { padding-right: 0; }
     .next-go { display: none; }
   }

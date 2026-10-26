@@ -2,8 +2,9 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import Icon from '../../components/Icon.astro';
 import PostCover from '../../components/PostCover.astro';
+import SubscribeForm from '../../components/SubscribeForm.astro';
 import { lessons, postLabel } from '../../data/blog';
-import { topics } from '../../data/site';
+import { topics, newsletter } from '../../data/site';
 import { profile } from '../../data/resume';
 import { formatDate } from '../../utils/date';
 
@@ -26,6 +27,7 @@ const suggestHref = `mailto:${profile.email}?subject=${encodeURIComponent('Lesso
 >
   <p slot="head" class="head-links">
     <a href={newestFirst[0].href} class="text-link">Start with the latest lesson <Icon name="arrow" size={16} /></a>
+    {newsletter.formId && <a href="#subscribe" class="text-link">Get lessons by email</a>}
     <a href="/rss.xml" class="text-link">Follow via RSS</a>
   </p>
 
@@ -64,6 +66,15 @@ const suggestHref = `mailto:${profile.email}?subject=${encodeURIComponent('Lesso
       </ol>
     </div>
   </section>
+
+  {newsletter.formId && (
+    <section id="subscribe" class="h-section" aria-labelledby="subscribe-title">
+      <div class="h-grid">
+        <h2 id="subscribe-title" class="h-label">Subscribe</h2>
+        <SubscribeForm id="subscribe-lessons" title="Get each new lesson by email" text="One short email when a new lesson or article goes up, so we keep learning together. No spam, and you can unsubscribe at any time." />
+      </div>
+    </section>
+  )}
 
   <section class="h-section" aria-labelledby="next-title">
     <div class="h-grid">

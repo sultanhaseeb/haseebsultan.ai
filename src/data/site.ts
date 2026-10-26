@@ -11,6 +11,14 @@ export const site = {
   },
 };
 
+// Email signup through Kit. formId is the number in the form's Kit URL; the forms stay hidden until it is set.
+// In Kit, the form redirects to /subscribe/check-your-inbox/ after signup and to /subscribe/confirmed/ after confirming.
+const newsletterFormId = '10101370';
+export const newsletter = {
+  formId: newsletterFormId,
+  action: `https://app.kit.com/forms/${newsletterFormId}/subscriptions`,
+};
+
 // Upcoming lesson topics, listed on /learning/.
 export const topics = ['Agentic AI', 'LLMOps', 'MCP', 'AI Infrastructure', 'Kubernetes for AI', 'AI Security', 'RAG', 'AI Agents'];
 

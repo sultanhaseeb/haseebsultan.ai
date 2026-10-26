@@ -1,0 +1,24 @@
+---
+// Kit redirects here after someone clicks the link in the confirmation email.
+import PageLayout from '../../layouts/PageLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { posts } from '../../data/blog';
+const latest = posts[0];
+---
+<PageLayout
+  title="You're subscribed"
+  label="Subscribed"
+  heading="You're subscribed."
+  description="Thanks for subscribing to new posts and lessons from Haseeb Sultan."
+  intro="Thank you. You will get an email whenever I publish a new article or lesson. While you're here, start with the latest one."
+  noindex
+>
+  <div slot="head" class="actions">
+    <a href={latest.href} class="btn btn-primary">Read the latest post <Icon name="arrow" size={16} /></a>
+    <a href="/learning/" class="btn btn-quiet">Start the lesson series</a>
+  </div>
+</PageLayout>
+
+<style>
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+</style>
