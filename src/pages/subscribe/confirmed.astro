@@ -13,12 +13,21 @@ const latest = posts[0];
   intro="Thank you. You will get an email whenever I publish a new article or lesson. While you're here, start with the latest one."
   noindex
 >
-  <div slot="head" class="actions">
-    <a href={latest.href} class="btn btn-primary">Read the latest post <Icon name="arrow" size={16} /></a>
-    <a href="/learning/" class="btn btn-quiet">Start the lesson series</a>
+  <div slot="head">
+    <div class="actions">
+      <a href={latest.href} class="btn btn-primary">Read the latest post <Icon name="arrow" size={16} /></a>
+      <a href="/learning/" class="btn btn-quiet">Start the lesson series</a>
+    </div>
+    <aside class="inbox-tip" aria-labelledby="inbox-tip-title">
+      <p id="inbox-tip-title" class="inbox-tip-title">One small tip for Gmail</p>
+      <p>Gmail sometimes files my emails under Promotions. If you find one there, drag it to your Primary tab and choose Yes when Gmail asks about future messages. The next ones will land in Primary.</p>
+    </aside>
   </div>
 </PageLayout>
 
 <style>
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .inbox-tip { max-width: 60ch; margin-top: 40px; padding: 20px 22px; border: 1px solid var(--rule); border-left: 3px solid var(--signal); border-radius: 3px; background: var(--surface); }
+  .inbox-tip-title { font-weight: 600; color: var(--ink); }
+  .inbox-tip p + p { margin-top: 6px; font-size: 15px; line-height: 1.65; color: var(--slate); }
 </style>
