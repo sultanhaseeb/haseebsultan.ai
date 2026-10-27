@@ -1,6 +1,7 @@
 import kubernetesLogo from '../assets/images/education/kubernetes.svg';
 import microsoftLogo from '../assets/images/education/microsoft.svg';
 import githubLogo from '../assets/images/education/github.svg';
+import anthropicLogo from '../assets/images/education/anthropic.svg';
 import oxfordLogo from '../assets/images/education/university-of-oxford.png';
 import fastLogo from '../assets/images/education/fast-nuces.png';
 import punjabLogo from '../assets/images/education/punjab-group-of-colleges.png';
@@ -121,6 +122,7 @@ export const resumeProjects = [
 ];
 
 export const certifications = [
+  { title: 'Model Context Protocol: Advanced Topics', issuer: 'Anthropic', logo: anthropicLogo },
   { title: 'Certified Kubernetes Administrator (CKA)', issuer: 'CNCF and The Linux Foundation', logo: kubernetesLogo },
   // AZ-400 is the exam for this certification, so it is not listed separately.
   { title: 'Microsoft Certified: DevOps Engineer Expert (AZ-400)', issuer: 'Microsoft', logo: microsoftLogo },
