@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
 import portrait from '../assets/images/haseeb.jpg';
+import SubscribePopup from '../components/SubscribePopup.astro';
 import { site } from '../data/site';
 interface Props {
   title?: string;
@@ -76,5 +77,6 @@ const structuredData = article ? {
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
     <slot />
+    <SubscribePopup enabled={!noindex} />
   </body>
 </html>

@@ -1,0 +1,143 @@
+---
+// A subscribe pop-up for readers who have not signed up yet. It waits until the reader has scrolled
+// halfway down the page or spent 30 seconds on it, and stays away for 30 days once closed.
+// The browser remembers who has subscribed (any signup form on this site, a visit to a /subscribe/ page,
+// or a link from a Kit email), because a static site cannot ask Kit who is on the list.
+import SubscribeForm from './SubscribeForm.astro';
+import { newsletter } from '../data/site';
+interface Props {
+  // False on pages that should never show it, such as the 404 and /subscribe/ pages.
+  // The script still runs there, so a visit to /subscribe/ is remembered.
+  enabled?: boolean;
+}
+const { enabled = true } = Astro.props;
+---
+{enabled && newsletter.formId && (
+  <dialog class="subscribe-popup" aria-labelledby="subscribe-popup-title" tabindex="-1">
+    <button type="button" class="popup-close" data-popup-close aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    </button>
+    <p class="popup-kicker">Haseeb Sultan · Blog</p>
+    <SubscribeForm
+      id="subscribe-popup"
+      title="Enjoying this? Get the next post by email."
+      text="One short email when I publish a new article or lesson on AI agents, AI security, and the infrastructure underneath. No spam, and you can unsubscribe at any time."
+    />
+    <button type="button" class="popup-later" data-popup-close>No thanks</button>
+  </dialog>
+)}
+
+<script>
+  const KEY = 'hs-subscribe';
+  const SNOOZE_DAYS = 30;
+  const DELAY_MS = 30_000;
+
+  type State = { state: 'subscribed' | 'dismissed'; at: number };
+
+  // Storage can be blocked (private windows, strict settings). If it is, never show the pop-up,
+  // because there would be no way to remember that the reader closed it.
+  const read = (): State | null | undefined => {
+    try {
+      const raw = localStorage.getItem(KEY);
+      return raw ? (JSON.parse(raw) as State) : null;
+    } catch {
+      return undefined;
+    }
+  };
+  const write = (state: State['state']) => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({ state, at: Date.now() }));
+    } catch {}
+  };
+
+  // Anyone who submits a signup form here, reaches a /subscribe/ page, or arrives from a Kit email link
+  // (Kit adds ck_subscriber_id to those links) counts as subscribed.
+  document.addEventListener('submit', event => {
+    if ((event.target as Element).closest('.subscribe-form')) write('subscribed');
+  }, true);
+  if (location.pathname.startsWith('/subscribe/') || new URLSearchParams(location.search).has('ck_subscriber_id')) {
+    write('subscribed');
+  }
+
+  const dialog = document.querySelector<HTMLDialogElement>('.subscribe-popup');
+  const saved = read();
+  const snoozed = saved?.state === 'dismissed' && Date.now() - saved.at < SNOOZE_DAYS * 86_400_000;
+
+  if (dialog && typeof dialog.showModal === 'function' && saved !== undefined && saved?.state !== 'subscribed' && !snoozed) {
+    let shown = false;
+    const show = () => {
+      if (shown) return;
+      shown = true;
+      window.removeEventListener('scroll', onScroll);
+      clearTimeout(timer);
+      // Do not interrupt someone who is typing in another form.
+      if (document.activeElement instanceof HTMLInputElement) return;
+      dialog.showModal();
+      // Focus the box rather than the close button, so the button does not open with a focus ring.
+      dialog.focus();
+    };
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - innerHeight;
+      if (scrollable > 0 && scrollY / scrollable >= 0.5) show();
+    };
+    const timer = setTimeout(show, DELAY_MS);
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const close = () => {
+      write('dismissed');
+      dialog.close();
+    };
+    dialog.querySelectorAll('[data-popup-close]').forEach(button => button.addEventListener('click', close));
+    // Escape key.
+    dialog.addEventListener('cancel', () => write('dismissed'));
+    // A click on the dimmed backdrop, outside the box.
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog) close();
+    });
+  }
+</script>
+
+<style>
+  .subscribe-popup {
+    width: min(460px, calc(100% - 32px));
+    margin: auto;
+    padding: 28px 28px 18px;
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--signal);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 24px 60px rgb(15 24 37 / .22);
+  }
+  .subscribe-popup:focus { outline: none; }
+  .subscribe-popup::backdrop { background: rgb(15 24 37 / .45); }
+  .subscribe-popup[open] { animation: popup-in 220ms ease-out; }
+  .subscribe-popup[open]::backdrop { animation: backdrop-in 220ms ease-out; }
+  @keyframes popup-in { from { opacity: 0; translate: 0 12px; } }
+  @keyframes backdrop-in { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .subscribe-popup[open], .subscribe-popup[open]::backdrop { animation: none; }
+  }
+
+  .popup-kicker { padding-right: 36px; font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
+  .subscribe-popup :global(.subscribe) { margin-top: 10px; }
+  .subscribe-popup :global(.subscribe-title) { font-size: 22px; line-height: 1.3; letter-spacing: -.01em; }
+  .subscribe-popup :global(.subscribe-form) { max-width: none; }
+
+  .popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--slate);
+    cursor: pointer;
+  }
+  .popup-close:hover { background: var(--paper); color: var(--ink); }
+  .popup-later { display: block; min-height: 40px; margin: 8px auto 0; padding: 0 12px; font-size: 14px; color: var(--slate); cursor: pointer; }
+  .popup-later:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .popup-close:focus-visible, .popup-later:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+</style>
