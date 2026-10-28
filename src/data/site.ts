@@ -19,6 +19,11 @@ export const newsletter = {
   action: `https://app.kit.com/forms/${newsletterFormId}/subscriptions`,
 };
 
+// Umami Cloud analytics. The website ID is public; it appears in the page source anyway.
+export const analytics = {
+  umamiWebsiteId: '88e444cf-3d16-4676-9818-21b4de334c85',
+};
+
 // Upcoming lesson topics, listed on /learning/.
 export const topics = ['Agentic AI', 'LLMOps', 'MCP', 'AI Infrastructure', 'Kubernetes for AI', 'AI Security', 'RAG', 'AI Agents'];
 

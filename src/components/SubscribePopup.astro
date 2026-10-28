@@ -28,6 +28,8 @@ const { enabled = true } = Astro.props;
 )}
 
 <script>
+  import { track } from '../utils/track';
+
   const KEY = 'hs-subscribe';
   const SNOOZE_DAYS = 30;
   const DELAY_MS = 30_000;
@@ -75,6 +77,7 @@ const { enabled = true } = Astro.props;
       dialog.showModal();
       // Focus the box rather than the close button, so the button does not open with a focus ring.
       dialog.focus();
+      track('Subscribe pop-up', { action: 'shown', page: location.pathname });
     };
     const onScroll = () => {
       const scrollable = document.documentElement.scrollHeight - innerHeight;
@@ -85,11 +88,15 @@ const { enabled = true } = Astro.props;
 
     const close = () => {
       write('dismissed');
+      track('Subscribe pop-up', { action: 'closed', page: location.pathname });
       dialog.close();
     };
     dialog.querySelectorAll('[data-popup-close]').forEach(button => button.addEventListener('click', close));
     // Escape key.
-    dialog.addEventListener('cancel', () => write('dismissed'));
+    dialog.addEventListener('cancel', () => {
+      write('dismissed');
+      track('Subscribe pop-up', { action: 'closed', page: location.pathname });
+    });
     // A click on the dimmed backdrop, outside the box.
     dialog.addEventListener('click', event => {
       if (event.target === dialog) close();

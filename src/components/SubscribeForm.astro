@@ -21,7 +21,7 @@ const inputId = `${id}-email`;
   <div class:list={['subscribe', `subscribe-${tone}`]}>
     <p class="subscribe-title" id={`${id}-title`}>{title}</p>
     {text && <p class="subscribe-text">{text}</p>}
-    <form action={newsletter.action} method="post" class="subscribe-form" aria-labelledby={`${id}-title`}>
+    <form action={newsletter.action} method="post" class="subscribe-form" aria-labelledby={`${id}-title`} data-location={id.replace(/^subscribe-/, '')}>
       <label for={inputId} class="sr-only">Email address</label>
       <input id={inputId} type="email" name="email_address" required autocomplete="email" placeholder="you@example.com" />
       <button type="submit">Subscribe</button>

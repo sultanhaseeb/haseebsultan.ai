@@ -38,7 +38,7 @@ const emailHref = `mailto:${profile.email}?subject=${encodeURIComponent(post.tit
   {next && (
     <nav class="next" aria-label={next.label}>
       <p class="next-label">{next.label}</p>
-      <a href={next.post.href} class="next-link">
+      <a href={next.post.href} class="next-link" data-umami-event="Read next" data-umami-event-to={next.post.href}>
         <span class="next-meta">{postLabel(next.post)}</span>
         <span class="next-title">{next.post.title}</span>
         <span class="next-desc">{next.post.description}</span>

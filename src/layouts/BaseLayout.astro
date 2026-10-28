@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { getImage } from 'astro:assets';
 import portrait from '../assets/images/haseeb.jpg';
 import SubscribePopup from '../components/SubscribePopup.astro';
+import Analytics from '../components/Analytics.astro';
 import { site } from '../data/site';
 interface Props {
   title?: string;
@@ -73,6 +74,7 @@ const structuredData = article ? {
     <meta name="twitter:image" content={imageUrl} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
     <title>{title}</title>
+    <Analytics />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>

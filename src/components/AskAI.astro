@@ -27,7 +27,7 @@ const tools = [
   <ul aria-labelledby="ask-ai-label">
     {tools.map(tool => (
       <li>
-        <a href={tool.href} target="_blank" rel="noopener noreferrer" data-copy-prompt={tool.copy ? prompt : undefined}>
+        <a href={tool.href} target="_blank" rel="noopener noreferrer" data-copy-prompt={tool.copy ? prompt : undefined} data-umami-event="Read with AI" data-umami-event-tool={tool.name} data-umami-event-post={post.href}>
           {tool.name}<Icon name="external" size={13} />
           {tool.copy && <span class="sr-only"> (copies the prompt first, then paste it into Gemini)</span>}
         </a>

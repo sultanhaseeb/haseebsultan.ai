@@ -1,0 +1,31 @@
+---
+// Umami analytics: page views, referrers, countries, and devices, with no cookies.
+// Read with AI and Read next links carry data-umami-event attributes; the pop-up reports when it is shown
+// and closed. The script below counts signups on every subscribe form, every link that leaves the site,
+// and email links.
+// data-domains keeps local previews out of the numbers.
+import { analytics } from '../data/site';
+const id = analytics.umamiWebsiteId;
+---
+{id && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={id} data-domains="haseebsultan.ai"></script>}
+
+<script>
+  import { track } from '../utils/track';
+
+  // Counted on submit rather than on click, so an empty or invalid email is not counted.
+  document.addEventListener('submit', event => {
+    const form = (event.target as Element | null)?.closest?.('.subscribe-form') as HTMLFormElement | null;
+    if (form) track('Subscribe', { location: form.dataset.location ?? 'unknown', page: location.pathname });
+  }, true);
+
+  document.addEventListener('click', event => {
+    const link = (event.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+    // Links with their own data-umami-event are already counted by Umami.
+    if (!link || link.hasAttribute('data-umami-event')) return;
+    const url = new URL(link.href, location.href);
+    if (url.protocol === 'mailto:') track('Email link', { page: location.pathname });
+    else if (url.protocol.startsWith('http') && url.host !== location.host) {
+      track('Outbound link', { url: url.host + url.pathname.replace(/\/$/, ''), page: location.pathname });
+    }
+  });
+</script>
