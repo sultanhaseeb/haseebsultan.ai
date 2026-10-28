@@ -1,0 +1,76 @@
+---
+// "Read this with AI": links that open a post in ChatGPT, Claude, Gemini, or Perplexity with a ready-made prompt,
+// so readers can summarize it and keep the conversation going there. No chat runs on this site.
+// ChatGPT, Claude, and Perplexity take the prompt from the link (?q=). Gemini does not, so its link copies the
+// prompt to the clipboard first and the reader pastes it.
+import Icon from './Icon.astro';
+import { type Post, isLesson } from '../data/blog';
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const lesson = isLesson(post);
+const url = new URL(post.href, Astro.site).href;
+const prompt = lesson
+  ? `Read this lesson by Haseeb Sultan: ${url}\n\nTeach me its main ideas step by step, in simple words. Then give me 3 short questions to check that I understood, and help me with anything I get wrong.`
+  : `Read this article by Haseeb Sultan: ${url}\n\nSummarize its key ideas in a few bullet points, explain any technical terms in simple words, and then let me ask you questions about it.`;
+const q = encodeURIComponent(prompt);
+const tools = [
+  { name: 'ChatGPT', href: `https://chatgpt.com/?q=${q}` },
+  { name: 'Claude', href: `https://claude.ai/new?q=${q}` },
+  { name: 'Gemini', href: 'https://gemini.google.com/app', copy: true },
+  { name: 'Perplexity', href: `https://www.perplexity.ai/search?q=${q}` },
+];
+---
+<div class="ask-ai">
+  <p class="ask-ai-label" id="ask-ai-label">{lesson ? 'Learn this with AI' : 'Read this with AI'}</p>
+  <ul aria-labelledby="ask-ai-label">
+    {tools.map(tool => (
+      <li>
+        <a href={tool.href} target="_blank" rel="noopener noreferrer" data-copy-prompt={tool.copy ? prompt : undefined}>
+          {tool.name}<Icon name="external" size={13} />
+          {tool.copy && <span class="sr-only"> (copies the prompt first, then paste it into Gemini)</span>}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <p class="ask-ai-status" role="status"></p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('a[data-copy-prompt]').forEach(link => {
+    link.addEventListener('click', () => {
+      const status = link.closest('.ask-ai')?.querySelector('.ask-ai-status');
+      const prompt = link.dataset.copyPrompt ?? '';
+      // The link still opens Gemini in a new tab; the prompt is waiting on the clipboard.
+      navigator.clipboard?.writeText(prompt).then(
+        () => { if (status) status.textContent = 'Prompt copied. Paste it into Gemini to start.'; },
+        () => { if (status) status.textContent = `Copy this into Gemini: ${prompt}`; },
+      );
+    });
+  });
+</script>
+
+<style>
+  .ask-ai { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 20px; }
+  .ask-ai-label { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .ask-ai ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .ask-ai a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    transition: border-color 160ms ease, color 160ms ease;
+  }
+  .ask-ai a:hover { border-color: var(--signal); color: var(--signal); }
+  .ask-ai a :global(svg) { color: var(--slate); }
+  .ask-ai-status { flex-basis: 100%; font-size: 13px; line-height: 1.5; color: var(--signal); overflow-wrap: anywhere; }
+  .ask-ai-status:empty { display: none; }
+</style>

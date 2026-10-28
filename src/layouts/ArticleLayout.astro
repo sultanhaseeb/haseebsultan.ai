@@ -1,10 +1,11 @@
 ---
-// Shared frame for articles and lessons: header, lead image, body, author box, and read next.
+// Shared frame for articles and lessons: header with "Read this with AI" links, lead image, body, author box, and read next.
 import { Image, getImage } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticleEnd from '../components/ArticleEnd.astro';
+import AskAI from '../components/AskAI.astro';
 import { type Post, isLesson, postLabel } from '../data/blog';
 import { formatDate } from '../utils/date';
 interface Props {
@@ -25,6 +26,7 @@ const socialImage = post.image ? await getImage({ src: post.image, width: 1200, 
         <h1 id="article-title">{post.title}</h1>
         <p class="article-deck">{post.description}</p>
         <p class="article-byline">Haseeb Sultan <span aria-hidden="true">·</span> <time datetime={post.published}>{formatDate(post.published)}</time></p>
+        <AskAI post={post} />
       </header>
       {post.image && (
         <figure class="article-cover">
