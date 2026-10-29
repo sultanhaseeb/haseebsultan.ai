@@ -126,7 +126,7 @@ em { font-style: italic; }
 /* ---------- Header ---------- */
 .site-header { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--rule); }
 .site-header-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; min-height: 76px; }
-.wordmark { font-family: var(--font-serif); font-size: 28px; line-height: 1; white-space: nowrap; color: var(--ink); }
+.wordmark { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-serif); font-size: 28px; line-height: 1; white-space: nowrap; color: var(--ink); }
 .wordmark .dot { color: var(--emerald); }
 .site-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 22px; font-size: 14px; }
 .site-nav a { display: inline-flex; align-items: center; min-height: 44px; border-bottom: 1.5px solid transparent; color: var(--muted); transition: color 160ms ease; }
@@ -141,7 +141,7 @@ em { font-style: italic; }
 .site-footer a:hover { color: var(--mint); }
 .site-footer :focus-visible { outline-color: var(--mint); }
 .footer-main { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding-block: 40px; }
-.footer-wordmark { font-family: var(--font-serif); font-size: 26px; line-height: 1; }
+.footer-wordmark { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-serif); font-size: 26px; line-height: 1; }
 .footer-wordmark .dot { color: var(--mint); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0 24px; margin: 0; padding: 0; list-style: none; font-size: 14px; }
 .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
@@ -164,7 +164,7 @@ em { font-style: italic; }
   text-transform: uppercase;
   color: var(--muted);
 }
-.kicker-strip a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.kicker-strip a { display: inline-block; margin-block: -13px; padding-block: 13px; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .kicker-strip a:hover { color: var(--emerald); }
 
 /* Section heading: a "§ 01 · Label" rail on the left of the h2 on wide screens, stacked above it on phones. */

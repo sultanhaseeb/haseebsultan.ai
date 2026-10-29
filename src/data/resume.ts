@@ -10,7 +10,7 @@ import sadiqLogo from '../assets/images/education/sadiq-public-school.jpg';
 // Public résumé content. Employer and client identities are omitted.
 export const profile = {
   // Current job title, shown as a fact on /experience/. The positioning title is site.title.
-  title: 'Senior DevOps Engineer',
+  title: 'Senior AI Platform Engineer',
   location: 'Dubai, UAE',
   email: 'hello@haseebsultan.ai',
   summary: 'My background spans full-stack development, cloud architecture, DevOps, and LLMOps. I build automated, secure platforms across Azure, AWS, and Google Cloud, with hands-on work in Kubernetes, infrastructure as code, CI/CD, MLOps, and LLM applications.',
@@ -22,9 +22,19 @@ export const expertise = [
   'Security & compliance', 'Containerization & orchestration', 'CI/CD', 'Monitoring & logging',
 ];
 
+// `location` is where each role was based, and `industries` the sectors it served; both show on the homepage and /experience/.
 export const experience = [
   {
-    role: 'Senior DevOps Engineer', period: 'Feb 2025 – Present', focus: 'AWS infrastructure & platform automation',
+    role: 'Senior AI Platform Engineer', period: 'Nov 2025 – Present', focus: 'AI platforms, LLMOps & agent infrastructure',
+    location: 'Dubai, United Arab Emirates',
+    industries: ['Cybersecurity', 'AI security'],
+    // Add what you have delivered in this role.
+    highlights: [],
+  },
+  {
+    role: 'Senior DevOps Engineer', period: 'Feb 2025 – Nov 2025', focus: 'AWS infrastructure & platform automation',
+    location: 'Dubai, United Arab Emirates',
+    industries: ['Fintech', 'Banking'],
     highlights: [
       'Architected secure, multi-tier AWS networking with VPCs, public and private subnets, route tables, and security groups for fintech microservices.',
       'Orchestrated Rails applications on ECS Fargate and a full ELK stack on EKS for centralized logging and real-time analytics.',
@@ -35,6 +45,8 @@ export const experience = [
   },
   {
     role: 'Senior DevOps Engineer', period: 'Oct 2023 – Feb 2025', focus: 'Azure optimization & DevSecOps',
+    location: 'Dubai, United Arab Emirates',
+    industries: ['Aviation'],
     highlights: [
       'Reduced Azure infrastructure costs by up to 45% through resource management, scaling strategies, cost-effective services, and reserved instances.',
       'Implemented DevSecOps in CI/CD for 23+ microservices, including secure code integration, continuous security testing, and compliance checks.',
@@ -45,6 +57,8 @@ export const experience = [
   },
   {
     role: 'Senior DevOps Engineer', period: 'Oct 2020 – Oct 2023', focus: 'Cloud migrations, architecture & technical leadership',
+    location: 'Pakistan',
+    industries: ['Healthcare', 'Insurance', 'Banking', 'Fintech'],
     highlights: [
       'Led more than 10 DevOps projects covering infrastructure automation, CI/CD implementation, and cloud migration.',
       'Migrated 5 applications, 100+ virtual machines, 25+ Kubernetes clusters, and 20+ database clusters across 11 environments to Azure, using Terraform and automated Azure DevOps pipelines.',
@@ -56,6 +70,8 @@ export const experience = [
   },
   {
     role: 'Cloud / Full Stack Engineer', period: 'Jun 2019 – Sep 2020', focus: 'Application development & collaborative delivery',
+    location: 'Pakistan',
+    industries: ['Transportation'],
     highlights: [
       'Built full-stack applications using React, Node.js, MySQL, and Sequelize within Agile teams.',
       'Collaborated with domestic and international teams on application delivery and the DevOps platform.',

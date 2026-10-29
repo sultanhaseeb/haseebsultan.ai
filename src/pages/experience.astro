@@ -41,9 +41,11 @@ const aiExpertise = 3;
           <div class="job-head">
             <p class:list={['period', { current: index === 0 }]}>{job.period}</p>
             <h3>{job.role}</h3>
+            <p class="location">{job.location}</p>
             <p class="focus">{job.focus}</p>
+            <p class="industry"><span class="mono-label">{job.industries.length === 1 ? 'Industry' : 'Industries'}</span> {job.industries.join(' · ')}</p>
           </div>
-          <ul class="highlights">{job.highlights.map(highlight => <li>{highlight}</li>)}</ul>
+          {job.highlights.length > 0 && <ul class="highlights">{job.highlights.map(highlight => <li>{highlight}</li>)}</ul>}
         </li>
       ))}
     </ol>
@@ -96,7 +98,10 @@ const aiExpertise = 3;
   .period { font: 400 13px/1.5 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
   .period.current { color: var(--emerald); }
   .job h3 { margin-top: 10px; font-size: 34px; line-height: 1.05; }
+  .location { margin-top: 6px; font-size: 13px; color: var(--muted); }
   .focus { margin-top: 8px; font-size: 15px; line-height: 1.6; color: var(--body); }
+  .industry { margin-top: 12px; font-size: 14px; line-height: 1.6; color: var(--ink); }
+  .industry .mono-label { display: block; margin-bottom: 2px; color: var(--emerald); }
   .highlights { flex: 2 1 520px; display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
   .highlights li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.65; color: var(--ink-soft); }
   .highlights li::before { content: ''; position: absolute; left: 0; top: .8em; width: 12px; height: 1px; background: var(--emerald); }

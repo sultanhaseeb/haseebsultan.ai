@@ -13,7 +13,8 @@ const yearsOfExperience = now.getUTCFullYear() - careerStart.getUTCFullYear() - 
 const facts = [
   { label: 'Experience', value: `${yearsOfExperience}+ years`, big: true },
   { label: 'Clouds', value: 'Azure, AWS, Google Cloud' },
-  { label: 'Certified', value: 'Kubernetes Administrator (CKA), Azure DevOps Engineer Expert' },
+  // One certification per line.
+  { label: 'Certified', value: ['Anthropic MCP: Advanced Topics', 'Kubernetes Administrator (CKA)'] },
   { label: 'Focus now', value: 'LLMOps, agent infrastructure, AI security' },
 ];
 ---
@@ -49,7 +50,7 @@ const facts = [
       {facts.map(fact => (
         <div>
           <dt class="mono-label">{fact.label}</dt>
-          <dd class:list={{ big: fact.big }}>{fact.value}</dd>
+          <dd class:list={{ big: fact.big }}>{Array.isArray(fact.value) ? fact.value.map(line => <span class="line">{line}</span>) : fact.value}</dd>
         </div>
       ))}
     </dl>
@@ -69,6 +70,8 @@ const facts = [
   .facts { margin-top: 64px; }
   .facts .ruled-grid > div { padding-block: 24px; }
   .facts dd { margin-top: 10px; font-size: 15px; line-height: 1.55; font-weight: 500; }
+  .facts dd .line { display: block; }
+  .facts dd .line + .line { margin-top: 4px; }
   .facts dd.big { margin-top: 8px; font-family: var(--font-serif); font-size: 40px; font-weight: 400; line-height: 1; }
 
   @media (max-width: 560px) {

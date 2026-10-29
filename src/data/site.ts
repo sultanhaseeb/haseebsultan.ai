@@ -80,12 +80,5 @@ export const aiProjects = [
   },
 ];
 
-// Ideas still being built, shown on /projects/ without links.
-export const experiments = [
-  {
-    title: 'Secure Document Agent',
-    description: 'An AI agent architecture for securely searching, reading, and interacting with enterprise documents using MCP.',
-    topics: ['MCP', 'AI Agents', 'Security'],
-    flow: ['User request', 'Secure MCP agent', 'Enterprise documents'],
-  },
-];
+// Ideas still being built, shown on /projects/ without links. Empty for now; add an entry to show one.
+export const experiments: { title: string; description: string; topics: string[]; flow: string[] }[] = [];

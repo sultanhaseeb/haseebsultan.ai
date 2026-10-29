@@ -1,4 +1,6 @@
 ---
+import { experience } from '../../data/resume';
+
 const metrics = [
   { value: '45%', unit: 'up to', label: 'Azure infrastructure cost reduction', accent: true },
   { value: '23+', label: 'Microservices with DevSecOps in CI/CD' },
@@ -6,13 +8,8 @@ const metrics = [
   { value: '10+', label: 'DevOps projects led, with a team of 8' },
 ];
 
-// Newest first. Focus lines are short versions of the roles on /experience/.
-const roles = [
-  { role: 'Senior DevOps Engineer', focus: 'AWS platform automation', dates: 'Feb 2025 – present', current: true },
-  { role: 'Senior DevOps Engineer', focus: 'Azure optimization and DevSecOps', dates: 'Oct 2023 – Feb 2025' },
-  { role: 'Senior DevOps Engineer', focus: 'Cloud migrations and team lead', dates: 'Oct 2020 – Oct 2023' },
-  { role: 'Cloud / Full Stack Engineer', focus: 'React, Node.js, MySQL', dates: 'Jun 2019 – Sep 2020' },
-];
+// Newest first, from the résumé data, with the industries each role served.
+const roles = experience.map((job, index) => ({ role: job.role, dates: job.period, location: job.location, industries: job.industries, current: index === 0 }));
 ---
 <section id="experience" class="section shell" aria-labelledby="record-title">
   <div class="sec-head">
@@ -35,8 +32,8 @@ const roles = [
     {roles.map(item => (
       <li>
         <span class:list={['dates', { current: item.current }]}>{item.dates}</span>
-        <strong class="serif">{item.role}</strong>
-        <span class="focus">{item.focus}</span>
+        <span class="role-cell"><strong class="serif">{item.role}</strong><span class="location">{item.location}</span></span>
+        <span class="industry"><span class="sr-only">Industries: </span>{item.industries.join(' · ')}</span>
       </li>
     ))}
   </ol>
@@ -56,8 +53,10 @@ const roles = [
   .roles li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding-block: 22px; border-bottom: 1px solid var(--rule); }
   .dates { flex: 0 0 200px; font: 400 13px/1.5 var(--font-mono); color: var(--muted); }
   .dates.current { color: var(--emerald); }
-  .roles strong { flex: 1 1 260px; font-size: 28px; line-height: 1.1; }
-  .focus { flex: 1 1 260px; font-size: 15px; color: var(--body); }
+  .role-cell { flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px; }
+  .roles strong { font-size: 28px; line-height: 1.1; }
+  .location { font-size: 13px; color: var(--muted); }
+  .industry { flex: 1 1 260px; font-size: 15px; color: var(--body); }
   .more { margin-top: 20px; }
 
   @media (max-width: 560px) {
