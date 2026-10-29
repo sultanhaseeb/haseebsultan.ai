@@ -1,30 +1,38 @@
 ---
-import Icon from './Icon.astro';
+// Three turns in the career so far, oldest first. The current one is in emerald.
+const turns = [
+  { year: '2019', title: 'Full-stack developer', text: 'Building products with React, Node.js, and MySQL in Agile teams.' },
+  { year: '2020', title: 'DevOps and cloud platforms', text: 'Migrations, Kubernetes, delivery pipelines, and security across Azure, AWS, and Google Cloud.' },
+  { year: 'Now', title: 'AI platforms', text: 'LLMOps, agent infrastructure, and AI security: taking AI from experiment to production.', current: true },
+];
 ---
-<section id="journey" class="h-section" aria-labelledby="journey-title">
-  <div class="h-grid">
-    <p class="h-label">Journey</p>
-    <div class="journey">
-      <h2 id="journey-title" class="h-title">From infrastructure to AI platforms.</h2>
-      <ol class="path" aria-label="Career path">
-        <li><span>2019</span>Full-stack &amp; cloud</li>
-        <li><span>2020</span>Senior DevOps</li>
-        <li><span>2023</span>Azure &amp; DevSecOps</li>
-        <li class="now"><span>Now</span>AI platforms</li>
-      </ol>
-      <a href="/experience/" class="text-link">Read my professional background <Icon name="arrow" size={16} /></a>
-    </div>
+<section id="journey" class="section shell" aria-labelledby="journey-title">
+  <div class="sec-head">
+    <p class="sec-label">§ 03 · Journey</p>
+    <h2 id="journey-title">Three turns, so far.</h2>
   </div>
+  <div class="ruled rows path">
+    <ol class="ruled-grid" aria-label="Career path">
+      {turns.map(turn => (
+        <li>
+          <p class:list={['year serif', { current: turn.current }]}>{turn.year}</p>
+          <h3>{turn.title}</h3>
+          <p class="text">{turn.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <a href="/experience/" class="text-link more">Certifications, education, and full experience <span aria-hidden="true">→</span></a>
 </section>
 
 <style>
-  .path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 36px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
-  .path li { position: relative; padding: 18px 16px 0 0; font-size: 14px; font-weight: 500; line-height: 1.4; }
-  .path li::before { content: ''; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink); }
-  .path li.now::before { background: var(--signal); border-color: var(--signal); }
-  .path span { display: block; margin-bottom: 4px; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
-  .path li.now span { color: var(--signal); }
-  @media (max-width: 560px) {
-    .path { grid-template-columns: 1fr 1fr; row-gap: 24px; }
-  }
+  .path { margin-top: 48px; }
+  .path .ruled-grid { --cell-min: 280px; --cell-pad: 28px; }
+  .path li { padding-block: 28px 32px; }
+  /* Past years are real text, so they use --soon (3:1 at this size) rather than the decorative --faint. */
+  .year { font-size: 72px; line-height: 1; color: var(--soon); }
+  .year.current { color: var(--emerald); }
+  .path h3 { margin-top: 12px; font-family: var(--font-sans); font-size: 18px; font-weight: 600; line-height: 1.4; }
+  .text { margin-top: 8px; font-size: 15px; line-height: 1.7; color: var(--body); }
+  .more { margin-top: 20px; }
 </style>

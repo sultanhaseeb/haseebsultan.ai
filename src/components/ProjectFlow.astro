@@ -1,23 +1,25 @@
 ---
+// An architecture flow: steps joined by arrows. "pill" fills each step, "dashed" outlines it (for work in
+// progress), and "text" is a plain mono line for dense grids.
 interface Props {
   steps: string[];
   label: string;
+  variant?: 'pill' | 'dashed' | 'text';
 }
-
-const { steps, label } = Astro.props;
+const { steps, label, variant = 'pill' } = Astro.props;
 ---
-<ol class="project-flow" aria-label={label}>
+<ol class:list={['flow', `flow-${variant}`]} aria-label={label}>
   {steps.map((step, index) => (
     <li>
-      <span class="step">{step}</span>
+      <span class:list={[variant === 'text' ? 'step' : 'pill', { dashed: variant === 'dashed' }]}>{step}</span>
       {index < steps.length - 1 && <span class="arrow" aria-hidden="true">→</span>}
     </li>
   ))}
 </ol>
 
 <style>
-  .project-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 0; padding: 0; list-style: none; font: 400 12px/1.5 var(--font-utility); }
-  .project-flow li { display: inline-flex; align-items: center; gap: 8px; }
-  .step { padding: 4px 9px; border-radius: 3px; background: var(--signal-soft); color: var(--ink); }
-  .arrow { color: var(--signal); }
+  .flow-pill, .flow-dashed { font-size: 12px; }
+  .flow-pill .pill, .flow-dashed .pill { padding: 6px 10px; }
+  .flow-text { gap: 4px 12px; font-size: 12px; line-height: 1.8; color: var(--muted); }
+  .flow-text li { gap: 12px; }
 </style>

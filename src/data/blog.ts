@@ -17,6 +17,12 @@ export interface Post {
   imageAlt?: string;
   // Shown under the lead image, for credits.
   imageCaption?: string;
+  // The phrase in the title (and cover title) set in italic emerald, such as "AI Agents".
+  accent?: string;
+  // Lessons: extra topics shown after the category, such as MCP and Python.
+  tags?: string[];
+  // Lessons: the code that goes with them.
+  repo?: { name: string; href: string };
 }
 
 export const controlProblemArticle: Post = {
@@ -24,6 +30,7 @@ export const controlProblemArticle: Post = {
   coverTitle: 'The Control Problem',
   description: 'What a missing watermark can teach us about AI alignment, reliable constraints, and the growing debate over control.',
   category: 'AI Safety',
+  accent: 'Losing Control?',
   href: '/blog/the-control-problem/',
   published: '2026-09-21',
   image: controlProblemImage,
@@ -35,6 +42,7 @@ export const gtcBerlinArticle: Post = {
   coverTitle: 'Inside GTC Berlin',
   description: 'Six takeaways from Jensen Huang’s keynote, from AI factories that manufacture tokens to agent security enforced in hardware.',
   category: 'AI Infrastructure',
+  accent: 'Agentic AI Revolution',
   href: '/blog/nvidia-gtc-berlin-keynote/',
   published: '2026-10-26',
   image: gtcBerlinImage,
@@ -47,6 +55,7 @@ export const aiSecurityArticle: Post = {
   coverTitle: 'Banks Lock Out AI Agents',
   description: 'In one week, five of America’s biggest banks stopped AI agents from moving customer money. What happened, why it matters, and how to use AI agents safely.',
   category: 'AI Security',
+  accent: 'AI Agents',
   href: '/blog/why-ai-security-matters/',
   published: '2026-10-26',
 };
@@ -56,6 +65,7 @@ export const specDrivenLesson: Post = {
   coverTitle: 'Spec-Driven Development',
   description: 'Why production AI engineering needs durable specifications, a Project Constitution, disciplined validation, and agent-independent workflows.',
   category: 'AI Engineering',
+  accent: 'From Chaos to Clarity',
   href: '/learning/spec-driven-development/',
   published: '2026-09-20',
   image: specDrivenImage,
@@ -67,6 +77,7 @@ export const jevLesson: Post = {
   coverTitle: 'System 1 AI',
   description: 'How Jev replaces slow text generation with fast, calibrated decisions for high-volume application workflows.',
   category: 'AI Engineering',
+  accent: 'Jev',
   href: '/learning/unlocking-system-1-ai-jev/',
   published: '2026-10-01',
   image: jevImage,
@@ -78,6 +89,9 @@ export const mcpLesson: Post = {
   coverTitle: 'Build an MCP Server',
   description: 'A hands-on walkthrough of a small Model Context Protocol server: when to use each of MCP’s three building blocks, and how clients connect over STDIO and HTTP.',
   category: 'AI Engineering',
+  accent: 'Tools, Resources, and Prompts',
+  tags: ['MCP', 'Python'],
+  repo: { name: 'taskboard-mcp', href: 'https://github.com/sultanhaseeb/taskboard-mcp' },
   href: '/learning/build-an-mcp-server/',
   published: '2026-10-26',
 };
@@ -108,10 +122,22 @@ export const lessonNumber = (post: Post) => String(lessons.indexOf(post) + 1).pa
 // The label above a post title, such as "Lesson 02 · AI Engineering" or "AI Safety".
 export const postLabel = (post: Post) => (isLesson(post) ? `Lesson ${lessonNumber(post)} · ${post.category}` : post.category);
 
-// What to suggest after a post: the next lesson in the series, otherwise the newest other post.
-export const readNext = (post: Post): { label: string; post: Post } | undefined => {
+// Splits a title around its accent phrase, so the phrase can be set in italics.
+export const accentParts = (text: string, accent?: string): [string, string, string] => {
+  const at = accent ? text.lastIndexOf(accent) : -1;
+  if (!accent || at < 0) return [text, '', ''];
+  return [text.slice(0, at), accent, text.slice(at + accent.length)];
+};
+
+// What to suggest after a post: the next lesson in the series first, then the newest other posts.
+export const readNext = (post: Post, count = 2): Post[] => {
   const nextLesson = isLesson(post) ? lessons[lessons.indexOf(post) + 1] : undefined;
-  if (nextLesson) return { label: 'Next lesson', post: nextLesson };
-  const other = posts.find(candidate => candidate !== post);
-  return other && { label: 'Read next', post: other };
+  const others = posts.filter(candidate => candidate !== post && candidate !== nextLesson);
+  return [...(nextLesson ? [nextLesson] : []), ...others].slice(0, count);
+};
+
+// The lessons either side of a lesson, for the previous and next links.
+export const lessonNeighbours = (post: Post) => {
+  const index = lessons.indexOf(post);
+  return { previous: lessons[index - 1], next: lessons[index + 1], number: index + 1, total: lessons.length };
 };

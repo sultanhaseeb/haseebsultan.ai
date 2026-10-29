@@ -1,84 +1,53 @@
 ---
 import { formatDate } from '../../utils/date';
-import Icon from '../Icon.astro';
 import PostCover from '../PostCover.astro';
-import { posts, postLabel } from '../../data/blog';
+import { posts, isLesson, lessonNumber } from '../../data/blog';
 
 // The three newest posts, articles and lessons together.
 const [lead, ...rest] = posts.slice(0, 3);
+const kind = (post: (typeof posts)[number]) => (isLesson(post) ? 'Lesson' : 'Article');
 ---
-<section id="blog" class="h-section shell" aria-labelledby="blog-title">
-  <div class="h-grid">
-    <p class="h-label">Blog</p>
-    <div>
-      <h2 id="blog-title" class="h-title">What I think about AI, and lessons you can follow.</h2>
-      <p class="intro">Articles share my view of where AI is heading. Numbered lessons break down new ideas in AI engineering, step by step, so you can learn them alongside me.</p>
-      <div class="writing">
-        <article class="lead">
-          <a href={lead.href} class="cover-link" tabindex="-1" aria-hidden="true"><PostCover post={lead} /></a>
-          <p class="meta"><span>{postLabel(lead)}</span><time datetime={lead.published}>{formatDate(lead.published)}</time></p>
-          <h3><a href={lead.href}>{lead.title}</a></h3>
-          <p class="desc">{lead.description}</p>
+<section id="blog" class="section shell" aria-labelledby="blog-title">
+  <div class="sec-head">
+    <p class="sec-label">§ 04 · Writing</p>
+    <h2 id="blog-title">What I think about AI, and <em class="plain">lessons you can follow.</em></h2>
+  </div>
+  <div class="writing">
+    <article class="lead">
+      <a href={lead.href} tabindex="-1" aria-hidden="true" class="cover-link"><PostCover post={lead} tone="forest" ratio="3 / 2" sizes="(max-width: 760px) calc(100vw - 40px), 640px" /></a>
+      <p class="meta"><span class="accent">{kind(lead)}</span><time datetime={lead.published}>{formatDate(lead.published)}</time></p>
+      <h3><a href={lead.href}>{lead.title}</a></h3>
+      <p class="desc">{lead.description}</p>
+    </article>
+    <div class="others">
+      {rest.map(post => (
+        <article class="other">
+          <p class="meta"><span class="accent">{isLesson(post) ? `Lesson ${lessonNumber(post)}` : 'Article'}</span><time datetime={post.published}>{formatDate(post.published)}</time></p>
+          <h3><a href={post.href}>{post.title}</a></h3>
+          <p class="desc">{post.description}</p>
         </article>
-        <div class="others">
-          {rest.map(post => (
-            <article class="other">
-              <p class="meta"><span>{postLabel(post)}</span><time datetime={post.published}>{formatDate(post.published)}</time></p>
-              <h3><a href={post.href}>{post.title}</a></h3>
-              <p class="desc">{post.description}</p>
-            </article>
-          ))}
-        </div>
-      </div>
+      ))}
       <p class="more">
-        <a href="/blog/" class="h-more">All posts <Icon name="arrow" size={16} /></a>
-        <a href="/learning/" class="h-more">Let's learn together: the lesson series <Icon name="arrow" size={16} /></a>
+        <a href="/blog/" class="text-link">All posts <span aria-hidden="true">→</span></a>
+        <a href="/learning/" class="text-link">The lesson series <span aria-hidden="true">→</span></a>
       </p>
     </div>
   </div>
 </section>
 
 <style>
-  .intro { margin-top: 14px; max-width: 58ch; font-size: 16px; line-height: 1.7; color: var(--slate); }
-  .writing {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: 40px;
-    margin-top: 32px;
-    padding-top: 28px;
-    border-top: 1px solid var(--ink);
-  }
-  .cover-link { display: block; transition: opacity 160ms ease; }
-  .lead:hover .cover-link { opacity: .92; }
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 12px;
-    font: 400 12px/1.5 var(--font-utility);
-    color: var(--slate);
-  }
-  .meta span { color: var(--signal); }
+  .writing { display: flex; flex-wrap: wrap; gap: 48px; margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--ink); }
+  .lead { flex: 1.3 1 440px; min-width: 0; }
+  .cover-link { display: block; }
   .lead .meta { margin-top: 20px; }
-  h3 {
-    margin-top: 8px;
-    font-family: var(--font-display);
-    font-weight: 600;
-    line-height: 1.3;
-    letter-spacing: -.015em;
-    text-wrap: balance;
-  }
-  .lead h3 { font-size: 23px; }
-  .other h3 { font-size: 18px; }
+  h3 { margin-top: 10px; font-size: 28px; line-height: 1.1; }
+  .lead h3 { font-size: 38px; line-height: 1.08; }
   h3 a { color: var(--ink); }
-  h3 a:hover { color: var(--signal); }
-  .desc { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--slate); }
-  .others { display: grid; align-content: start; }
-  .other { padding-block: 0 26px; }
-  .other + .other { padding-top: 26px; border-top: 1px solid var(--rule); }
-  .more { display: flex; flex-wrap: wrap; gap: 0 28px; }
-
-  @media (max-width: 760px) {
-    .writing { grid-template-columns: 1fr; gap: 28px; }
-    .others { border-top: 1px solid var(--rule); padding-top: 26px; }
-  }
+  h3 a:hover { color: var(--emerald); }
+  .desc { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--body); }
+  .lead .desc { margin-top: 12px; font-size: 16px; }
+  .others { flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; }
+  .other { padding-bottom: 28px; border-bottom: 1px solid var(--rule); }
+  .other + .other { padding-top: 28px; }
+  .more { display: flex; flex-wrap: wrap; gap: 0 28px; margin-top: 16px; }
 </style>

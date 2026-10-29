@@ -20,25 +20,22 @@ const coDesignNumbers = [
   { value: '0', unit: 'cables', label: 'Inside a Vera Rubin compute node, so it can be fully liquid cooled' },
   { value: '1.44', unit: 'exaflops', label: 'From 72 GPUs working as one' },
 ];
+
+const toc = [
+  { id: 'manufacturing', label: 'AI is a manufacturing industry' },
+  { id: 'co-design', label: 'Extreme co-design beat Moore’s Law' },
+  { id: 'super-agent', label: 'The anatomy of a super agent' },
+  { id: 'agent-security', label: 'Agent security moves into hardware' },
+  { id: 'dsx-pods', label: 'Modular pods for AI factories' },
+  { id: 'desktop', label: 'Supercomputing on the desktop' },
+  { id: 'road-ahead', label: 'The road ahead' },
+];
 ---
-<ArticleLayout post={post}>
+<ArticleLayout post={post} toc={toc}>
   <p class="article-lead">For the past few years, most of us have met AI as a text box. You type a prompt, and a model writes back.</p>
   <p>That era is ending. Enterprises are moving past chatbots toward autonomous agents and physical robots: systems that reason continuously, run entire workflows, and take real action in the world. That puts enormous pressure on the infrastructure underneath. Data centers, networks, and enterprise IT stacks were built to host software, not to run AI that thinks and acts around the clock.</p>
   <p>At NVIDIA’s GTC Berlin keynote, Jensen Huang laid out how that infrastructure has to change. He did not frame it as a faster chip. He described a new industrial revolution, in which computing stops being a passive host for applications and becomes a factory that produces intelligence, one token at a time, at planetary scale.</p>
   <p>Here are the six takeaways that stood out to me, from gigawatt-scale data center pods and hardware-enforced agent security to supercomputers that fit on a desk.</p>
-
-  <nav class="article-contents" aria-label="The six takeaways">
-    <p>The six takeaways</p>
-    <ol>
-      <li><a href="#manufacturing">AI is a manufacturing industry</a></li>
-      <li><a href="#co-design">Extreme co-design beat Moore’s Law</a></li>
-      <li><a href="#super-agent">The anatomy of a super agent</a></li>
-      <li><a href="#agent-security">Agent security moves into hardware</a></li>
-      <li><a href="#dsx-pods">Modular pods for AI factories</a></li>
-      <li><a href="#desktop">Supercomputing on the desktop</a></li>
-      <li><a href="#road-ahead">The road ahead</a></li>
-    </ol>
-  </nav>
 
   <section aria-labelledby="manufacturing">
     <header class="takeaway-head">
@@ -173,48 +170,46 @@ const coDesignNumbers = [
 </ArticleLayout>
 
 <style>
-  .takeaway-head { margin-block: 64px 18px; }
-  .takeaway-no { font: 500 12px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
-  .takeaway-head h2 { margin: 6px 0 0; }
+  .takeaway-head { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--ink); }
+  .takeaway-no { font: 400 13px/1.5 var(--font-mono); color: var(--emerald); }
+  .takeaway-head h2 { margin-top: 6px; }
+  .takeaway-head + * { margin-top: 20px; }
 
   /* The layer cake: listed bottom-up for screen readers, drawn as a stack that narrows towards the top. */
-  .layer-cake { display: flex; flex-direction: column-reverse; gap: 6px; margin-block: 24px 28px; padding: 0; list-style: none; }
-  .layer-cake li { display: grid; grid-template-columns: 34px 132px minmax(0, 1fr); gap: 12px; align-items: baseline; margin: 0; padding: 14px 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); font-size: 15px; line-height: 1.55; }
-  .layer-cake li:nth-child(2) { margin-inline: 14px; }
-  .layer-cake li:nth-child(3) { margin-inline: 28px; }
-  .layer-cake li:nth-child(4) { margin-inline: 42px; }
-  .layer-cake li:nth-child(5) { margin-inline: 56px; border-color: var(--signal); background: var(--signal-soft); }
-  .layer-cake li:first-child { background: var(--night); border-color: var(--night); color: var(--night-ink); }
-  .layer-cake li:first-child strong { color: var(--night-ink); }
-  .layer-cake li:first-child .layer-text { color: var(--night-muted); }
-  .layer-no { font: 400 12px/1.5 var(--font-utility); color: var(--signal); }
-  .layer-cake li:first-child .layer-no { color: var(--night-signal); }
-  .layer-cake strong { font-family: var(--font-display); font-weight: 600; }
-  .layer-text { color: var(--slate); }
+  .layer-cake { display: flex; flex-direction: column-reverse; gap: 6px; margin-top: 24px !important; padding: 0 !important; list-style: none !important; }
+  .layer-cake li { display: grid; grid-template-columns: 34px 132px minmax(0, 1fr); gap: 12px; align-items: baseline; margin: 0 !important; padding: 14px 18px; border: 1px solid var(--rule); background: var(--paper-raised); font-size: 15px; line-height: 1.55; }
+  .layer-cake li:nth-child(2) { margin-inline: 14px !important; }
+  .layer-cake li:nth-child(3) { margin-inline: 28px !important; }
+  .layer-cake li:nth-child(4) { margin-inline: 42px !important; }
+  .layer-cake li:nth-child(5) { margin-inline: 56px !important; border-color: var(--emerald); }
+  .layer-cake li:first-child { background: var(--forest); border-color: var(--forest); color: var(--forest-ink); }
+  .layer-cake li:first-child strong { color: var(--forest-ink); }
+  .layer-cake li:first-child .layer-text { color: var(--forest-body); }
+  .layer-no { font: 400 12px/1.5 var(--font-mono); color: var(--emerald); }
+  .layer-cake li:first-child .layer-no { color: var(--mint); }
+  .layer-cake strong { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.1; }
+  .layer-text { color: var(--body); }
 
-  .numbers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-block: 28px 32px; border-top: 1px solid var(--ink); }
-  .numbers div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; padding: 20px 20px 20px 0; border-bottom: 1px solid var(--rule); }
+  .numbers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 28px !important; border-top: 1px solid var(--ink); }
+  .numbers div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; padding: 22px 20px 22px 0; border-bottom: 1px solid var(--rule); }
   .numbers div:nth-child(even) { padding-left: 20px; border-left: 1px solid var(--rule); }
-  .numbers dd { margin: 0; display: flex; align-items: baseline; gap: 6px; font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 4vw, 36px); line-height: 1; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
-  .numbers .unit { font: 400 12px/1 var(--font-utility); letter-spacing: 0; color: var(--slate); }
-  .numbers dt { font-size: 14px; line-height: 1.5; color: var(--slate); }
+  .numbers dd { display: flex; align-items: baseline; gap: 6px; font-family: var(--font-serif); font-size: clamp(44px, 5vw, 64px); line-height: .95; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .numbers .unit { font: 400 12px/1 var(--font-mono); letter-spacing: 0; color: var(--muted); }
+  .numbers dt { font-size: 14px; line-height: 1.5; color: var(--body); }
 
+  /* Numbered building blocks, with serif numerals. */
   .blocks { counter-reset: block; padding: 0 !important; list-style: none !important; }
-  .blocks li { position: relative; padding-left: 44px; }
-  .blocks li::before { counter-increment: block; content: counter(block); position: absolute; left: 0; top: .15em; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 12px/1 var(--font-utility); }
-  .blocks li + li { margin-top: 14px; }
-
-  .article-note p { margin: 0; font-size: 16px; line-height: 1.7; }
-
-  .closing-question { margin-top: 24px !important; padding: 22px 24px; border-left: 3px solid var(--signal); background: var(--signal-soft); font-family: var(--font-display); font-weight: 600; font-size: clamp(19px, 2.2vw, 22px); line-height: 1.45; letter-spacing: -.01em; color: var(--ink); }
+  .blocks li { position: relative; padding-left: 40px; }
+  .blocks li::before { counter-increment: block; content: counter(block); position: absolute; left: 0; top: -.05em; font-family: var(--font-serif); font-size: 34px; line-height: 1; color: var(--emerald); }
+  .blocks li + li { margin-top: 16px; }
 
   @media (max-width: 640px) {
     .layer-cake li { grid-template-columns: 30px minmax(0, 1fr); row-gap: 2px; padding: 12px 14px; }
     .layer-text { grid-column: 2; }
-    .layer-cake li:nth-child(2) { margin-inline: 6px; }
-    .layer-cake li:nth-child(3) { margin-inline: 12px; }
-    .layer-cake li:nth-child(4) { margin-inline: 18px; }
-    .layer-cake li:nth-child(5) { margin-inline: 24px; }
+    .layer-cake li:nth-child(2) { margin-inline: 6px !important; }
+    .layer-cake li:nth-child(3) { margin-inline: 12px !important; }
+    .layer-cake li:nth-child(4) { margin-inline: 18px !important; }
+    .layer-cake li:nth-child(5) { margin-inline: 24px !important; }
     .numbers div { padding-right: 12px; }
     .numbers div:nth-child(even) { padding-left: 12px; }
   }

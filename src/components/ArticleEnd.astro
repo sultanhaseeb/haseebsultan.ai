@@ -1,97 +1,102 @@
 ---
-// Closes every article and lesson: who wrote it, how to respond or subscribe, and what to read next.
-import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
+// After every article and lesson: what to read next, then the newsletter.
+// Articles get two "Read next" posts; lessons get the previous and next lesson in the series.
+import PostCover from './PostCover.astro';
 import SubscribeForm from './SubscribeForm.astro';
-import portrait from '../assets/images/haseeb.jpg';
-import { site, newsletter } from '../data/site';
-import { profile } from '../data/resume';
-import { type Post, isLesson, postLabel, readNext } from '../data/blog';
+import { type Post, isLesson, lessonNumber, lessonNeighbours, postLabel, readNext } from '../data/blog';
 interface Props {
   post: Post;
 }
 const { post } = Astro.props;
-const next = readNext(post);
-const emailHref = `mailto:${profile.email}?subject=${encodeURIComponent(post.title)}`;
+const lesson = isLesson(post);
+const nextPosts = lesson ? [] : readNext(post, 2);
+const { previous, next, number } = lessonNeighbours(post);
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
-<div class="article-end reading-column">
-  <aside class="author" aria-labelledby="author-name">
-    <Image src={portrait} alt="" width={128} class="author-photo" />
-    <div>
-      <p class="author-kicker">Written by</p>
-      <p id="author-name" class="author-name">{site.name}</p>
-      <p class="author-bio">{site.title} in {profile.location}. I build the infrastructure AI runs on: Kubernetes platforms, LLMOps, and secure tooling for AI agents.</p>
-      <ul class="author-links">
-        <li><a href={emailHref}>{isLesson(post) ? 'Questions about this lesson? Email me' : 'Thoughts on this? Email me'}</a></li>
-        <li><a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">Follow on LinkedIn <Icon name="external" size={13} /></a></li>
-        <li><a href="/rss.xml">RSS feed</a></li>
-      </ul>
+{lesson ? (
+  <nav class="lesson-nav shell" aria-label="More lessons">
+    <div class="ruled rows">
+      <div class="ruled-grid">
+        {previous ? (
+          <a href={previous.href} class="step-link">
+            <span class="meta">← Previous · Lesson {lessonNumber(previous)}</span>
+            <span class="step-title serif">{previous.title}</span>
+          </a>
+        ) : (
+          <a href="/learning/" class="step-link">
+            <span class="meta">← The lesson series</span>
+            <span class="step-title serif">All lessons</span>
+          </a>
+        )}
+        {next ? (
+          <a href={next.href} class="step-link end" data-umami-event="Read next" data-umami-event-to={next.href}>
+            <span class="meta">Next · Lesson {lessonNumber(next)} →</span>
+            <span class="step-title serif">{next.title}</span>
+          </a>
+        ) : (
+          <div class="step-link end">
+            <span class="meta">Next · Lesson {pad(number + 1)}</span>
+            <span class="step-title serif soon"><em class="plain">Coming soon</em></span>
+          </div>
+        )}
+      </div>
     </div>
-  </aside>
-
-  {newsletter.formId && (
-    <div class="subscribe-card">
-      <SubscribeForm id="subscribe-article" title={isLesson(post) ? 'Get the next lesson by email' : 'Get new posts by email'} />
+  </nav>
+) : (
+  <section class="read-next shell" aria-labelledby="read-next-title">
+    <h2 id="read-next-title" class="next-label">Read next</h2>
+    <div class="next-grid">
+      {nextPosts.map(item => (
+        <a href={item.href} class="next-link" data-umami-event="Read next" data-umami-event-to={item.href}>
+          <span class="next-thumb"><PostCover post={item} tone="numeral" ratio="4 / 3" sizes="160px" /></span>
+          <span class="next-copy">
+            <span class="meta"><span class="accent">{isLesson(item) ? postLabel(item) : `Article · ${item.category}`}</span></span>
+            <span class="next-title serif">{item.title}</span>
+          </span>
+        </a>
+      ))}
     </div>
-  )}
+  </section>
+)}
 
-  {next && (
-    <nav class="next" aria-label={next.label}>
-      <p class="next-label">{next.label}</p>
-      <a href={next.post.href} class="next-link" data-umami-event="Read next" data-umami-event-to={next.post.href}>
-        <span class="next-meta">{postLabel(next.post)}</span>
-        <span class="next-title">{next.post.title}</span>
-        <span class="next-desc">{next.post.description}</span>
-        <span class="next-go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
-      </a>
-    </nav>
+<section class="end-news shell" aria-label="Newsletter">
+  {lesson ? (
+    <SubscribeForm
+      id="subscribe-article"
+      layout="split"
+      title={next ? 'Get each new lesson' : `Get Lesson ${pad(number + 1)}`}
+      text="One short email when a new lesson goes up, so we keep learning together."
+    />
+  ) : (
+    <SubscribeForm id="subscribe-article" layout="split" title="Get the next post" />
   )}
-</div>
+</section>
 
 <style>
-  .article-end { display: grid; gap: 40px; margin-top: 64px; }
-  .author {
-    display: grid;
-    grid-template-columns: 64px minmax(0, 1fr);
-    gap: 20px;
-    align-items: start;
-    padding: 24px 26px;
-    border: 1px solid var(--rule);
-    border-radius: 3px;
-    background: var(--surface);
+  .read-next, .lesson-nav { padding-top: 112px; }
+  .next-label { font: 400 12px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--emerald); }
+  .next-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 40px; margin-top: 24px; padding-top: 32px; border-top: 1px solid var(--ink); }
+  .next-link { display: flex; align-items: flex-start; gap: 24px; color: var(--ink); }
+  .next-thumb { flex: 0 0 160px; width: 160px; }
+  .next-copy { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .next-title { font-size: 28px; line-height: 1.08; transition: color 160ms ease; }
+  .next-link:hover .next-title { color: var(--emerald); }
+
+  .lesson-nav .ruled-grid { --cell-min: 320px; --cell-pad: 32px; }
+  .step-link { display: flex; flex-direction: column; gap: 8px; padding-block: 32px; color: var(--ink); }
+  .step-link.end { text-align: right; }
+  .step-title { font-size: 34px; line-height: 1.05; transition: color 160ms ease; }
+  a.step-link:hover .step-title { color: var(--emerald); }
+  .step-title.soon { color: var(--soon); }
+  .step-link .meta { display: block; }
+
+  .end-news { padding-block: 96px 112px; }
+
+  @media (max-width: 480px) {
+    .next-thumb { flex-basis: 112px; width: 112px; }
+    .next-title { font-size: 24px; }
   }
-  .author-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: 50% 30%; }
-  .author-kicker { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
-  .author-name { margin-top: 2px; font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.3; }
-  .author-bio { margin-top: 6px; font-size: 15px; line-height: 1.65; color: var(--slate); }
-  .author-links { display: flex; flex-wrap: wrap; gap: 0 20px; margin: 10px 0 0; padding: 0; list-style: none; }
-  .author-links a { display: inline-flex; align-items: center; gap: 5px; min-height: 36px; font-size: 14px; font-weight: 600; color: var(--signal); }
-  .author-links a:hover { color: var(--signal-strong); }
-
-  .subscribe-card { padding: 24px 26px; border: 1px solid var(--rule); border-left: 3px solid var(--signal); border-radius: 3px; background: var(--surface); }
-
-  .next-label { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
-  .next-link {
-    position: relative;
-    display: grid;
-    gap: 6px;
-    margin-top: 12px;
-    padding: 22px 56px 22px 0;
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--rule);
-    color: var(--ink);
-  }
-  .next-meta { font: 400 12px/1.5 var(--font-utility); color: var(--signal); }
-  .next-title { font-family: var(--font-display); font-weight: 600; font-size: 21px; line-height: 1.3; letter-spacing: -.015em; transition: color 160ms ease; }
-  .next-desc { font-size: 15px; line-height: 1.65; color: var(--slate); }
-  .next-go { position: absolute; top: 50%; right: 4px; translate: 0 -50%; color: var(--slate); transition: color 160ms ease, translate 160ms ease; }
-  .next-link:hover .next-title, .next-link:hover .next-go { color: var(--signal); }
-  .next-link:hover .next-go { translate: 3px -50%; }
-
-  @media (max-width: 560px) {
-    .author { grid-template-columns: 1fr; gap: 14px; padding: 20px; }
-    .subscribe-card { padding: 20px; }
-    .next-link { padding-right: 0; }
-    .next-go { display: none; }
+  @media (max-width: 700px) {
+    .step-link.end { text-align: left; }
   }
 </style>

@@ -1,5 +1,4 @@
 ---
-import Icon from '../Icon.astro';
 import { site } from '../../data/site';
 import { profile } from '../../data/resume';
 
@@ -11,64 +10,28 @@ const channels = [
 ];
 ---
 <section id="contact" class="contact shell" aria-labelledby="contact-title">
-  <div class="h-grid">
-    <p class="h-label">Contact</p>
-    <div class="contact-body">
-      <div>
-        <h2 id="contact-title" class="statement">Working on cloud, Kubernetes, or LLM infrastructure? I'm happy to talk.</h2>
-        <p class="note">You can also <a href="/learning/">learn with me</a>: each lesson breaks down a new idea in AI engineering, step by step.</p>
-      </div>
-      <ul class="channels">
-        {channels.map(channel => (
-          <li>
-            <a href={channel.href} target={channel.external ? '_blank' : undefined} rel={channel.external ? 'noopener noreferrer' : undefined}>
-              <span class="ch-label">{channel.label}</span>
-              <span class="ch-value">{channel.value}</span>
-              <Icon name={channel.external ? 'external' : 'arrow'} size={16} />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+  <p class="sec-label">§ 05 · Contact</p>
+  <h2 id="contact-title">Working on cloud, Kubernetes, or LLM infrastructure? <em>Let's talk.</em></h2>
+  <div class="ruled rows channels">
+    <ul class="ruled-grid">
+      {channels.map(channel => (
+        <li>
+          <a href={channel.href} target={channel.external ? '_blank' : undefined} rel={channel.external ? 'noopener noreferrer' : undefined}>
+            <span class="mono-label">{channel.label}</span>
+            <span class="value">{channel.value}{channel.external && <span aria-hidden="true"> ↗</span>}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>
 
 <style>
-  .contact { padding-block: var(--section-gap); }
-  .contact-body {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    gap: 48px;
-    align-items: start;
-  }
-  .statement {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(28px, 3.4vw, 40px);
-    line-height: 1.15;
-    letter-spacing: -.03em;
-    text-wrap: balance;
-  }
-  .note { margin-top: 20px; max-width: 46ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
-  .note a { color: var(--signal); text-decoration: underline; text-underline-offset: 3px; }
-  .channels { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
-  .channels li { border-bottom: 1px solid var(--rule); }
-  .channels a {
-    display: grid;
-    grid-template-columns: 96px minmax(0, 1fr) 16px;
-    gap: 16px;
-    align-items: center;
-    min-height: 60px;
-    color: var(--ink);
-  }
-  .ch-label { font: 400 12px/1.5 var(--font-utility); color: var(--slate); text-transform: uppercase; letter-spacing: .08em; }
-  .ch-value { font-size: 15px; font-weight: 500; overflow-wrap: anywhere; }
-  .channels a svg { color: var(--slate); transition: color 160ms ease, translate 160ms ease; }
-  .channels a:hover .ch-value, .channels a:hover svg { color: var(--signal); }
-  .channels a:hover svg { translate: 2px -2px; }
-
-  @media (max-width: 760px) {
-    .contact-body { grid-template-columns: 1fr; gap: 32px; }
-    .channels a { grid-template-columns: 84px minmax(0, 1fr) 16px; }
-  }
+  .contact { padding-block: clamp(96px, 12vw, 140px) var(--section-gap); }
+  h2 { margin-top: 20px; max-width: 18ch; font-size: clamp(48px, 7vw, 104px); line-height: .98; letter-spacing: -.025em; }
+  .channels { margin-top: 56px; }
+  .channels .ruled-grid { --cell-min: 240px; --cell-pad: 20px; }
+  .channels a { display: flex; flex-direction: column; gap: 6px; padding-block: 22px; color: var(--ink); }
+  .value { font-size: 16px; font-weight: 500; overflow-wrap: anywhere; }
+  .channels a:hover .value { color: var(--emerald); }
 </style>

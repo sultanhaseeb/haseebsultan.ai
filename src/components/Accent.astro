@@ -1,0 +1,10 @@
+---
+// Renders text with its accent phrase in an <em>, which headings set in italic emerald (mint on forest).
+import { accentParts } from '../data/blog';
+interface Props {
+  text: string;
+  accent?: string;
+}
+const [before, accent, after] = accentParts(Astro.props.text, Astro.props.accent);
+---
+{before}{accent && <em>{accent}</em>}{after}

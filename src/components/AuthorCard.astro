@@ -1,0 +1,33 @@
+---
+// Closes every article: who wrote it, and how to reply.
+import { Image } from 'astro:assets';
+import portrait from '../assets/images/haseeb.jpg';
+import { site } from '../data/site';
+import { profile } from '../data/resume';
+import type { Post } from '../data/blog';
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const emailHref = `mailto:${profile.email}?subject=${encodeURIComponent(post.title)}`;
+---
+<aside class="author-card" aria-labelledby="author-name">
+  <Image src={portrait} alt="Haseeb Sultan" width={176} class="author-photo" />
+  <div class="author-copy">
+    <p id="author-name" class="author-name serif">Written by {site.name}</p>
+    <p class="author-bio">{site.title} in {profile.location.split(',')[0]}. I build the infrastructure AI runs on, and the guardrails that let agents act safely.</p>
+    <p class="author-links">
+      <a href="/about/" class="text-link">About me <span aria-hidden="true">→</span></a>
+      <a href={emailHref} class="text-link">Thoughts on this? Email me</a>
+    </p>
+  </div>
+</aside>
+
+<style>
+  .author-card { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; margin-top: 56px; padding-block: 28px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
+  .author-card :global(.author-photo) { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; }
+  .author-copy { flex: 1 1 280px; }
+  .author-name { font-size: 28px; line-height: 1.1; color: var(--ink); }
+  .author-bio { margin-top: 6px; font-size: 15px; line-height: 1.6; color: var(--body); }
+  .author-links { display: flex; flex-wrap: wrap; gap: 0 24px; margin-top: 4px; }
+</style>

@@ -1,159 +1,67 @@
 ---
-import Icon from '../Icon.astro';
-
 const metrics = [
-  { value: '45%', unit: 'up to', label: 'Azure infrastructure cost reduction' },
+  { value: '45%', unit: 'up to', label: 'Azure infrastructure cost reduction', accent: true },
   { value: '23+', label: 'Microservices with DevSecOps in CI/CD' },
   { value: '100+', label: 'Virtual machines migrated to Azure' },
   { value: '10+', label: 'DevOps projects led, with a team of 8' },
 ];
 
-// Timeline scale: January 2019 to the January after the build date, in decimal years, so the
-// current role reaches the right edge again each time the site is rebuilt.
-const start = 2019;
-const end = new Date().getUTCFullYear() + 1;
-const pct = (year: number) => ((year - start) / (end - start)) * 100;
-const ticks = Array.from({ length: end - start }, (_, i) => start + i);
-
+// Newest first. Focus lines are short versions of the roles on /experience/.
 const roles = [
-  { role: 'Cloud / Full Stack Engineer', focus: 'React, Node.js, MySQL', from: 2019 + 5 / 12, to: 2020 + 9 / 12, dates: 'Jun 2019 – Sep 2020' },
-  { role: 'Senior DevOps Engineer', focus: 'Cloud migrations and team lead', from: 2020 + 9 / 12, to: 2023 + 10 / 12, dates: 'Oct 2020 – Oct 2023' },
-  { role: 'Senior DevOps Engineer', focus: 'Azure optimization and DevSecOps', from: 2023 + 9 / 12, to: 2025 + 1 / 12, dates: 'Oct 2023 – Feb 2025' },
-  { role: 'Senior DevOps Engineer', focus: 'AWS platform automation', from: 2025 + 1 / 12, to: end, dates: 'Feb 2025 – present', ongoing: true },
+  { role: 'Senior DevOps Engineer', focus: 'AWS platform automation', dates: 'Feb 2025 – present', current: true },
+  { role: 'Senior DevOps Engineer', focus: 'Azure optimization and DevSecOps', dates: 'Oct 2023 – Feb 2025' },
+  { role: 'Senior DevOps Engineer', focus: 'Cloud migrations and team lead', dates: 'Oct 2020 – Oct 2023' },
+  { role: 'Cloud / Full Stack Engineer', focus: 'React, Node.js, MySQL', dates: 'Jun 2019 – Sep 2020' },
 ];
 ---
-<section id="experience" class="h-section shell" aria-labelledby="record-title">
-  <div class="h-grid">
-    <p class="h-label">Track record</p>
-    <div>
-      <h2 id="record-title" class="h-title">Measured results from production platforms.</h2>
-
-      <dl class="metrics">
-        {metrics.map(metric => (
-          <div class="metric">
-            <dt>{metric.label}</dt>
-            <dd>{metric.unit && <span class="unit">{metric.unit}</span>}{metric.value}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <figure class="timeline">
-        <figcaption>Roles, 2019 to today</figcaption>
-        <div class="axis" aria-hidden="true">
-          {ticks.map(year => <span style={`left: ${pct(year)}%`}>{year}</span>)}
-        </div>
-        <ol class="rows">
-          {roles.map(item => (
-            <li class="row">
-              <div class="row-label">
-                <strong>{item.role}</strong>
-                <span>{item.focus}</span>
-              </div>
-              <div class="track">
-                {ticks.map(year => <i class="gridline" style={`left: ${pct(year)}%`} aria-hidden="true"></i>)}
-                <span
-                  class:list={['bar', { ongoing: item.ongoing }]}
-                  style={`left: ${pct(item.from)}%; width: ${pct(item.to) - pct(item.from)}%`}
-                ></span>
-                <span class="dates" style={pct(item.from) > 55 ? `right: ${100 - pct(item.to)}%` : `left: ${pct(item.from)}%`}>{item.dates}</span>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </figure>
-
-      <a href="/experience/" class="h-more">Full experience and skills <Icon name="arrow" size={16} /></a>
-    </div>
+<section id="experience" class="section shell" aria-labelledby="record-title">
+  <div class="sec-head">
+    <p class="sec-label">§ 02 · Track record</p>
+    <h2 id="record-title">Measured results from production platforms.</h2>
   </div>
+
+  <div class="ruled metrics">
+    <dl class="ruled-grid">
+      {metrics.map(metric => (
+        <div class="metric">
+          <dt>{metric.label}</dt>
+          <dd class:list={{ accent: metric.accent }}>{metric.unit && <span class="unit">{metric.unit} </span>}{metric.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+
+  <ol class="roles" aria-label="Roles, newest first">
+    {roles.map(item => (
+      <li>
+        <span class:list={['dates', { current: item.current }]}>{item.dates}</span>
+        <strong class="serif">{item.role}</strong>
+        <span class="focus">{item.focus}</span>
+      </li>
+    ))}
+  </ol>
+  <a href="/experience/" class="text-link more">Full experience and skills <span aria-hidden="true">→</span></a>
 </section>
 
 <style>
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin: 40px 0 0;
-    border-top: 1px solid var(--ink);
-  }
-  .metric { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 10px; padding: 22px 20px 0 0; }
-  .metric + .metric { padding-left: 20px; border-left: 1px solid var(--rule); }
-  .metric dd {
-    margin: 0;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(32px, 3.6vw, 44px);
-    line-height: 1;
-    letter-spacing: -.03em;
-    font-variant-numeric: tabular-nums;
-  }
-  .unit { font: 400 12px/1 var(--font-utility); letter-spacing: 0; color: var(--slate); }
-  .metric dt { font-size: 14px; line-height: 1.5; color: var(--slate); max-width: 22ch; }
+  .metrics { margin-top: 56px; }
+  .metrics .ruled-grid { --cell-min: 240px; }
+  .metric { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 12px; padding-top: 28px; }
+  .metric dt { max-width: 22ch; font-size: 15px; line-height: 1.5; color: var(--body); }
+  .metric dd { font-family: var(--font-serif); font-size: 96px; line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .metric dd.accent { color: var(--emerald); }
+  .unit { vertical-align: top; font: 400 12px/1.5 var(--font-mono); letter-spacing: 0; color: var(--muted); }
 
-  .timeline { margin: 64px 0 0; }
-  .timeline figcaption {
-    font: 500 11px/1.5 var(--font-utility);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--slate);
-  }
-  /* The axis and each track share one column so ticks and bars use the same scale. */
-  .axis, .track { margin-left: 260px; position: relative; }
-  .axis { height: 28px; margin-top: 16px; border-bottom: 1px solid var(--rule); }
-  .axis span {
-    position: absolute;
-    bottom: 8px;
-    translate: -50% 0;
-    font: 400 11px/1 var(--font-utility);
-    color: var(--slate);
-    font-variant-numeric: tabular-nums;
-  }
-  .axis span:first-child { translate: 0 0; }
-  .rows { margin: 0; padding: 0; list-style: none; }
-  .row { position: relative; display: block; min-height: 64px; border-bottom: 1px solid var(--rule); }
-  .row-label {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 240px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2px;
-  }
-  .row-label strong { font-size: 14px; font-weight: 600; line-height: 1.35; }
-  .row-label span { font-size: 13px; color: var(--slate); line-height: 1.4; }
-  .track { height: 64px; }
-  .gridline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--rule); opacity: .6; }
-  .bar {
-    position: absolute;
-    top: 34px;
-    height: 10px;
-    border-radius: 2px;
-    background: var(--ink);
-  }
-  .bar.ongoing { background: linear-gradient(90deg, var(--signal) 70%, color-mix(in srgb, var(--signal) 15%, transparent)); }
-  .dates {
-    position: absolute;
-    top: 8px;
-    white-space: nowrap;
-    font: 400 11px/1.4 var(--font-utility);
-    color: var(--slate);
-    font-variant-numeric: tabular-nums;
-  }
+  .roles { margin: 72px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+  .roles li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding-block: 22px; border-bottom: 1px solid var(--rule); }
+  .dates { flex: 0 0 200px; font: 400 13px/1.5 var(--font-mono); color: var(--muted); }
+  .dates.current { color: var(--emerald); }
+  .roles strong { flex: 1 1 260px; font-size: 28px; line-height: 1.1; }
+  .focus { flex: 1 1 260px; font-size: 15px; color: var(--body); }
+  .more { margin-top: 20px; }
 
-  @media (max-width: 900px) {
-    .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    /* Needs the sibling combinator to outrank `.metric + .metric` once styles are scoped. */
-    .metric + .metric:nth-child(3) { padding-left: 0; border-left: 0; }
-    .metric:nth-child(n + 3) { margin-top: 24px; border-top: 1px solid var(--rule); }
-  }
-  @media (max-width: 640px) {
-    .axis, .track { margin-left: 0; }
-    /* Every other year, so the labels don't collide on a narrow axis. */
-    .axis span:nth-child(even) { display: none; }
-    .row { padding-top: 14px; }
-    .row-label { position: static; width: auto; }
-    .track { height: 56px; }
+  @media (max-width: 560px) {
+    .metric dd { font-size: 80px; }
+    .dates { flex-basis: 100%; }
   }
 </style>

@@ -1,69 +1,55 @@
 ---
-// Typographic cover card for article and lesson listings. It is decorative (the listing
-// repeats the title as text), so it is hidden from assistive technology.
-import { type Post, isLesson, lessonNumber } from '../data/blog';
+// The cover for a post in listings. Posts with a lead image show it, cropped to the box; posts without one get a
+// text cover: the category and the short cover title, on forest (lead posts) or on the placeholder colour (grid cards).
+// "numeral" shows a lesson's big number instead, for small thumbnails. Covers are decorative: the listing repeats
+// the title as text, so they are hidden from assistive technology.
+import { Image } from 'astro:assets';
+import { type Post, isLesson, lessonNumber, accentParts } from '../data/blog';
 interface Props {
   post: Post;
+  tone?: 'forest' | 'placeholder' | 'numeral';
+  ratio?: string;
+  // Passed to <Image>; the default suits a card in a two or three column grid.
+  sizes?: string;
   class?: string;
 }
-const { post, class: className } = Astro.props;
-const lesson = isLesson(post);
+const { post, tone = 'placeholder', ratio = '16 / 10', sizes = '(max-width: 760px) calc(100vw - 40px), 400px', class: className } = Astro.props;
+const [before, accent, after] = accentParts(post.coverTitle, post.accent);
+const showNumeral = tone === 'numeral' && isLesson(post);
 ---
-<div class:list={['cover', className]} aria-hidden="true">
-  <span class="kind">{lesson ? `Lesson ${lessonNumber(post)}` : 'Article'}</span>
-  {lesson && <span class="number">{lessonNumber(post)}</span>}
-  <span class="title">{post.coverTitle}</span>
-  <span class="category">{post.category}</span>
+<div class:list={['post-cover', `tone-${showNumeral ? 'numeral' : post.image ? 'image' : tone === 'numeral' ? 'forest' : tone}`, className]} style={`aspect-ratio: ${ratio}`} aria-hidden="true">
+  {post.image ? (
+    <Image src={post.image} alt="" widths={[320, 480, 720, 960, 1280]} sizes={sizes} />
+  ) : showNumeral ? (
+    <span class="numeral">{lessonNumber(post)}</span>
+  ) : (
+    <>
+      <span class="category">{post.category}</span>
+      <span class="title">{before}{accent && <em>{accent}</em>}{after}</span>
+    </>
+  )}
 </div>
 
 <style>
-  .cover {
+  .post-cover {
     position: relative;
     container-type: inline-size;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 6px;
-    aspect-ratio: 16 / 10;
-    padding: clamp(14px, 6cqi, 26px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: clamp(18px, 7cqi, 40px);
     overflow: hidden;
-    border-radius: 3px;
-    background:
-      linear-gradient(var(--night-grid) 1px, transparent 1px) 0 0 / 28px 28px,
-      linear-gradient(90deg, var(--night-grid) 1px, transparent 1px) 0 0 / 28px 28px,
-      var(--night);
-    color: var(--night-ink);
-    --night-grid: color-mix(in srgb, var(--night-rule) 55%, transparent);
+    background: var(--placeholder);
+    color: var(--ink);
   }
-  .kind, .category {
-    position: relative;
-    font: 500 11px/1.4 var(--font-utility);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-  .kind { color: var(--night-signal); }
-  .category { color: var(--night-muted); }
-  .title {
-    position: relative;
-    align-self: end;
-    max-width: 14ch;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(18px, 8.5cqi, 44px);
-    line-height: 1.08;
-    letter-spacing: -.025em;
-    text-wrap: balance;
-  }
-  /* Large outlined lesson number, the series motif. */
-  .number {
-    position: absolute;
-    top: -.12em;
-    right: .04em;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 46cqi;
-    line-height: 1;
-    letter-spacing: -.05em;
-    color: transparent;
-    -webkit-text-stroke: 1px color-mix(in srgb, var(--night-signal) 45%, transparent);
-  }
+  .tone-image { padding: 0; }
+  .tone-image :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .tone-forest, .tone-numeral { background: var(--forest); color: var(--forest-ink); }
+  .category { font: 400 12px/1.4 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--emerald); }
+  .tone-forest .category { color: var(--mint); }
+  .title { max-width: 12ch; font-family: var(--font-serif); font-size: clamp(16px, 10cqi, 72px); line-height: .98; letter-spacing: -.01em; }
+  .title em { color: inherit; }
+  .numeral { margin: auto; font-family: var(--font-serif); font-size: 30cqi; line-height: 1; color: var(--mint); }
 </style>

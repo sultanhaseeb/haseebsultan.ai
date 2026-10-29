@@ -47,11 +47,22 @@ const sources = [
   { title: 'Cyberattack Hits India’s Largest Bank, Exposes Customer Data', outlet: 'Bloomberg', href: 'https://www.bloomberg.com/news/articles/2026-10-21/cyberattack-hits-india-s-largest-bank-exposes-customer-records' },
   { title: 'Janata Bank website targeted in cyberattack despite precautionary shutdown', outlet: 'bdnews24', href: 'https://bdnews24.com/business/tqt24otsx1' },
 ];
+
+const toc = [
+  { id: 'what-happened', label: 'What happened' },
+  { id: 'what-is-an-agent', label: 'What is an AI agent?' },
+  { id: 'why-worried', label: 'Why the banks are worried' },
+  { id: 'bigger-picture', label: 'The bigger picture' },
+  { id: 'why-it-matters', label: 'Why AI security is important' },
+  { id: 'what-you-can-do', label: 'What you can do' },
+  { id: 'final-thoughts', label: 'Final thoughts' },
+  { id: 'sources', label: 'Sources' },
+];
 ---
-<ArticleLayout post={post}>
+<ArticleLayout post={post} toc={toc}>
   <p class="article-lead">In October 2026, America’s biggest banks did something surprising: they locked AI agents out of customer accounts. JPMorgan Chase, Bank of America, Citi, Charles Schwab and Wells Fargo all said the same thing.</p>
   <figure class="pull-quote">
-    <blockquote><p>AI can look at your balance, but it cannot move your money.</p></blockquote>
+    <blockquote><p>“AI can look at your balance, but it <em>cannot move your money.</em>”</p></blockquote>
     <figcaption>The message from five of America’s biggest banks</figcaption>
   </figure>
   <p>This is not a small tech story. It is a warning about what happens when we give AI the power to act before we know how to keep it safe. In this post, I explain what happened in simple words, and why AI security now matters to everyone.</p>
@@ -79,11 +90,11 @@ const sources = [
     <dl class="compare">
       <div>
         <dt>A chatbot</dt>
-        <dd>Answers your questions.</dd>
+        <dd class="serif">Answers your questions.</dd>
       </div>
       <div class="compare-agent">
         <dt>An AI agent</dt>
-        <dd>Goes one step further: it takes actions for you.</dd>
+        <dd class="serif">Goes one step further: it takes actions for you.</dd>
       </div>
     </dl>
     <p>Think of it like a personal assistant. You say “pay my electricity bill” or “move my spare cash to a savings account,” and the agent logs in and does it. No clicking, no forms.</p>
@@ -93,10 +104,10 @@ const sources = [
   <section aria-labelledby="why-worried">
     <h2 id="why-worried">Why the banks are worried</h2>
     <p>The banks gave three main reasons.</p>
-    <ol class="blocks">
-      <li><strong>Rogue actions.</strong> Some agents did things the user never asked for. When software can move money, one wrong step can cost real money in seconds.</li>
-      <li><strong>No clear rules on who pays.</strong> If an AI sends money to the wrong place, is it the customer’s fault, the bank’s, or the AI company’s? Today, nobody has a clear answer.</li>
-      <li><strong>Telling good from bad.</strong> A helpful agent and a hacker’s bot can look the same to a bank. Both log in with the customer’s password. That makes fraud much harder to spot.</li>
+    <ol class="numbered bare">
+      <li><p><strong>Rogue actions.</strong> Some agents did things the user never asked for. When software can move money, one wrong step can cost real money in seconds.</p></li>
+      <li><p><strong>No clear rules on who pays.</strong> If an AI sends money to the wrong place, is it the customer’s fault, the bank’s, or the AI company’s? Today, nobody has a clear answer.</p></li>
+      <li><p><strong>Telling good from bad.</strong> A helpful agent and a hacker’s bot can look the same to a bank. Both log in with the customer’s password. That makes fraud much harder to spot.</p></li>
     </ol>
     <p>There is also a business reason. Banks worry that smart agents could quickly move customers’ idle cash to accounts that pay higher interest elsewhere. So this is partly about security, and partly about control.</p>
   </section>
@@ -107,10 +118,8 @@ const sources = [
     <ul class="worldwide">
       {worldwide.map(item => (
         <li>
-          <div class="worldwide-place">
-            <span class="worldwide-country">{item.country}</span>
-            <strong>{item.bank}</strong>
-          </div>
+          <p class="worldwide-country">{item.country}</p>
+          <p class="worldwide-bank">{item.bank}</p>
           <p>{item.text}</p>
         </li>
       ))}
@@ -128,9 +137,7 @@ const sources = [
       <li><strong>The rules are still being written.</strong> Bills in the US Congress on AI agent accountability are still waiting. Until the law catches up, companies must protect themselves.</li>
       <li><strong>Attackers use AI too.</strong> Defenders cannot use yesterday’s tools against tomorrow’s threats.</li>
     </ul>
-    <figure class="pull-quote">
-      <blockquote><p>The more power we give AI, the more we must control, watch and limit it.</p></blockquote>
-    </figure>
+    <p class="callout">The more power we give AI, the more we must <em>control, watch and limit it.</em></p>
   </section>
 
   <section aria-labelledby="what-you-can-do">
@@ -160,63 +167,42 @@ const sources = [
 
   <section aria-labelledby="sources" class="sources">
     <h2 id="sources">Sources</h2>
-    <ul>
+    <ol>
       {sources.map(source => (
-        <li><a href={source.href} target="_blank" rel="noopener noreferrer">{source.title}</a> <span class="source-outlet">{source.outlet}</span></li>
+        <li><a href={source.href} target="_blank" rel="noopener noreferrer">{source.title}</a> · {source.outlet}</li>
       ))}
-    </ul>
+    </ol>
   </section>
 </ArticleLayout>
 
 <style>
-  /* One row per bank: the name and its stance on the left, what it said on the right. */
-  .bank-moves { display: grid; gap: 8px; margin-block: 24px 28px; padding: 0 !important; list-style: none !important; }
-  .bank-moves li { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 20px; align-items: baseline; margin: 0; padding: 16px 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
-  .bank-name { display: flex; flex-direction: column; gap: 4px; }
-  .bank-name strong { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.35; }
-  .bank-stance { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
-  .bank-moves p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--slate); }
+  /* One row per bank: the name and its stance in a label column, what it said beside it. */
+  .bank-moves { margin-top: 28px !important; padding: 0 !important; list-style: none !important; border-top: 1px solid var(--ink); font-size: 16px; line-height: 1.65; }
+  .bank-moves li { display: flex; flex-wrap: wrap; gap: 6px 24px; margin: 0 !important; padding-block: 18px; border-bottom: 1px solid var(--rule); }
+  .bank-name { flex: 0 0 180px; }
+  .bank-name strong { display: block; }
+  .bank-stance { font: 400 12px/1.5 var(--font-mono); color: var(--emerald); }
+  .bank-moves p { flex: 1 1 320px; margin: 0 !important; }
 
-  .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-block: 24px 28px; }
-  .compare div { padding: 20px 22px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
-  .compare dt { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
-  .compare dd { margin: 8px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.4; color: var(--ink); }
-  .compare .compare-agent { border-color: var(--night); background: var(--night); }
-  .compare .compare-agent dt { color: var(--night-signal); }
-  .compare .compare-agent dd { color: var(--night-ink); }
+  .compare { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px !important; }
+  .compare div { flex: 1 1 240px; padding: 28px; border: 1px solid var(--rule); background: var(--paper-raised); }
+  .compare dt { font: 400 12px/1.5 var(--font-mono); color: var(--muted); }
+  .compare dd { margin-top: 10px; font-size: 28px; line-height: 1.15; color: var(--ink); }
+  .compare .compare-agent { border-color: var(--forest); background: var(--forest); }
+  .compare .compare-agent dt { color: var(--mint); }
+  .compare .compare-agent dd { color: var(--forest-ink); }
 
-  .blocks { counter-reset: block; padding: 0 !important; list-style: none !important; }
-  .blocks li { position: relative; padding-left: 44px; }
-  .blocks li::before { counter-increment: block; content: counter(block); position: absolute; left: 0; top: .15em; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 12px/1 var(--font-utility); }
-  .blocks li + li { margin-top: 14px; }
+  .worldwide { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; margin-top: 24px !important; padding: 0 !important; list-style: none !important; font-size: 15px; line-height: 1.65; }
+  .worldwide li { margin: 0 !important; padding: 24px; border-top: 2px solid var(--ink); background: var(--paper-raised); }
+  .worldwide-country { font: 400 11px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--emerald); }
+  .worldwide-bank { margin-top: 6px !important; font-weight: 600; color: var(--ink); }
+  .worldwide li p + p:last-child { margin-top: 8px; }
 
-  /* Same row layout as the bank list, with the country above the bank's name. */
-  .worldwide { display: grid; gap: 8px; margin-block: 24px 28px; padding: 0 !important; list-style: none !important; }
-  .worldwide li { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 20px; align-items: baseline; margin: 0 !important; padding: 16px 18px; border: 1px solid var(--rule); border-left: 3px solid var(--signal); border-radius: 3px; background: var(--surface); }
-  .worldwide-place { display: flex; flex-direction: column; gap: 4px; }
-  .worldwide-country { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
-  .worldwide-place strong { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.35; }
-  .worldwide li > p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--slate); }
-
-  .checklists { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-block: 24px 28px; }
-  .checklist { padding: 20px 22px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
-  .checklist h3 { margin: 0 0 12px; font-size: 17px; }
-  .checklist ul { margin: 0; padding: 0; list-style: none; font-size: 15px; line-height: 1.65; }
-  .checklist li { position: relative; padding-left: 26px; }
-  .checklist li::before { content: ''; position: absolute; left: 2px; top: .5em; width: 10px; height: 6px; border-left: 2px solid var(--signal); border-bottom: 2px solid var(--signal); transform: rotate(-45deg); }
-
-  .article-note p { margin: 0; font-size: 16px; line-height: 1.7; }
-
-  .closing-question { margin-top: 24px !important; padding: 22px 24px; border-left: 3px solid var(--signal); background: var(--signal-soft); font-family: var(--font-display); font-weight: 600; font-size: clamp(19px, 2.2vw, 22px); line-height: 1.45; letter-spacing: -.01em; color: var(--ink); }
-
-  .sources h2 { font-size: 20px; }
-  .sources ul { padding: 0; list-style: none; font-size: 15px; line-height: 1.6; }
-  .sources li + li { margin-top: 12px; }
-  .source-outlet { display: block; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
-
-  @media (max-width: 640px) {
-    .bank-moves li, .worldwide li { grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 14px 16px; }
-    .bank-name { flex-direction: row; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
-    .compare, .checklists { grid-template-columns: minmax(0, 1fr); }
-  }
+  .checklists { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px !important; font-size: 15px; line-height: 1.65; }
+  .checklist { flex: 1 1 260px; padding: 28px; border: 1px solid var(--rule); }
+  .checklist h3 { margin: 0; font-family: var(--font-sans); font-size: 16px; font-weight: 600; line-height: 1.5; }
+  .checklist ul { margin-top: 14px; padding: 0; list-style: none; }
+  .checklist li { position: relative; padding-left: 22px; }
+  .checklist li + li { margin-top: 10px; }
+  .checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--emerald); }
 </style>

@@ -4,25 +4,23 @@ import ArticleLayout from '../../layouts/ArticleLayout.astro';
 import { controlProblemArticle as post } from '../../data/blog';
 import watermarkExample from '../../assets/images/blog/the-control-problem/chatgpt-watermark-example.jpeg';
 import alignmentMaze from '../../assets/images/blog/the-control-problem/alignment-maze.png';
+
+const toc = [
+  { id: 'small-failure', label: 'A small failure with a clear constraint' },
+  { id: 'alignment-problem', label: 'The alignment problem' },
+  { id: 'agents-find-another-path', label: 'When agents find another path' },
+  { id: 'safety-power-incentives', label: 'Safety, power, and incentives' },
+  { id: 'what-we-know', label: 'What we actually know' },
+  { id: 'challenge-of-control', label: 'The challenge of control' },
+  { id: 'sources', label: 'Further reading' },
+];
 ---
-<ArticleLayout post={post}>
+<ArticleLayout post={post} toc={toc}>
   <p>Over the last few weeks, a question that once belonged mainly to science fiction has entered serious conversations inside some of the world’s largest artificial intelligence companies.</p>
-  <p>Could artificial intelligence eventually kill us?</p>
+  <p class="question serif">Could artificial intelligence eventually kill us?</p>
   <p>The latest debate grew after Jacob Coxon, a researcher who had worked at OpenAI and Anthropic, left Anthropic and warned about the danger of developing systems that can improve themselves. Anthropic researcher Evan Hubinger has publicly estimated a greater than 10 percent chance of AI causing human extinction within the next decade. Soon afterwards, Anthropic chief executive Dario Amodei called for more caution and coordination as frontier capabilities advance.</p>
   <p>Those warnings sound terrifying. They also raise a reasonable question. Why are some of the people who understand these systems best so worried about them?</p>
   <p>A small experience I recently had with ChatGPT made one part of the problem easier for me to understand.</p>
-
-  <nav class="article-contents" aria-label="In this article">
-    <p>In this article</p>
-    <ol>
-      <li><a href="#small-failure">A small failure with a clear constraint</a></li>
-      <li><a href="#alignment-problem">The alignment problem</a></li>
-      <li><a href="#agents-find-another-path">When agents find another path</a></li>
-      <li><a href="#safety-power-incentives">Safety, power, and incentives</a></li>
-      <li><a href="#what-we-know">What we actually know</a></li>
-      <li><a href="#challenge-of-control">The challenge of control</a></li>
-    </ol>
-  </nav>
 
   <section aria-labelledby="small-failure">
     <h2 id="small-failure">A Small Failure With a Clear Constraint</h2>
@@ -100,3 +98,8 @@ import alignmentMaze from '../../assets/images/blog/the-control-problem/alignmen
     </ul>
   </section>
 </ArticleLayout>
+
+<style>
+  /* The question the article asks, set apart in the serif. */
+  .question { margin-block: 28px !important; font-size: clamp(30px, 3.4vw, 40px); line-height: 1.1; color: var(--ink); }
+</style>

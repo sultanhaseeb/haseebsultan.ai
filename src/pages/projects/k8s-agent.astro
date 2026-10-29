@@ -1,6 +1,6 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
-import Icon from '../../components/Icon.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
 import { aiProjects } from '../../data/site';
 
 const project = aiProjects.find(candidate => candidate.id === 'k8s-agent')!;
@@ -27,133 +27,154 @@ const guardrails = [
   { title: 'Managed settings', text: 'A managed settings file, which outranks any user setting, allows only kubectl commands and explicitly denies apply, edit, deleting namespaces or nodes, curl, and web access.' },
   { title: 'Kubernetes RBAC: the layer that binds', text: 'The agent’s ServiceAccount gets a Role only in the allowed namespaces: delete on pods, read-only access to common workload resources, and no access to Secrets at all. If someone talks the model into printing secret values, the API server refuses. The limit does not depend on the model cooperating.' },
 ];
+const installCode = `helm upgrade --install k8sagnet ./charts/k8sagnet \\
+  --namespace k8sagnet --create-namespace`;
+
+const facts = [
+  { label: 'Project', value: 'Open source, 2026' },
+  { label: 'Built with', value: 'Go, Python (FastAPI), Claude Code, Helm' },
+  { label: 'Runs on', value: 'Kubernetes' },
+];
 ---
 <PageLayout
   title="k8s-agent case study"
-  heading="Giving an AI agent kubectl, without giving it the cluster."
-  label="Case study"
   description="How k8s-agent lets a Claude Code agent inspect and act on a Kubernetes cluster through layered guardrails, with RBAC as the final boundary."
-  intro="k8s-agent is an open-source Kubernetes dashboard with a built-in Claude Code agent. You can ask it about any resource or have it delete a failing pod, and every action passes through layered checks, with Kubernetes RBAC as the boundary that actually holds."
 >
-  <div slot="head">
-    <dl class="facts">
-      <div><dt>Project</dt><dd>Open source, 2026</dd></div>
-      <div><dt>Built with</dt><dd>Go, Python (FastAPI), Claude Code, Helm</dd></div>
-      <div><dt>Runs on</dt><dd>Kubernetes</dd></div>
-    </dl>
-    <div class="actions">
-      <a href={project.repo} class="btn btn-primary" target="_blank" rel="noopener noreferrer">View code on GitHub <Icon name="external" size={15} /></a>
-      <a href="/projects/" class="btn btn-quiet">All projects</a>
+  <header slot="hero" class="case-hero shell">
+    <div class="kicker-strip">
+      <span><a href="/projects/">Projects</a> / Case study</span>
+      <span>Open source</span>
+      <span>Kubernetes · AI agents</span>
     </div>
-  </div>
+    <h1>Giving an AI agent kubectl, <em>without giving it the cluster.</em></h1>
+    <p class="lede">k8s-agent is an open-source Kubernetes dashboard with a built-in Claude Code agent. You can ask it about any resource or have it delete a failing pod, and every action passes through layered checks, with Kubernetes RBAC as the boundary that actually holds.</p>
+    <div class="btn-row actions">
+      <a href={project.repo} class="btn btn-primary" target="_blank" rel="noopener noreferrer">View code on GitHub <span aria-hidden="true">↗</span></a>
+      <a href="/projects/" class="btn btn-secondary">All projects</a>
+    </div>
+    <div class="ruled rows facts">
+      <dl class="ruled-grid">
+        {facts.map(fact => <div><dt class="mono-label">{fact.label}</dt><dd>{fact.value}</dd></div>)}
+      </dl>
+    </div>
+  </header>
 
-  <section class="h-section" aria-labelledby="problem-title">
-    <div class="h-grid">
-      <p class="h-label">Problem</p>
+  <section class="section shell" aria-labelledby="problem-title">
+    <div class="sec-head">
+      <p class="sec-label">§ 01 · Problem</p>
       <div class="prose">
-        <h2 id="problem-title" class="h-title">Useful agents need real access. Real access is risky.</h2>
+        <h2 id="problem-title">Useful agents need real access. <em>Real access is risky.</em></h2>
         <p>AI agents are now good at operating Kubernetes. They can read logs, explain why a deployment is failing, and clean up a crashed pod in seconds. To do that they need kubectl and credentials, and that is the risk: a misunderstood instruction, or a manipulated prompt, can become a real change in a real cluster.</p>
         <p>It is tempting to write the rules into the prompt and trust the model to follow them. I wanted the opposite: an agent that is genuinely useful, with limits that still hold if the model does the wrong thing.</p>
       </div>
     </div>
   </section>
 
-  <section class="h-section" aria-labelledby="architecture-title">
-    <div class="h-grid">
-      <p class="h-label">Architecture</p>
-      <div>
-        <h2 id="architecture-title" class="h-title">Three small services, each with only the access it needs.</h2>
-        <ol class="path" aria-label="The path an agent action takes">
-          {path.map(step => (
-            <li>
-              <strong>{step.name}</strong>
-              <span class="tech">{step.tech}</span>
-              <span class="access">{step.access}</span>
-            </li>
-          ))}
-        </ol>
-        <dl class="components">
-          {components.map(item => <div><dt>{item.name}</dt><dd>{item.text}</dd></div>)}
-        </dl>
-      </div>
+  <section class="section shell" aria-labelledby="architecture-title">
+    <div class="sec-head">
+      <p class="sec-label">§ 02 · Architecture</p>
+      <h2 id="architecture-title">Three small services, each with only the access it needs.</h2>
+    </div>
+    <ol class="path" aria-label="The path an agent action takes">
+      {path.map((step, index) => (
+        <li class:list={{ final: index === path.length - 1 }}>
+          <span class="step-no serif" aria-hidden="true">{index + 1}</span>
+          <strong class="serif">{step.name}</strong>
+          <span class="tech">{step.tech}</span>
+          <span class="access">{step.access}</span>
+        </li>
+      ))}
+    </ol>
+    <div class="ruled rows components">
+      <dl class="ruled-grid">
+        {components.map(item => <div><dt class="serif">{item.name}</dt><dd>{item.text}</dd></div>)}
+      </dl>
     </div>
   </section>
 
-  <section class="h-section" aria-labelledby="guardrails-title">
-    <div class="h-grid">
-      <p class="h-label">Guardrails</p>
-      <div>
-        <h2 id="guardrails-title" class="h-title">Five layers of checks. The last one is the one that holds.</h2>
-        <ol class="guardrails">
-          {guardrails.map((item, index) => (
-            <li class:list={{ binding: index === guardrails.length - 1 }}>
-              <span class="no" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <p class="hardening">Every container also runs as a non-root user with a read-only root filesystem, no privilege escalation, and all Linux capabilities dropped. The agent itself is optional: switch it off and k8s-agent is a read-only dashboard.</p>
-      </div>
+  <section class="section shell" aria-labelledby="guardrails-title">
+    <div class="sec-head">
+      <p class="sec-label">§ 03 · Guardrails</p>
+      <h2 id="guardrails-title">Five layers of checks. <em>The last one is the one that holds.</em></h2>
     </div>
+    <ol class="guardrails">
+      {guardrails.map((item, index) => (
+        <li class:list={{ binding: index === guardrails.length - 1 }}>
+          <span class="no serif" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <div>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <p class="hardening">Every container also runs as a non-root user with a read-only root filesystem, no privilege escalation, and all Linux capabilities dropped. The agent itself is optional: switch it off and k8s-agent is a read-only dashboard.</p>
   </section>
 
-  <section class="h-section" aria-labelledby="run-title">
-    <div class="h-grid">
-      <p class="h-label">Run it</p>
+  <section class="section run shell" aria-labelledby="run-title">
+    <div class="sec-head">
+      <p class="sec-label">§ 04 · Run it</p>
       <div class="prose">
-        <h2 id="run-title" class="h-title">One Helm command to install.</h2>
+        <h2 id="run-title">One Helm command to install.</h2>
         <p>Choose the namespaces the agent may act in, then install the chart. The allow-list starts with a single <code>demo</code> namespace.</p>
-        <pre><code>helm upgrade --install k8sagnet ./charts/k8sagnet \
-  --namespace k8sagnet --create-namespace</code></pre>
+        <CodeBlock code={installCode} lang="bash" />
         <p>The README covers building the images, logging the agent in, and running the Go API on its own.</p>
-        <a href={project.repo} class="text-link" target="_blank" rel="noopener noreferrer">Read the code and README on GitHub <Icon name="external" size={14} /></a>
+        <a href={project.repo} class="text-link" target="_blank" rel="noopener noreferrer">Read the code and README on GitHub <span aria-hidden="true">↗</span></a>
       </div>
     </div>
   </section>
 </PageLayout>
 
 <style>
-  .facts { display: flex; flex-wrap: wrap; gap: 16px 48px; margin: 32px 0 0; }
-  .facts dt { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
-  .facts dd { margin: 6px 0 0; font-size: 15px; font-weight: 500; }
-  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .case-hero { padding-top: clamp(48px, 7vw, 88px); }
+  .case-hero h1 { margin-top: 40px; max-width: 18ch; font-size: clamp(48px, 6.6vw, 96px); line-height: .98; }
+  .lede { margin-top: 28px; max-width: 60ch; font-size: 19px; line-height: 1.65; color: var(--body); }
+  .actions { margin-top: 32px; }
+  .facts { margin-top: 56px; }
+  .facts .ruled-grid > div { padding-block: 22px; }
+  .facts dd { margin-top: 8px; font-size: 15px; font-weight: 500; line-height: 1.55; }
 
-  .prose > p { max-width: 64ch; margin-top: 18px; font-size: 16px; line-height: 1.75; color: var(--slate); }
-  .prose p code { padding: 2px 5px; border-radius: 3px; background: var(--signal-soft); font: .88em var(--font-utility); color: var(--ink); }
-  pre { margin-top: 18px; padding: 18px 20px; overflow-x: auto; border-radius: 3px; background: var(--night); color: var(--night-ink); font: 13px/1.7 var(--font-utility); }
+  .prose > p { max-width: 64ch; margin-top: 20px; font-size: 17px; line-height: 1.75; color: var(--ink-soft); }
+  .prose > :global(.code-block) { margin-top: 20px; }
+  .prose p code { padding: 2px 6px; background: var(--paper-sunk); font: .85em var(--font-mono); color: var(--ink); }
+  .prose .text-link { margin-top: 12px; }
 
   /* Request path: boxes joined by arrows, stacked vertically on narrow screens. */
-  .path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin: 32px 0 0; padding: 0; list-style: none; }
-  .path li { position: relative; display: grid; align-content: start; gap: 6px; padding: 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
-  .path li + li::before { content: '→'; position: absolute; top: 50%; left: -21px; translate: 0 -50%; font: 16px/1 var(--font-utility); color: var(--signal); }
-  .path li:last-child { border-color: var(--ink); }
-  .path strong { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
-  .tech { font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
-  .access { margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.5; color: var(--ink); }
+  .path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin: 48px 0 0; padding: 0; list-style: none; }
+  .path li { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 24px; border: 1px solid var(--rule); background: var(--paper-raised); }
+  .path li + li::before { content: '→'; position: absolute; top: 50%; left: -24px; translate: 0 -50%; font: 16px/1 var(--font-mono); color: var(--emerald); }
+  .path li.final { border-color: var(--forest); background: var(--forest); color: var(--forest-ink); }
+  .step-no { font-size: 28px; line-height: 1; color: var(--faint); }
+  .final .step-no { color: var(--mint); }
+  .path strong { font-size: 26px; line-height: 1.1; }
+  .tech { font: 400 12px/1.5 var(--font-mono); color: var(--muted); }
+  .final .tech { color: var(--forest-muted); }
+  .access { margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--rule); font-size: 14px; line-height: 1.5; }
+  .final .access { border-top-color: var(--forest-rule); color: var(--mint); }
 
-  .components { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin: 36px 0 0; padding-top: 28px; border-top: 1px solid var(--rule); }
-  .components dt { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
-  .components dd { margin: 8px 0 0; font-size: 15px; line-height: 1.7; color: var(--slate); }
+  .components { margin-top: 48px; }
+  .components .ruled-grid { --cell-min: 420px; --cell-pad: 32px; }
+  .components .ruled-grid > div { padding-block: 28px; }
+  .components dt { font-size: 26px; line-height: 1.1; }
+  .components dd { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--body); }
 
-  .guardrails { margin: 32px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
-  .guardrails li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 16px; padding-block: 24px; border-bottom: 1px solid var(--rule); }
-  .guardrails .no { font: 400 12px/1.9 var(--font-utility); color: var(--signal); }
-  .guardrails h3 { font-size: 18px; }
-  .guardrails p { margin-top: 8px; max-width: 66ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
-  .guardrails .binding { margin-top: 12px; padding: 24px; border: 1px solid color-mix(in srgb, var(--signal) 45%, var(--rule)); border-radius: 3px; background: var(--signal-soft); }
-  .guardrails .binding p { color: var(--ink); }
-  .hardening { margin-top: 24px; max-width: 66ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
+  .guardrails { margin: 48px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+  .guardrails li { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 16px; padding-block: 28px; border-bottom: 1px solid var(--rule); }
+  .guardrails .no { font-size: 44px; line-height: .9; color: var(--emerald); }
+  .guardrails h3 { font-size: 28px; }
+  .guardrails p { margin-top: 10px; max-width: 66ch; font-size: 15px; line-height: 1.7; color: var(--body); }
+  .guardrails .binding { margin-top: 16px; padding: 32px; border: 0; background: var(--forest); color: var(--forest-ink); }
+  .guardrails .binding .no { color: var(--mint); }
+  .guardrails .binding p { color: var(--forest-body); }
+  .hardening { margin-top: 28px; max-width: 66ch; font-size: 15px; line-height: 1.7; color: var(--body); }
+  .run { padding-bottom: var(--section-gap); }
 
   @media (max-width: 900px) {
-    .path { grid-template-columns: 1fr; gap: 26px; }
-    .path li + li::before { content: '↓'; top: -22px; left: 18px; translate: 0 0; }
-    .components { grid-template-columns: 1fr; }
+    .path { grid-template-columns: 1fr; gap: 30px; }
+    .path li + li::before { content: '↓'; top: -24px; left: 24px; translate: 0 0; }
   }
   @media (max-width: 560px) {
-    .guardrails li { grid-template-columns: 1fr; gap: 4px; }
-    .guardrails .binding { padding: 20px; }
+    .guardrails li { grid-template-columns: 1fr; gap: 6px; }
+    .guardrails .binding { padding: 24px; }
   }
 </style>

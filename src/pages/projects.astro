@@ -1,7 +1,32 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import Projects from '../components/Projects.astro';
+import { aiProjects } from '../data/site';
+import { resumeProjects } from '../data/resume';
 ---
-<PageLayout title="Projects" label="Portfolio" description="Haseeb Sultan’s projects: open-source AI agent infrastructure on Kubernetes, and cloud platforms delivered across Azure, AWS, and Google Cloud." intro="What I build now and what I have delivered: open-source AI agent infrastructure on Kubernetes, and production cloud platforms across Azure, AWS, and Google Cloud.">
+<PageLayout
+  title="Projects"
+  size="xl"
+  kicker={['Portfolio', `${aiProjects.length} open source · ${resumeProjects.length} delivered`, 'Azure · AWS · Google Cloud']}
+  description="Haseeb Sultan’s projects: open-source AI agent infrastructure on Kubernetes, and cloud platforms delivered across Azure, AWS, and Google Cloud."
+  intro="What I build now and what I have delivered: open-source AI agent infrastructure on Kubernetes, and production cloud platforms across Azure, AWS, and Google Cloud."
+>
+  <Fragment slot="heading">Projects<span class="dot">.</span></Fragment>
   <Projects />
+  <section class="cta shell" aria-labelledby="cta-title">
+    <div class="cta-inner">
+      <h2 id="cta-title">Building something similar? <em>Let's talk.</em></h2>
+      <div class="btn-row">
+        <a href="/#contact" class="btn btn-primary">Get in touch <span aria-hidden="true">→</span></a>
+        <a href="/experience/" class="btn btn-secondary">See experience</a>
+      </div>
+    </div>
+  </section>
 </PageLayout>
+
+<style>
+  .dot { color: var(--emerald); }
+  .cta { padding-block: var(--section-gap); }
+  .cta-inner { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px 48px; padding-top: 40px; border-top: 1px solid var(--ink); }
+  .cta h2 { flex: 1 1 520px; font-size: clamp(40px, 5vw, 72px); line-height: 1; }
+</style>

@@ -1,35 +1,48 @@
 ---
+// Frame for inner pages: the kicker strip, a very large serif h1 with the intro beside it, then the page's sections.
+// A page can replace the whole hero with a `hero` slot, or just the h1's content with a `heading` slot
+// (to put the key phrase in an <em>). Extra hero content, such as buttons, goes in the `head` slot.
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   description: string;
-  intro?: string;
+  // Up to three labels spread across the top of the page. A label with an href is a link.
+  kicker?: (string | { label: string; href: string })[];
+  // Older pages pass a single label; it becomes the kicker.
   label?: string;
   // Visible page heading, when it should differ from the browser title.
   heading?: string;
+  intro?: string;
+  size?: 'lg' | 'xl';
   image?: string;
   noindex?: boolean;
+  footerNewsletter?: boolean;
 }
-const { title, description, intro, label = title, heading = title, image, noindex } = Astro.props;
+const { title, description, label, heading = title, intro, size = 'lg', image, noindex, footerNewsletter } = Astro.props;
+const kicker = Astro.props.kicker ?? (label ? [label] : []);
+const hasHero = Astro.slots.has('hero');
+const hasHeading = Astro.slots.has('heading');
 ---
 <BaseLayout title={`${title} | Haseeb Sultan`} description={description} image={image} noindex={noindex}>
   <Header />
   <main id="main">
-    <header class="page-head shell">
-      <div class="h-grid">
-        <p class="h-label">{label}</p>
-        <div>
-          <h1>{heading}</h1>
-          {intro && <p class="lede">{intro}</p>}
-          <slot name="head" />
+    {hasHero ? <slot name="hero" /> : (
+      <header class="page-hero shell">
+        {kicker.length > 0 && (
+          <div class="kicker-strip">
+            {kicker.map(item => typeof item === 'string' ? <span>{item}</span> : <a href={item.href}>{item.label}</a>)}
+          </div>
+        )}
+        <div class="hero-row">
+          <h1 class:list={['hero-title', { xl: size === 'xl' }]}>{hasHeading ? <slot name="heading" /> : heading}</h1>
+          {intro && <p class="hero-intro">{intro}</p>}
         </div>
-      </div>
-    </header>
-    <div class="page-body shell">
-      <slot />
-    </div>
+        <slot name="head" />
+      </header>
+    )}
+    <slot />
   </main>
-  <Footer />
+  <Footer newsletter={footerNewsletter} />
 </BaseLayout>

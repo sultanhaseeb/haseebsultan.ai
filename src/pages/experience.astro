@@ -1,70 +1,118 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
-import { profile, expertise, experience, additionalSkills } from '../data/resume';
----
-<PageLayout title="Experience & Skills" label="Since 2019" description="Haseeb Sultan’s career experience and skills in DevOps, cloud architecture, Kubernetes, MLOps, and LLMOps." intro={profile.summary}>
-  <dl slot="head" class="profile-facts">
-    <div><dt>Current role</dt><dd>{profile.title}</dd></div>
-    <div><dt>Location</dt><dd>{profile.location}</dd></div>
-    <div><dt>Email</dt><dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd></div>
-  </dl>
+import Qualifications from '../components/Qualifications.astro';
+import { profile, expertise, experience, certifications } from '../data/resume';
+import { platformLayers } from '../data/site';
 
-  <section id="career" class="h-section" aria-labelledby="career-title">
-    <div class="h-grid">
-      <h2 id="career-title" class="h-label">Career</h2>
-      <ol class="career rule-top">
-        {experience.map(job => (
-          <li class="job">
-            <div class="job-head">
-              <p class="period">{job.period}</p>
-              <h3>{job.role}</h3>
-              <p class="focus">{job.focus}</p>
+// Career start (June 2019), counted at build time, as on the homepage.
+const careerStart = new Date(Date.UTC(2019, 5, 1));
+const now = new Date();
+const years = now.getUTCFullYear() - careerStart.getUTCFullYear() - (now.getUTCMonth() < careerStart.getUTCMonth() ? 1 : 0);
+const facts = [
+  { label: 'Experience', value: `${years}+ years` },
+  { label: 'Clusters migrated', value: '25+' },
+  { label: 'Certifications', value: String(certifications.length) },
+  { label: 'Team led', value: '8 people' },
+];
+// The AI-related areas are the first three, and lead the expertise list.
+const aiExpertise = 3;
+---
+<PageLayout
+  title="Experience & Skills"
+  kicker={[`Since ${careerStart.getUTCFullYear()}`, profile.title, profile.location]}
+  description="Haseeb Sultan’s career experience, skills, certifications, and education in DevOps, cloud architecture, Kubernetes, MLOps, and LLMOps."
+  intro={profile.summary}
+>
+  <Fragment slot="heading">Experience <em>&amp; skills.</em></Fragment>
+  <div slot="head" class="ruled rows facts">
+    <dl class="ruled-grid">
+      {facts.map(fact => <div><dt class="mono-label">{fact.label}</dt><dd class="serif">{fact.value}</dd></div>)}
+    </dl>
+  </div>
+
+  <section id="career" class="section shell" aria-labelledby="career-title">
+    <div class="sec-head">
+      <p class="sec-label">§ 01 · Roles</p>
+      <h2 id="career-title">From full-stack to the platform underneath.</h2>
+    </div>
+    <ol class="roles rule-top">
+      {experience.map((job, index) => (
+        <li class="job">
+          <div class="job-head">
+            <p class:list={['period', { current: index === 0 }]}>{job.period}</p>
+            <h3>{job.role}</h3>
+            <p class="focus">{job.focus}</p>
+          </div>
+          <ul class="highlights">{job.highlights.map(highlight => <li>{highlight}</li>)}</ul>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section id="expertise" class="band skills-band" aria-labelledby="expertise-title">
+    <div class="band-inner shell">
+      <div class="sec-head">
+        <p class="sec-label">§ 02 · Expertise</p>
+        <h2 id="expertise-title">What I work on, <em>and with.</em></h2>
+      </div>
+      <ul class="chip-list skills">
+        {expertise.map((item, index) => <li class:list={['chip', { ai: index < aiExpertise }]}>{item}</li>)}
+      </ul>
+      <div class="ruled tools">
+        <div class="ruled-grid">
+          {platformLayers.map(layer => (
+            <div>
+              <h3 class:list={['layer', { current: layer.current }]}>{layer.name}</h3>
+              <p>{layer.tools.join(', ')}</p>
             </div>
-            <ul class="highlights">{job.highlights.map(highlight => <li>{highlight}</li>)}</ul>
-          </li>
-        ))}
-      </ol>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="expertise" class="h-section" aria-labelledby="expertise-title">
-    <div class="h-grid">
-      <h2 id="expertise-title" class="h-label">Expertise</h2>
-      <div>
-        <ul class="chip-list">{expertise.map(item => <li class="chip">{item}</li>)}</ul>
-        <div class="skills">
-          {additionalSkills.map(skill => <article><h3>{skill.title}</h3><p>{skill.description}</p></article>)}
-        </div>
-        <p class="more">See also <a href="/projects/">projects</a>, <a href="/about/#credentials">certifications</a>, and <a href="/about/#education">education</a>.</p>
+  <Qualifications />
+
+  <section class="cta shell" aria-labelledby="cta-title">
+    <div class="cta-inner">
+      <h2 id="cta-title">Working on cloud or AI platforms? <em>Let's talk.</em></h2>
+      <div class="btn-row">
+        <a href="/#contact" class="btn btn-primary">Get in touch <span aria-hidden="true">→</span></a>
+        <a href="/projects/" class="btn btn-secondary">See projects</a>
       </div>
     </div>
   </section>
 </PageLayout>
 
 <style>
-  .profile-facts { display: flex; flex-wrap: wrap; gap: 16px 48px; margin: 32px 0 0; }
-  .profile-facts dt { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
-  .profile-facts dd { margin: 6px 0 0; font-size: 15px; font-weight: 500; overflow-wrap: anywhere; }
-  .profile-facts a { color: var(--signal); }
-  .profile-facts a:hover { color: var(--signal-strong); }
+  .facts { margin-top: 56px; }
+  .facts .ruled-grid { --cell-min: 200px; }
+  .facts .ruled-grid > div { padding-block: 24px; }
+  .facts dd { margin-top: 8px; font-size: 44px; line-height: 1; }
 
-  .career { margin: 0; padding: 0; list-style: none; }
-  .job { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.5fr); gap: 40px; padding-block: 34px; border-bottom: 1px solid var(--rule); }
-  .period { font: 400 12px/1.5 var(--font-utility); color: var(--signal); font-variant-numeric: tabular-nums; }
-  .job h3 { margin-top: 8px; font-size: 20px; }
-  .focus { margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--slate); }
-  .highlights { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
-  .highlights li { position: relative; padding-left: 20px; font-size: 15px; line-height: 1.7; color: #344053; }
-  .highlights li::before { content: ''; position: absolute; left: 0; top: .72em; width: 8px; height: 1px; background: var(--slate); }
+  .roles { margin: 48px 0 0; padding: 0; list-style: none; }
+  .job { display: flex; flex-wrap: wrap; gap: 16px 48px; padding-block: 40px; border-bottom: 1px solid var(--rule); }
+  .job-head { flex: 1 1 260px; }
+  .period { font: 400 13px/1.5 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .period.current { color: var(--emerald); }
+  .job h3 { margin-top: 10px; font-size: 34px; line-height: 1.05; }
+  .focus { margin-top: 8px; font-size: 15px; line-height: 1.6; color: var(--body); }
+  .highlights { flex: 2 1 520px; display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .highlights li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.65; color: var(--ink-soft); }
+  .highlights li::before { content: ''; position: absolute; left: 0; top: .8em; width: 12px; height: 1px; background: var(--emerald); }
 
-  .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--rule); }
-  .skills h3 { font-size: 17px; }
-  .skills p { margin-top: 8px; font-size: 15px; line-height: 1.7; color: var(--slate); }
-  .more { margin-top: 32px; font-size: 14px; color: var(--slate); }
-  .more a { color: var(--signal); text-decoration: underline; text-underline-offset: 3px; }
+  .skills-band { margin-top: var(--section-gap); }
+  .skills { margin-top: 40px; }
+  .skills .chip { padding: 12px 18px; border-color: rgba(239, 235, 226, .4); }
+  .skills .chip.ai { border-color: var(--mint); color: var(--mint); }
+  .tools { margin-top: 56px; }
+  .tools .ruled-grid { --cell-min: 240px; }
+  .tools .ruled-grid > div { padding-top: 28px; }
+  .layer { font: 400 12px/1.5 var(--font-mono); color: var(--forest-muted); }
+  .layer.current { color: var(--mint); }
+  .tools p { margin-top: 12px; font-size: 15px; line-height: 1.8; color: var(--forest-body); }
 
-  @media (max-width: 760px) {
-    .job { grid-template-columns: 1fr; gap: 18px; padding-block: 28px; }
-    .skills { grid-template-columns: 1fr; gap: 24px; }
-  }
+  .cta { padding-block: var(--section-gap); }
+  .cta-inner { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px 48px; padding-top: 40px; border-top: 1px solid var(--ink); }
+  .cta h2 { flex: 1 1 520px; font-size: clamp(40px, 5vw, 72px); line-height: 1; }
 </style>

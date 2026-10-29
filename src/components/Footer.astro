@@ -1,39 +1,50 @@
 ---
-import Icon from './Icon.astro';
+// A compact dark footer on every page. The homepage passes `newsletter` to add the signup form above the links.
 import SubscribeForm from './SubscribeForm.astro';
-import { site, newsletter } from '../data/site';
+import { site } from '../data/site';
 import { profile } from '../data/resume';
-const pages = [
+interface Props {
+  newsletter?: boolean;
+}
+const { newsletter = false } = Astro.props;
+const year = new Date().getFullYear();
+const links = [
   { href: '/blog/', label: 'Blog' },
   { href: '/learning/', label: 'Lessons' },
   { href: '/projects/', label: 'Projects' },
-  { href: '/experience/', label: 'Experience' },
-  { href: '/about/', label: 'About' },
-];
-const elsewhere = [
-  { href: site.social.email, label: profile.email },
   { href: site.social.linkedin, label: 'LinkedIn', external: true },
   { href: site.social.github, label: 'GitHub', external: true },
-  { href: site.social.topmate, label: 'Topmate', external: true },
+  { href: '/rss.xml', label: 'RSS' },
 ];
 ---
 <footer class="site-footer">
-  <div class="shell">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="/" class="wordmark"><span class="wordmark-mark" aria-hidden="true">HS</span>Haseeb Sultan</a>
-        <p>{site.title} in {profile.location}. I build cloud, Kubernetes, and AI platforms, and write about what I learn.</p>
-        {newsletter.formId && <div class="footer-subscribe"><SubscribeForm id="subscribe-footer" tone="dark" /></div>}
+  {newsletter ? (
+    <>
+      <div class="footer-news shell">
+        <SubscribeForm
+          id="subscribe-footer"
+          tone="night"
+          title="The newsletter"
+          titleEm=""
+          text="New articles and lessons on AI infrastructure, sent when they're published."
+        />
+        <nav aria-label="Footer">
+          <ul class="footer-links">
+            {links.map(link => <li><a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{link.label}</a></li>)}
+          </ul>
+        </nav>
       </div>
-      <nav class="footer-col" aria-labelledby="footer-pages">
-        <h2 id="footer-pages">Pages</h2>
-        <ul>{pages.map(page => <li><a href={page.href}>{page.label}</a></li>)}</ul>
+      <p class="footer-bottom footer-copy shell">© {year} {site.name} · {profile.location}</p>
+    </>
+  ) : (
+    <div class="footer-main shell">
+      <a href="/" class="footer-wordmark">{site.name}<span class="dot" aria-hidden="true">.</span></a>
+      <nav aria-label="Footer">
+        <ul class="footer-links">
+          {links.map(link => <li><a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{link.label}</a></li>)}
+        </ul>
       </nav>
-      <nav class="footer-col" aria-labelledby="footer-elsewhere">
-        <h2 id="footer-elsewhere">Contact</h2>
-        <ul>{elsewhere.map(link => <li><a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{link.label}{link.external && <Icon name="external" size={13} />}</a></li>)}</ul>
-      </nav>
+      <p class="footer-copy">© {year} · {profile.location}</p>
     </div>
-    <div class="footer-bottom"><span>© {new Date().getFullYear()} Haseeb Sultan</span><span><a href="/rss.xml">RSS feed</a> · Built with Astro</span></div>
-  </div>
+  )}
 </footer>

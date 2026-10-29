@@ -16,7 +16,7 @@ const ariaCurrent = (link: (typeof links)[number]) => {
 ---
 <header class="site-header">
   <div class="site-header-inner shell">
-    <a href="/" class="wordmark"><span class="wordmark-mark" aria-hidden="true">HS</span>Haseeb Sultan</a>
+    <a href="/" class="wordmark">Haseeb Sultan<span class="dot" aria-hidden="true">.</span></a>
     <nav class="site-nav" aria-label="Main navigation">
       {links.map(link => <a href={link.href} aria-current={ariaCurrent(link)}>{link.label}</a>)}
       <a href="/#contact" class="nav-cta">Contact</a>

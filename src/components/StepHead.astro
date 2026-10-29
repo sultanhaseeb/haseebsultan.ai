@@ -1,0 +1,20 @@
+---
+// A lesson section heading: "Step 0X" in mono beside the serif h2, with an ink rule above.
+// The id matches the entry in the lesson's step rail.
+interface Props {
+  id: string;
+  step: number;
+}
+const { id, step } = Astro.props;
+---
+<div class="step-head">
+  <span class="step-no">Step {String(step).padStart(2, '0')}</span>
+  <h2 id={id}><slot /></h2>
+</div>
+
+<style>
+  .step-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--ink); }
+  .step-no { font: 400 13px/1.5 var(--font-mono); color: var(--emerald); }
+  .step-head h2 { margin: 0; }
+  .step-head + :global(*) { margin-top: 20px; }
+</style>

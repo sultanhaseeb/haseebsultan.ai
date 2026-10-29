@@ -1,38 +1,32 @@
 ---
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import StepHead from '../../components/StepHead.astro';
 import { specDrivenLesson as post } from '../../data/blog';
+
+const toc = [
+  { id: 'vibe-coding', label: 'The pitfalls of vibe coding' },
+  { id: 'sdd', label: 'What is Spec-Driven Development?' },
+  { id: 'constitution', label: 'The Project Constitution' },
+  { id: 'loop', label: 'The SDD Feature Development Loop' },
+  { id: 'tools', label: 'OpenSpec and Spec Kit' },
+  { id: 'protocols', label: 'Protocols for agent independence' },
+  { id: 'summary', label: 'Key takeaways' },
+];
 ---
-<ArticleLayout post={post}>
+<ArticleLayout post={post} toc={toc}>
+  <Fragment slot="objectives">
+    <li><strong>Understand the fundamental differences</strong> between vibe coding and Spec-Driven Development.</li>
+    <li><strong>Master the components of a Project Constitution</strong> that establishes stable, long-term project guardrails.</li>
+    <li><strong>Navigate the iterative Feature Development Loop</strong> of specification, implementation, validation, and replanning.</li>
+    <li><strong>Identify major tools and protocols</strong> such as OpenSpec, Spec Kit, MCP, and ACP that support agent-independent workflows.</li>
+  </Fragment>
+
   <p class="article-lead">Did you know that giving an AI coding agent a short prompt like “create a login page” can generate technical debt faster than an entire team of human developers?</p>
   <p>While <strong>vibe coding</strong> (building software through quick prompts and trial and error) feels like magic for tiny experiments, it quickly falls apart on serious production projects. To build scalable, maintainable applications with AI, we must shift from prompting-first to spec-first.</p>
   <p>Welcome to <strong>Spec-Driven Development (SDD)</strong>, where the specification becomes the shared brain and the AI agent provides the execution muscle.</p>
 
-  <aside class="learning-objectives" aria-labelledby="learning-objectives-title">
-    <h2 id="learning-objectives-title">Learning Objectives</h2>
-    <p>By completing this lesson, you will be able to:</p>
-    <ul>
-      <li><strong>Understand the fundamental differences</strong> between vibe coding and Spec-Driven Development.</li>
-      <li><strong>Master the components of a Project Constitution</strong> that establishes stable, long-term project guardrails.</li>
-      <li><strong>Navigate the iterative Feature Development Loop</strong> of specification, implementation, validation, and replanning.</li>
-      <li><strong>Identify major tools and protocols</strong> such as OpenSpec, Spec Kit, MCP, and ACP that support agent-independent workflows.</li>
-    </ul>
-  </aside>
-
-  <nav class="article-contents" aria-label="In this article">
-    <p>In this article</p>
-    <ol>
-      <li><a href="#vibe-coding">The pitfalls of vibe coding</a></li>
-      <li><a href="#sdd">What is Spec-Driven Development?</a></li>
-      <li><a href="#constitution">The Project Constitution</a></li>
-      <li><a href="#loop">The SDD Feature Development Loop</a></li>
-      <li><a href="#tools">OpenSpec and Spec Kit</a></li>
-      <li><a href="#protocols">Protocols for agent independence</a></li>
-      <li><a href="#summary">Key takeaways</a></li>
-    </ol>
-  </nav>
-
   <section aria-labelledby="vibe-coding">
-    <h2 id="vibe-coding">The Pitfalls of Vibe Coding</h2>
+    <StepHead id="vibe-coding" step={1}>The Pitfalls of Vibe Coding</StepHead>
     <p>Imagine cooking a complex five-course meal without a recipe: throwing ingredients into a pot, tasting the result, and trying to correct the flavor as you go. This is vibe coding. You give an AI agent a short instruction, review the output, explain what is wrong, and repeat the loop until you are satisfied.</p>
     <p>Vibe coding works beautifully for small prototypes, but it fails to scale for several reasons:</p>
 
@@ -53,7 +47,7 @@ import { specDrivenLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="sdd">
-    <h2 id="sdd">What Is Spec-Driven Development?</h2>
+    <StepHead id="sdd" step={2}>What Is Spec-Driven Development?</StepHead>
     <p>Spec-Driven Development is an approach in which you author a detailed, unambiguous specification of what needs to be built before any code is generated. Think of it as a blueprint.</p>
     <p>One of the most powerful concepts in SDD is separating the specification from the implementation:</p>
 
@@ -77,7 +71,7 @@ import { specDrivenLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="constitution">
-    <h2 id="constitution">The Project Constitution</h2>
+    <StepHead id="constitution" step={3}>The Project Constitution</StepHead>
     <p>Before writing individual features, you need a solid foundation. The <strong>Project Constitution</strong> is the high-level, stable source of truth that governs the repository and prevents AI agents from making unsupported assumptions.</p>
     <p>A robust Project Constitution has three pillars:</p>
 
@@ -106,7 +100,7 @@ import { specDrivenLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="loop">
-    <h2 id="loop">The SDD Feature Development Loop</h2>
+    <StepHead id="loop" step={4}>The SDD Feature Development Loop</StepHead>
     <p>Once the Constitution is established, development proceeds in repeatable cycles. Rather than attempting to generate an entire project at once, you build incrementally through four steps:</p>
 
     <ol class="process-list">
@@ -130,7 +124,7 @@ import { specDrivenLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="tools">
-    <h2 id="tools">SDD in the Real World: OpenSpec and Spec Kit</h2>
+    <StepHead id="tools" step={5}>SDD in the Real World: OpenSpec and Spec Kit</StepHead>
     <p>Two prominent open-source toolkits can help you apply Spec-Driven Development on your local machine.</p>
 
     <div class="tool-grid">
@@ -166,7 +160,7 @@ import { specDrivenLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="protocols">
-    <h2 id="protocols">Protocols for Agent Independence</h2>
+    <StepHead id="protocols" step={6}>Protocols for Agent Independence</StepHead>
     <p>The AI ecosystem changes rapidly. Today’s preferred coding agent or model may be replaced by a stronger one within months, so specifications should remain agent-independent.</p>
     <p>Several open standards support portable workflows:</p>
 
@@ -185,43 +179,41 @@ import { specDrivenLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="summary">
-    <h2 id="summary">Key Takeaways</h2>
+    <StepHead id="summary" step={7}>Key takeaways</StepHead>
     <p>Spec-Driven Development changes our responsibility in the AI era. Instead of manually typing every line of code, we focus on communicating intent, managing architecture, and validating results.</p>
-    <ul class="takeaways">
-      <li><strong>Intent is the new source of truth:</strong> Specifications act as executable contracts that guide coding agents with minimal ambiguity.</li>
-      <li><strong>Establish a Project Constitution:</strong> Define the Mission, Tech Stack, and Roadmap early to give the codebase a permanent anchor.</li>
-      <li><strong>Practice disciplined iteration:</strong> Use specification, implementation, validation, and replanning to scale without accumulating uncontrolled technical debt.</li>
-      <li><strong>Keep workflows agent-independent:</strong> Write specifications in clean Markdown and use standards such as MCP and ACP so the project can outlive changing AI tools.</li>
-    </ul>
+    <ol class="numbered">
+      <li><span><strong>Intent is the new source of truth:</strong> Specifications act as executable contracts that guide coding agents with minimal ambiguity.</span></li>
+      <li><span><strong>Establish a Project Constitution:</strong> Define the Mission, Tech Stack, and Roadmap early to give the codebase a permanent anchor.</span></li>
+      <li><span><strong>Practice disciplined iteration:</strong> Use specification, implementation, validation, and replanning to scale without accumulating uncontrolled technical debt.</span></li>
+      <li><span><strong>Keep workflows agent-independent:</strong> Write specifications in clean Markdown and use standards such as MCP and ACP so the project can outlive changing AI tools.</span></li>
+    </ol>
   </section>
 </ArticleLayout>
 
 <style>
-  .pitfall-grid, .pillar-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-block: 28px 36px; }
-  .comparison-grid, .tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-block: 28px 36px; }
-  .pitfall-grid article, .pillar-grid article, .comparison-grid article, .tool-grid article, .protocol-list article { padding: 20px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
-  .pitfall-grid article { border-top: 2px solid #c8563f; }
-  .comparison-grid article:first-child, .tool-grid article:first-child { border-top: 2px solid #c08a2e; }
-  .comparison-grid article:last-child, .tool-grid article:last-child, .pillar-grid article { border-top: 2px solid var(--signal); }
-  .pitfall-grid h3, .pillar-grid h3, .comparison-grid h3, .tool-grid h3, .protocol-list h3 { margin: 0; font-size: 17px; }
-  .pitfall-grid h3 + p, .pillar-grid h3 + p, .comparison-grid h3 + p, .tool-grid h3 + p, .protocol-list h3 + p { margin-top: 10px; font-size: 14px; line-height: 1.65; color: var(--slate); }
-  .card-label { margin: 0 0 9px !important; font: 500 11px/1.4 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
-  .pillar-grid span { display: block; margin-bottom: 8px; font: 400 12px/1 var(--font-utility); color: var(--signal); }
-  .article-note h3 { margin: 0; }
-  .article-note h3 + p { margin-top: 8px; font-size: 15px; line-height: 1.75; color: var(--slate); }
-  .process-list { counter-reset: process; padding: 0 !important; list-style: none !important; }
-  .process-list li { position: relative; padding: 4px 0 26px 48px; border-left: 1px solid var(--rule); margin-left: 14px; }
-  .process-list li + li { margin-top: 0; }
-  .process-list li::before { counter-increment: process; content: counter(process, decimal-leading-zero); position: absolute; left: -15px; top: 0; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 500 11px/1 var(--font-utility); }
-  .process-list li:last-child { padding-bottom: 4px; border-left-color: transparent; }
-  .process-list h3 { margin: 0; }
-  .process-list h3 + p { margin-top: 6px; color: var(--slate); }
-  .tool-grid ul { margin-bottom: 0; font-size: 14px; line-height: 1.7; }
-  .protocol-list { display: grid; gap: 12px; margin-block: 28px 34px; }
-  .protocol-list article { border-left: 2px solid var(--signal); }
-  .takeaways { padding: 24px 24px 24px 46px !important; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  .pitfall-grid, .pillar-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 28px !important; }
+  .comparison-grid, .tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 28px !important; }
+  .pitfall-grid article, .pillar-grid article, .comparison-grid article, .tool-grid article, .protocol-list article { padding: 24px; border: 1px solid var(--rule); background: var(--paper-raised); }
+  .pitfall-grid article { border-top: 2px solid var(--caution-ink); }
+  .comparison-grid article:first-child, .tool-grid article:first-child { border-top: 2px solid var(--ink); }
+  .comparison-grid article:last-child, .tool-grid article:last-child { border-color: var(--forest); background: var(--forest); color: var(--forest-ink); }
+  .comparison-grid article:last-child :is(h3, li, strong), .tool-grid article:last-child :is(h3, li, strong) { color: var(--forest-ink); }
+  .comparison-grid article:last-child :is(p, .card-label), .tool-grid article:last-child :is(p, .card-label) { color: var(--forest-body) !important; }
+  .pillar-grid article { border-top: 2px solid var(--emerald); }
+  .pitfall-grid h3, .pillar-grid h3, .comparison-grid h3, .tool-grid h3, .protocol-list h3 { margin: 0; font-size: 26px; line-height: 1.1; }
+  .pitfall-grid h3 + p, .pillar-grid h3 + p, .comparison-grid h3 + p, .tool-grid h3 + p, .protocol-list h3 + p { margin-top: 10px; font-size: 15px; line-height: 1.65; color: var(--body); }
+  .card-label { margin: 0 0 9px !important; font: 400 12px/1.4 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--emerald); }
+  .pillar-grid span { display: block; margin-bottom: 8px; font: 400 12px/1 var(--font-mono); color: var(--emerald); }
+  .article-note h3 + p { margin-top: 8px; font-size: 15px; line-height: 1.75; color: var(--body); }
+  .process-list { counter-reset: process; padding: 0 !important; list-style: none !important; border-top: 1px solid var(--ink); }
+  .process-list li { counter-increment: process; display: grid; grid-template-columns: 56px minmax(0, 1fr); column-gap: 16px; margin: 0 !important; padding-block: 20px; border-bottom: 1px solid var(--rule); }
+  .process-list li::before { content: counter(process, decimal-leading-zero); grid-row: span 2; font-family: var(--font-serif); font-size: 40px; line-height: 1; color: var(--emerald); }
+  .process-list h3 { margin: 0; font-size: 26px; }
+  .process-list h3 + p { margin-top: 6px; color: var(--body); }
+  .tool-grid ul { margin-top: 12px; font-size: 14px; line-height: 1.7; }
+  .protocol-list { display: grid; gap: 12px; margin-top: 28px !important; }
+  .protocol-list article { border-left: 2px solid var(--emerald); }
   @media (max-width: 767px) {
     .pitfall-grid, .pillar-grid, .comparison-grid, .tool-grid { grid-template-columns: 1fr; }
-    .process-list li { padding-left: 36px; }
   }
 </style>

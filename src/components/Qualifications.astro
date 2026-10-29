@@ -1,60 +1,53 @@
 ---
+// Certifications and education, side by side, each with the issuer's logo in a white tile.
 import { Image } from 'astro:assets';
 import { certifications, education } from '../data/resume';
 ---
-<section id="credentials" class="h-section" aria-labelledby="credentials-title">
-  <div class="h-grid">
-    <p class="h-label">Certifications</p>
-    <div>
-      <h2 id="credentials-title" class="h-title">Certifications.</h2>
-      <ul class="creds rule-top">
-        {certifications.map(item => (
-          <li>
-            <span class="logo"><Image src={item.logo} alt="" width={52} /></span>
-            <strong>{item.title}</strong>
-            <span class="issuer">{item.issuer}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+<section class="quals section shell" aria-label="Certifications and education">
+  <div id="credentials" class="quals-col">
+    <h2 class="sec-label">§ 03 · Certifications</h2>
+    <ul class="creds rule-top">
+      {certifications.map(item => (
+        <li>
+          <span class="tile"><Image src={item.logo} alt="" width={60} /></span>
+          <div>
+            <p class="cred-title">{item.title}</p>
+            <p class="issuer">{item.issuer}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   </div>
-</section>
-
-<section id="education" class="h-section" aria-labelledby="education-title">
-  <div class="h-grid">
-    <p class="h-label">Education</p>
-    <div>
-      <h2 id="education-title" class="h-title">Education.</h2>
-      <ul class="edu rule-top">
-        {education.map(item => (
-          <li>
-            <span class="logo logo-lg"><Image src={item.logo} alt="" width={84} /></span>
-            <div>
-              <p class="detail">{item.detail}</p>
-              <h3>{item.qualification}</h3>
-              <p class="inst">{item.institution}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+  <div id="education" class="quals-col">
+    <h2 class="sec-label">§ 04 · Education</h2>
+    <ol class="edu rule-top">
+      {education.map(item => (
+        <li>
+          <span class="tile tile-lg"><Image src={item.logo} alt="" width={104} /></span>
+          <div>
+            <h3>{item.qualification}</h3>
+            <p class="inst">{item.institution} · {item.detail}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
   </div>
 </section>
 
 <style>
+  .quals { display: flex; flex-wrap: wrap; gap: 56px 72px; }
+  .quals-col { flex: 1 1 480px; min-width: 0; scroll-margin-top: calc(var(--header-h) + 24px); }
+  #education { flex-basis: 420px; }
+  .sec-label { display: block; }
   .creds, .edu { margin: 28px 0 0; padding: 0; list-style: none; }
-  .creds li { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 16px; align-items: center; min-height: 64px; padding-block: 12px; border-bottom: 1px solid var(--rule); }
-  .creds strong { font-size: 15px; font-weight: 500; line-height: 1.45; }
-  .issuer { font: 400 12px/1.5 var(--font-utility); color: var(--slate); text-align: right; }
-  .logo { display: grid; place-items: center; width: 36px; height: 36px; padding: 5px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
-  .logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
-  .logo-lg { width: 56px; height: 56px; padding: 7px; }
-  .edu li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 20px; align-items: start; padding-block: 22px; border-bottom: 1px solid var(--rule); }
-  .detail { font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
-  .edu h3 { margin-top: 6px; font-size: 18px; }
-  .inst { margin-top: 6px; font-size: 15px; line-height: 1.6; color: var(--slate); }
-  @media (max-width: 600px) {
-    .creds li { grid-template-columns: 36px minmax(0, 1fr); row-gap: 2px; }
-    .issuer { grid-column: 2; text-align: left; }
-  }
+  .creds li { display: flex; align-items: center; gap: 18px; padding-block: 16px; border-bottom: 1px solid var(--rule); }
+  .edu li { display: flex; align-items: center; gap: 20px; padding-block: 20px; border-bottom: 1px solid var(--rule); }
+  .creds li > div, .edu li > div { flex: 1 1 auto; min-width: 0; }
+  .tile { flex: 0 0 52px; display: grid; place-items: center; width: 52px; height: 52px; padding: 11px; border: 1px solid var(--rule); background: var(--tile); }
+  .tile-lg { flex-basis: 72px; width: 72px; height: 72px; padding: 10px; }
+  .tile :global(img) { width: 100%; height: 100%; object-fit: contain; }
+  .cred-title { font-size: 16px; font-weight: 500; line-height: 1.45; }
+  .issuer { margin-top: 3px; font: 400 12px/1.5 var(--font-mono); color: var(--muted); }
+  .edu h3 { font-size: 26px; line-height: 1.15; }
+  .inst { margin-top: 6px; font-size: 14px; line-height: 1.6; color: var(--body); }
 </style>

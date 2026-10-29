@@ -4,18 +4,18 @@ import Icon from '../components/Icon.astro';
 ---
 <PageLayout
   title="Page not found"
-  label="404"
+  kicker={['404', 'Page not found']}
   description="This page does not exist or has moved."
   intro="This page doesn't exist or has moved. These are good places to start instead."
   noindex
 >
-  <div slot="head" class="actions">
+  <div slot="head" class="actions head-actions">
     <a href="/" class="btn btn-primary">Go to the homepage <Icon name="arrow" size={16} /></a>
-    <a href="/blog/" class="btn btn-quiet">Read the blog</a>
-    <a href="/projects/" class="btn btn-quiet">See the projects</a>
+    <a href="/blog/" class="btn btn-secondary">Read the blog</a>
+    <a href="/projects/" class="btn btn-secondary">See the projects</a>
   </div>
 </PageLayout>
 
 <style>
-  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
 </style>

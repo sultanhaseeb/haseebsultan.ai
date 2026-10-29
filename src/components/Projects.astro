@@ -1,94 +1,127 @@
 ---
-import Icon from './Icon.astro';
 import ProjectFlow from './ProjectFlow.astro';
 import { aiProjects, experiments } from '../data/site';
 import { resumeProjects } from '../data/resume';
+
+const [flagship, ...otherAi] = aiProjects;
+// The first sentence of each description, as on the homepage.
+const firstSentence = (text: string) => `${text.split('. ')[0].replace(/\.$/, '')}.`;
 ---
-<section id="ai-platforms" class="h-section" aria-labelledby="ai-title">
-  <div class="h-grid">
-    <h2 id="ai-title" class="h-label">AI platforms</h2>
-    <div>
-      <p class="section-intro">Open source, with the code on GitHub.</p>
-      <div class="ai-grid">
-        {aiProjects.map((project, index) => (
-          <article id={project.id} class:list={['card', { featured: index === 0 }]}>
-            <p class="role">{project.role}</p>
-            <h3>{project.title}</h3>
-            <p class="desc">{project.summary}</p>
-            <ProjectFlow steps={project.flow} label={`${project.title} architecture flow: ${project.flow.join(' to ')}`} />
-            <ul class="chip-list" aria-label="Technologies">{project.topics.map(topic => <li class="chip">{topic}</li>)}</ul>
-            <p class="card-links">
-              <a href={project.href} class="text-link">{project.linkLabel} <Icon name="arrow" size={16} /></a>
-              <a href={project.repo} class="text-link" target="_blank" rel="noopener noreferrer">View code on GitHub <Icon name="external" size={14} /></a>
-            </p>
-          </article>
-        ))}
-        {experiments.map(project => (
-          <article class="card">
-            <p class="status"><span class="dot" aria-hidden="true"></span>In progress</p>
-            <h3>{project.title}</h3>
-            <p class="desc">{project.description}</p>
-            <ProjectFlow steps={project.flow} label={`${project.title} architecture flow: ${project.flow.join(' to ')}`} />
-            <p class="tags">{project.topics.join(' · ')}</p>
-          </article>
-        ))}
+<section id="ai-platforms" class="section shell" aria-labelledby="ai-title">
+  <div class="sec-head">
+    <p class="sec-label">§ 01 · AI platforms</p>
+    <h2 id="ai-title">Open source, with public code.</h2>
+  </div>
+
+  <article id={flagship.id} class="flagship" aria-labelledby={`${flagship.id}-title`}>
+    <div class="flagship-copy">
+      <p class="role">Flagship · {flagship.role}</p>
+      <h3 id={`${flagship.id}-title`}>{flagship.title}</h3>
+      <p class="summary">{flagship.summary}</p>
+      <p class="topics">{flagship.topics.join(' · ')}</p>
+      <div class="btn-row actions">
+        <a href={flagship.href} class="btn btn-forest">{flagship.linkLabel} <span aria-hidden="true">→</span></a>
+        <a href={flagship.repo} class="btn btn-forest-outline" target="_blank" rel="noopener noreferrer">View on GitHub <span aria-hidden="true">↗</span></a>
       </div>
+    </div>
+    <div class="flagship-flow">
+      <p class="mono-label">How a request flows</p>
+      <ol aria-label={`${flagship.title} request path`}>
+        {flagship.flow.map((step, index) => (
+          <li class:list={{ on: /agent/i.test(step) }}><span class="n serif" aria-hidden="true">{index + 1}</span><span>{step}</span></li>
+        ))}
+      </ol>
+    </div>
+  </article>
+
+  <div class="ruled rows secondary">
+    <div class="ruled-grid">
+      {otherAi.map(project => (
+        <article id={project.id}>
+          <p class="role muted">{project.role}</p>
+          <h3>{project.title}</h3>
+          <p class="desc">{project.summary}</p>
+          <ProjectFlow steps={project.flow} label={`${project.title} architecture flow: ${project.flow.join(' to ')}`} />
+          <p class="links">
+            <a href={project.href} class="text-link">{project.linkLabel} <span aria-hidden="true">→</span></a>
+            <a href={project.repo} class="text-link" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+          </p>
+        </article>
+      ))}
+      {experiments.map(project => (
+        <article>
+          <p class="role muted status"><span class="dot" aria-hidden="true"></span>Experiment · In progress</p>
+          <h3>{project.title}</h3>
+          <p class="desc">{project.description}</p>
+          <ProjectFlow steps={project.flow} variant="dashed" label={`${project.title} architecture flow: ${project.flow.join(' to ')}`} />
+        </article>
+      ))}
     </div>
   </div>
 </section>
 
-<section id="project-portfolio" class="h-section" aria-labelledby="projects-title">
-  <div class="h-grid">
-    <h2 id="projects-title" class="h-label">Delivered · {resumeProjects.length}</h2>
+<section id="project-portfolio" class="section shell" aria-labelledby="projects-title">
+  <div class="sec-head">
+    <p class="sec-label">§ 02 · Delivered platforms</p>
     <div>
-      <p class="section-intro">Production platforms I have designed and delivered: Kubernetes, infrastructure as code, GitOps, and secure software delivery.</p>
-      <ol class="portfolio rule-top">
-        {resumeProjects.map(project => (
-          <li id={project.id} class="project">
-            <div class="project-head">
-              <p class="role">{project.role}</p>
-              <h3>{project.title}</h3>
-            </div>
-            <div class="project-body">
-              <p class="desc">{project.description}</p>
-              <ProjectFlow steps={project.flow} label={`${project.title} architecture flow: ${project.flow.join(' to ')}`} />
-              <ul class="chip-list" aria-label="Technologies">{project.topics.map(topic => <li class="chip">{topic}</li>)}</ul>
-            </div>
-          </li>
-        ))}
-      </ol>
+      <h2 id="projects-title">Production work for clients, <em class="plain">2019 to today.</em></h2>
+      <p class="sec-intro">Client and employer names are left out. Each project lists my role and the stack it ran on.</p>
     </div>
+  </div>
+  <div class="ruled rows portfolio">
+    <ol class="ruled-grid">
+      {resumeProjects.map((project, index) => (
+        <li id={project.id} class="project">
+          <p class="project-meta"><span>{project.role}</span><span class="no">{String(index + 1).padStart(2, '0')}</span></p>
+          <h3>{project.title}</h3>
+          <p class="desc">{firstSentence(project.description)}</p>
+          <ProjectFlow steps={project.flow} variant="text" label={`${project.title} architecture flow: ${project.flow.join(' to ')}`} />
+          <p class="project-topics">{project.topics.slice(0, 5).join(' · ')}</p>
+        </li>
+      ))}
+    </ol>
   </div>
 </section>
 
 <style>
-  .section-intro { max-width: 60ch; margin-bottom: 28px; font-size: 16px; line-height: 1.7; color: var(--slate); }
+  .flagship { display: flex; flex-wrap: wrap; margin-top: 40px; background: var(--forest); color: var(--forest-ink); }
+  .flagship :focus-visible { outline-color: var(--mint); }
+  .flagship-copy { flex: 1.3 1 480px; min-width: 0; padding: clamp(32px, 4vw, 56px); }
+  .flagship .role { color: var(--mint); }
+  .flagship h3 { margin-top: 14px; font-size: clamp(56px, 6vw, 88px); line-height: .95; }
+  .flagship .summary { margin-top: 20px; max-width: 54ch; font-size: 17px; line-height: 1.7; color: var(--forest-body); }
+  .flagship .topics { margin-top: 20px; font: 400 12px/1.9 var(--font-mono); color: var(--forest-muted); }
+  .actions { margin-top: 28px; }
+  .actions .btn { min-height: 48px; padding: 0 22px; }
+  .flagship-flow { flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: clamp(32px, 4vw, 56px); border-left: 1px solid var(--forest-rule); }
+  .flagship-flow .mono-label { margin-bottom: 16px; color: var(--forest-muted); }
+  .flagship-flow ol { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--forest-rule); }
+  .flagship-flow li { display: flex; align-items: baseline; gap: 16px; padding-block: 16px; border-top: 1px solid var(--forest-rule); font-size: 16px; }
+  .flagship-flow .n { font-size: 28px; line-height: 1; color: var(--forest-numeral); }
+  .flagship-flow li.on, .flagship-flow li.on .n { color: var(--mint); }
 
-  .ai-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-  .card { display: grid; align-content: start; gap: 14px; padding: 26px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
-  .card h3 { font-size: 20px; }
-  .card.featured { grid-column: 1 / -1; gap: 16px; padding: 32px; border-color: color-mix(in srgb, var(--signal) 40%, var(--rule)); border-top: 3px solid var(--signal); }
-  .card.featured h3 { font-size: 26px; letter-spacing: -.02em; }
-  .card.featured .desc { max-width: 64ch; font-size: 16px; }
-  .card:target { outline: 2px solid var(--signal); outline-offset: 4px; }
-  .card-links { display: flex; flex-wrap: wrap; gap: 0 28px; }
-  .card-links .text-link { margin-top: 0; }
-  .status { display: inline-flex; align-items: center; gap: 8px; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--live); }
-  .tags { padding-top: 14px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--slate); }
+  .secondary { border-top: 0; }
+  .secondary .ruled-grid { --cell-min: 420px; --cell-pad: 40px; }
+  .secondary article { display: flex; flex-direction: column; gap: 14px; padding-block: 40px; }
+  .role { font: 400 12px/1.5 var(--font-mono); color: var(--emerald); }
+  .role.muted { color: var(--muted); }
+  .status { display: inline-flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; border: 1.5px solid var(--emerald); border-radius: 50%; }
+  .secondary h3 { font-size: 44px; line-height: 1; }
+  .desc { max-width: 56ch; font-size: 16px; line-height: 1.7; color: var(--body); }
+  .links { display: flex; flex-wrap: wrap; gap: 0 24px; }
 
-  .portfolio { margin: 0; padding: 0; list-style: none; }
-  .project { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: 40px; padding-block: 36px; border-bottom: 1px solid var(--rule); }
-  .project:target { background: linear-gradient(90deg, var(--signal-soft), transparent 70%); }
-  .role { font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
-  .project h3 { margin-top: 8px; font-size: 21px; line-height: 1.3; }
-  .project-body { display: grid; gap: 18px; }
-  .desc { font-size: 15px; line-height: 1.75; color: var(--slate); }
+  .portfolio { margin-top: 48px; }
+  .portfolio .ruled-grid { --cell-min: 340px; --cell-pad: 32px; }
+  .project { display: flex; flex-direction: column; gap: 10px; padding-block: 32px 36px; scroll-margin-top: calc(var(--header-h) + 24px); }
+  .project:target { background: var(--paper-raised); }
+  .project-meta { display: flex; justify-content: space-between; gap: 12px; font: 400 12px/1.5 var(--font-mono); color: var(--muted); }
+  .no { color: var(--emerald); }
+  .project h3 { font-size: 32px; line-height: 1.05; }
+  .project .desc { font-size: 15px; }
+  .project-topics { font-size: 13px; line-height: 1.6; color: var(--muted); }
 
-  @media (max-width: 760px) {
-    .ai-grid { grid-template-columns: 1fr; }
-    .card, .card.featured { padding: 22px; }
-    .card.featured h3 { font-size: 23px; }
-    .project { grid-template-columns: 1fr; gap: 14px; padding-block: 28px; }
+  @media (max-width: 860px) {
+    .flagship-flow { border-left: 0; border-top: 1px solid var(--forest-rule); }
   }
 </style>

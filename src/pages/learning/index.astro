@@ -1,125 +1,88 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
-import Icon from '../../components/Icon.astro';
 import PostCover from '../../components/PostCover.astro';
 import SubscribeForm from '../../components/SubscribeForm.astro';
-import { lessons, postLabel } from '../../data/blog';
-import { topics, newsletter } from '../../data/site';
+import { lessons, lessonNumber } from '../../data/blog';
+import { topics } from '../../data/site';
 import { profile } from '../../data/resume';
 import { formatDate } from '../../utils/date';
 
 // Newest lesson first; numbers still follow publication order.
 const newestFirst = [...lessons].reverse();
-
-const steps = [
-  { title: 'I dig into a topic', text: 'A new idea in AI engineering, usually in AI agents, LLMOps, or AI infrastructure.' },
-  { title: 'I turn it into a lesson', text: 'Clear learning objectives, plain explanations, diagrams, and the key takeaways at the end.' },
-  { title: 'We learn it together', text: 'Read at your own pace, then tell me what was unclear or what you want to learn next.' },
-];
-
 const suggestHref = `mailto:${profile.email}?subject=${encodeURIComponent('Lesson idea')}`;
+const count = lessons.length;
 ---
 <PageLayout
   title="Let's learn together"
-  label="Lesson series"
+  kicker={['The lesson series', `${count} ${count === 1 ? 'lesson' : 'lessons'} so far`, 'AI engineering, step by step']}
   description="Step-by-step lessons on AI engineering by Haseeb Sultan: AI agents, MCP, LLMOps, and AI infrastructure, explained so you can learn alongside him."
   intro="Each lesson breaks down a new idea in AI engineering, step by step, so you can learn it alongside me, one topic at a time."
 >
-  <p slot="head" class="head-links">
-    <a href={newestFirst[0].href} class="text-link">Start with the latest lesson <Icon name="arrow" size={16} /></a>
-    {newsletter.formId && <a href="#subscribe" class="text-link">Get lessons by email</a>}
-    <a href="/rss.xml" class="text-link">Follow via RSS</a>
-  </p>
+  <Fragment slot="heading">Let's learn <em>together.</em></Fragment>
 
-  <section class="h-section" aria-labelledby="lessons-title">
-    <div class="h-grid">
-      <h2 id="lessons-title" class="h-label">Lessons · {lessons.length}</h2>
-      <ol class="lessons rule-top">
-        {newestFirst.map(lesson => (
-          <li>
-            <article class="lesson">
-              <div class="lesson-copy">
-                <p class="meta"><span>{postLabel(lesson)}</span><time datetime={lesson.published}>{formatDate(lesson.published)}</time></p>
-                <h3><a href={lesson.href}>{lesson.title}</a></h3>
-                <p class="desc">{lesson.description}</p>
-                <a href={lesson.href} class="btn btn-primary start" aria-label={`Start lesson: ${lesson.title}`}>Start lesson <Icon name="arrow" size={16} /></a>
-              </div>
-              <a href={lesson.href} class="thumb" tabindex="-1" aria-hidden="true"><PostCover post={lesson} /></a>
-            </article>
-          </li>
-        ))}
-      </ol>
-    </div>
+  <section class="lessons-section shell" aria-labelledby="lessons-title">
+    <h2 id="lessons-title" class="sr-only">Lessons</h2>
+    <ol class="lessons">
+      {newestFirst.map((lesson, index) => (
+        <li>
+          <a href={lesson.href} class="lesson">
+            <span class:list={['numeral', { newest: index === 0 }]} aria-hidden="true">{lessonNumber(lesson)}</span>
+            <div class="lesson-copy">
+              <p class="meta">
+                <span class="sr-only">Lesson {lessonNumber(lesson)}.</span>
+                {index === 0 && <span class="accent">Newest</span>}
+                <span>{lesson.tags?.length ? lesson.tags.join(' · ') : lesson.category}</span>
+                <time datetime={lesson.published}>{formatDate(lesson.published)}</time>
+              </p>
+              <h3>{lesson.title}</h3>
+              <p class="desc">{lesson.description}</p>
+            </div>
+            <PostCover post={lesson} tone="forest" ratio="4 / 3" class="lesson-cover" sizes="(max-width: 760px) calc(100vw - 40px), 300px" />
+          </a>
+        </li>
+      ))}
+    </ol>
   </section>
 
-  <section class="h-section" aria-labelledby="how-title">
-    <div class="h-grid">
-      <h2 id="how-title" class="h-label">How it works</h2>
-      <ol class="steps">
-        {steps.map((step, index) => (
-          <li>
-            <span class="step-no">{String(index + 1).padStart(2, '0')}</span>
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </li>
-        ))}
-      </ol>
+  <section class="coming shell" aria-labelledby="coming-title">
+    <div class="topics">
+      <p class="sec-label">§ Coming up</p>
+      <h2 id="coming-title">Topics on the list.</h2>
+      <ul class="chip-list">{topics.map(topic => <li class="chip">{topic}</li>)}</ul>
+      <p class="suggest">Is there something you want us to learn next? Email me at <a href={suggestHref}>{profile.email}</a> with your idea.</p>
     </div>
-  </section>
-
-  {newsletter.formId && (
-    <section id="subscribe" class="h-section" aria-labelledby="subscribe-title">
-      <div class="h-grid">
-        <h2 id="subscribe-title" class="h-label">Subscribe</h2>
-        <SubscribeForm id="subscribe-lessons" title="Get each new lesson by email" text="One short email when a new lesson or article goes up, so we keep learning together. No spam, and you can unsubscribe at any time." />
-      </div>
-    </section>
-  )}
-
-  <section class="h-section" aria-labelledby="next-title">
-    <div class="h-grid">
-      <h2 id="next-title" class="h-label">Coming up</h2>
-      <div class="next">
-        <p class="next-title">Next on the lesson list</p>
-        <ul class="chip-list">{topics.map(topic => <li class="chip">{topic}</li>)}</ul>
-        <p class="suggest">Is there something you want us to learn next? Email me at <a href={suggestHref}>{profile.email}</a> with your idea.</p>
-      </div>
+    <div id="subscribe" class="news">
+      <SubscribeForm
+        id="subscribe-lessons"
+        title="Get each new lesson"
+        text="One short email when a new lesson or article goes up, so we keep learning together. No spam, and you can unsubscribe at any time."
+      />
     </div>
   </section>
 </PageLayout>
 
 <style>
-  .head-links { display: flex; flex-wrap: wrap; gap: 0 28px; margin-top: 8px; }
-  .lessons { margin: 0; padding: 0; list-style: none; }
+  .lessons-section { padding-top: 72px; }
+  .lessons { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
   .lessons > li { border-bottom: 1px solid var(--rule); }
-  .lesson { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 40px; align-items: start; padding-block: 36px; }
-  .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font: 400 12px/1.5 var(--font-utility); color: var(--slate); }
-  .meta span { color: var(--signal); }
-  .lesson h3 { margin-top: 10px; font-size: 24px; line-height: 1.25; }
-  .lesson h3 a:hover { color: var(--signal); }
-  .desc { margin-top: 10px; max-width: 54ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
-  .start { margin-top: 22px; }
-  .thumb { display: block; transition: opacity 160ms ease; }
-  .lesson:hover .thumb { opacity: .92; }
+  .lesson { display: flex; flex-wrap: wrap; align-items: center; gap: 24px 48px; padding-block: 40px; color: var(--ink); }
+  .numeral { flex: 0 0 140px; font-family: var(--font-serif); font-size: 120px; line-height: .8; color: var(--faint); }
+  .numeral.newest { color: var(--emerald); }
+  .lesson-copy { flex: 2 1 420px; min-width: 0; }
+  .lesson h3 { margin-top: 10px; font-size: clamp(32px, 3.4vw, 48px); line-height: 1.04; transition: color 160ms ease; }
+  .lesson:hover h3 { color: var(--emerald); }
+  .desc { margin-top: 12px; max-width: 60ch; font-size: 16px; line-height: 1.7; color: var(--body); }
+  .lesson :global(.lesson-cover) { flex: 1 1 260px; max-width: 360px; }
 
-  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
-  .steps li { padding: 22px 24px 0 0; }
-  .steps li + li { padding-left: 24px; border-left: 1px solid var(--rule); }
-  .step-no { font: 400 12px/1.5 var(--font-utility); color: var(--signal); }
-  .steps h3 { margin-top: 8px; font-size: 18px; }
-  .steps p { margin-top: 8px; font-size: 15px; line-height: 1.65; color: var(--slate); }
+  .coming { display: flex; flex-wrap: wrap; gap: 48px 72px; padding-block: var(--section-gap); }
+  .topics { flex: 1 1 460px; min-width: 0; }
+  .topics h2 { margin-top: 16px; font-size: clamp(38px, 4.4vw, 60px); }
+  .topics .chip-list { margin-top: 32px; }
+  .suggest { margin-top: 28px; max-width: 56ch; font-size: 15px; line-height: 1.7; color: var(--body); }
+  .suggest a { color: var(--emerald); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+  .news { flex: 1 1 400px; min-width: 0; }
 
-  .next-title { margin-bottom: 14px; font-size: 15px; font-weight: 600; }
-  .suggest { margin-top: 24px; max-width: 60ch; font-size: 15px; line-height: 1.7; color: var(--slate); }
-  .suggest a { color: var(--signal); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
-
-  @media (max-width: 900px) {
-    .lesson { grid-template-columns: minmax(0, 1fr) minmax(0, 220px); gap: 28px; }
-  }
-  @media (max-width: 700px) {
-    .lesson { grid-template-columns: 1fr; gap: 20px; padding-block: 28px; }
-    .thumb { order: -1; max-width: 420px; }
-    .steps { grid-template-columns: 1fr; }
-    .steps li, .steps li + li { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--rule); }
+  @media (max-width: 560px) {
+    .numeral { flex-basis: 100%; font-size: 96px; }
   }
 </style>

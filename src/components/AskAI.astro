@@ -52,25 +52,30 @@ const tools = [
 </script>
 
 <style>
-  .ask-ai { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 20px; }
-  .ask-ai-label { font: 500 11px/1.5 var(--font-utility); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .ask-ai { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+  .ask-ai-label { font: 400 11px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .ask-ai ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
   .ask-ai a {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    min-height: 36px;
-    padding: 0 12px;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    background: var(--surface);
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--chip-rule);
     font-size: 14px;
     font-weight: 500;
     color: var(--ink);
     transition: border-color 160ms ease, color 160ms ease;
   }
-  .ask-ai a:hover { border-color: var(--signal); color: var(--signal); }
-  .ask-ai a :global(svg) { color: var(--slate); }
-  .ask-ai-status { flex-basis: 100%; font-size: 13px; line-height: 1.5; color: var(--signal); overflow-wrap: anywhere; }
+  .ask-ai a:hover { border-color: var(--emerald); color: var(--emerald); }
+  .ask-ai a :global(svg) { color: var(--muted); }
+  .ask-ai-status { flex-basis: 100%; font-size: 13px; line-height: 1.5; color: var(--emerald); overflow-wrap: anywhere; }
   .ask-ai-status:empty { display: none; }
+
+  /* In the forest lesson hero. */
+  :global(.band) .ask-ai-label { color: var(--forest-muted); }
+  :global(.band) .ask-ai a { border-color: var(--forest-rule); color: var(--forest-ink); }
+  :global(.band) .ask-ai a:hover { border-color: var(--mint); color: var(--mint); }
+  :global(.band) .ask-ai a :global(svg) { color: var(--forest-muted); }
+  :global(.band) .ask-ai-status { color: var(--mint); }
 </style>

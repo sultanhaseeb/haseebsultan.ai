@@ -1,10 +1,10 @@
 ---
-import { Code } from 'astro:components';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StepHead from '../../components/StepHead.astro';
 import { mcpLesson as post } from '../../data/blog';
 
-const repo = 'https://github.com/sultanhaseeb/taskboard-mcp';
-const theme = 'github-dark-default';
+const repo = post.repo?.href ?? 'https://github.com/sultanhaseeb/taskboard-mcp';
 
 // Code samples are taken from the taskboard-mcp repository.
 const setupCode = `from mcp.server import MCPServer
@@ -83,152 +83,239 @@ const clientCode = `server = StdioServerParameters(
 
 async with Client(server) as client:
     result = await client.read_resource("taskboard://tasks")`;
+
+const toc = [
+  { id: 'what-is-mcp', label: 'What an MCP server is' },
+  { id: 'building-blocks', label: 'The three building blocks' },
+  { id: 'tools', label: 'Tools in depth' },
+  { id: 'transports', label: 'STDIO and Streamable HTTP' },
+  { id: 'testing', label: 'Testing with MCP Inspector' },
+  { id: 'security-note', label: 'A note on security' },
+  { id: 'summary', label: 'Key takeaways' },
+];
+
+// The three building blocks, shown as tabs. "Who decides" is the clearest way to tell them apart.
+const blocks = [
+  { id: 'tool', label: 'Tool', who: 'The model chooses to call it', names: ['add_task', 'list_tasks', 'complete_task', 'say_hello'], title: 'Tools: actions the model can take' },
+  { id: 'resource', label: 'Resource', who: 'The application reads it', names: ['taskboard://tasks'], title: 'Resources: data the application reads' },
+  { id: 'prompt', label: 'Prompt', who: 'The user picks it', names: ['plan_open_tasks(goal)'], title: 'Prompts: templates the user picks' },
+];
 ---
-<ArticleLayout post={post}>
-  <section aria-labelledby="introduction">
-    <h2 id="introduction">Introduction</h2>
-    <p>An AI assistant that can “use tools” needs a standard way to reach the outside world. The <strong>Model Context Protocol (MCP)</strong> is an open standard for that connection: you write a server once, and any MCP client, such as an AI desktop app, an IDE, or an agent, can use it.</p>
-    <p>In this lesson we walk through a small taskboard server written in Python. It comes from my <a href={repo} target="_blank" rel="noopener noreferrer">taskboard-mcp</a> repository, and it is deliberately tiny, so we can focus on the part that is easiest to mix up: MCP’s three building blocks, and when to use each one.</p>
-  </section>
+<ArticleLayout post={post} toc={toc}>
+  <Fragment slot="objectives">
+    <li><strong>Explain</strong> what an MCP server is and how a client connects to it.</li>
+    <li><strong>Distinguish</strong> tools, resources, and prompts, and choose the right one for a capability.</li>
+    <li><strong>Implement</strong> each building block in Python with the official MCP SDK.</li>
+    <li><strong>Run</strong> a server over STDIO and Streamable HTTP, and test it with MCP Inspector.</li>
+    <li><strong>Recognize</strong> the risk of exposing an MCP server without authentication.</li>
+  </Fragment>
 
-  <aside class="learning-objectives" aria-labelledby="learning-objectives">
-    <h2 id="learning-objectives">Learning Objectives</h2>
-    <p>By completing this lesson, you will be able to:</p>
-    <ul>
-      <li><strong>Explain</strong> what an MCP server is and how a client connects to it.</li>
-      <li><strong>Distinguish</strong> tools, resources, and prompts, and choose the right one for a capability.</li>
-      <li><strong>Implement</strong> each building block in Python with the official MCP SDK.</li>
-      <li><strong>Run</strong> a server over STDIO and Streamable HTTP, and test it with MCP Inspector.</li>
-      <li><strong>Recognize</strong> the risk of exposing an MCP server without authentication.</li>
-    </ul>
-  </aside>
-
-  <nav class="article-contents" aria-label="In this lesson">
-    <p>In this lesson</p>
-    <ol>
-      <li><a href="#what-is-mcp">What an MCP server is</a></li>
-      <li><a href="#building-blocks">The three building blocks</a></li>
-      <li><a href="#tools">Tools: actions the model can take</a></li>
-      <li><a href="#resources">Resources: data the application reads</a></li>
-      <li><a href="#prompts">Prompts: templates the user picks</a></li>
-      <li><a href="#transports">Running it: STDIO and Streamable HTTP</a></li>
-      <li><a href="#testing">Testing with MCP Inspector</a></li>
-      <li><a href="#summary">Key takeaways</a></li>
-    </ol>
-  </nav>
+  <p>An AI assistant that can “use tools” needs a standard way to reach the outside world. The <strong>Model Context Protocol (MCP)</strong> is an open standard for that connection: you write a server once, and any MCP client, such as an AI desktop app, an IDE, or an agent, can use it.</p>
+  <p>In this lesson we walk through a small taskboard server written in Python. It comes from my <a href={repo} target="_blank" rel="noopener noreferrer">taskboard-mcp</a> repository, and it is deliberately tiny, so we can focus on the part that is easiest to mix up: MCP’s three building blocks, and when to use each one.</p>
 
   <section aria-labelledby="what-is-mcp">
-    <h2 id="what-is-mcp">What an MCP Server Is</h2>
+    <StepHead id="what-is-mcp" step={1}>What an MCP server is</StepHead>
     <p>An MCP server is a small program that exposes capabilities to AI applications. The application, called the <strong>client</strong>, connects to the server, asks what it offers, and decides when to use it. The server does not need to know which model is on the other side.</p>
 
     <figure class="mcp-diagram">
       <ol aria-label="How the pieces connect">
-        <li><strong>MCP client</strong><span>MCP Inspector, ChatGPT Desktop, an IDE, or an agent</span></li>
-        <li><strong>taskboard-mcp</strong><span>Tools · Resources · Prompts</span></li>
-        <li><strong>tasks.db</strong><span>SQLite file beside server.py</span></li>
+        <li><strong class="serif">MCP client</strong><span>MCP Inspector, ChatGPT Desktop, an IDE, or an agent</span></li>
+        <li class="server"><strong class="serif">taskboard-mcp</strong><span>Tools · Resources · Prompts</span></li>
+        <li><strong class="serif">tasks.db</strong><span>SQLite file beside server.py</span></li>
       </ol>
       <figcaption>The client talks MCP to the server; only the server touches the database.</figcaption>
     </figure>
 
     <p>Our server keeps tasks in a SQLite database. Setting it up takes two lines with the official Python SDK (version 2):</p>
-    <Code code={setupCode} lang="python" theme={theme} />
+    <CodeBlock code={setupCode} lang="python" file="server.py" />
     <p>Everything else is ordinary Python functions with a decorator on top.</p>
   </section>
 
   <section aria-labelledby="building-blocks">
-    <h2 id="building-blocks">The Three Building Blocks</h2>
-    <p>MCP servers can expose three kinds of capability. The clearest way to tell them apart is to ask <strong>who decides when each one is used</strong>.</p>
-    <div class="article-table">
-      <table>
-        <thead>
-          <tr><th scope="col">Building block</th><th scope="col">Who decides</th><th scope="col">In this server</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Tool</strong></td><td>The model chooses to call it</td><td><code>add_task</code>, <code>list_tasks</code>, <code>complete_task</code>, <code>say_hello</code></td></tr>
-          <tr><td><strong>Resource</strong></td><td>The application reads it</td><td><code>taskboard://tasks</code></td></tr>
-          <tr><td><strong>Prompt</strong></td><td>The user picks it</td><td><code>plan_open_tasks(goal)</code></td></tr>
-        </tbody>
-      </table>
+    <StepHead id="building-blocks" step={2}>The three building blocks</StepHead>
+    <p>MCP servers can expose three kinds of capability. The clearest way to tell them apart is to ask <strong>who decides when each one is used</strong>. Pick one to see it in this server.</p>
+
+    <div class="block-tabs" data-tabs>
+      <div class="tablist" role="tablist" aria-label="MCP building blocks" hidden>
+        {blocks.map((block, index) => (
+          <button type="button" role="tab" id={`tab-${block.id}`} aria-controls={`block-${block.id}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1}>
+            <span class="tab-label serif">{block.label}</span>
+            <span class="tab-who">{block.who}</span>
+          </button>
+        ))}
+      </div>
+
+      <section id="block-tool" class="tab-panel" aria-labelledby="block-tool-title">
+        <h3 id="block-tool-title" class="panel-title">{blocks[0].title}</h3>
+        <p>A tool is a function the model can choose to call. The decorator registers it, and the function’s name, parameters, and docstring describe it to the client. That description is what the model reads when deciding whether to call the tool, so a clear docstring matters.</p>
+        <p class="in-server">In this server: <span>{blocks[0].names.join(', ')}</span></p>
+        <CodeBlock code={addTaskCode} lang="python" file="server.py" />
+      </section>
+
+      <section id="block-resource" class="tab-panel" aria-labelledby="block-resource-title">
+        <h3 id="block-resource-title" class="panel-title">{blocks[1].title}</h3>
+        <p>A resource is data that the client reads and can hand to the model as context. It has a URI, and reading it is not a tool call: nothing changes.</p>
+        <p class="in-server">In this server: <span>{blocks[1].names.join(', ')}</span></p>
+        <CodeBlock code={resourceCode} lang="python" file="server.py" />
+        <p>Use a resource when the application should decide what context to load, for example showing the current tasks before the conversation starts.</p>
+      </section>
+
+      <section id="block-prompt" class="tab-panel" aria-labelledby="block-prompt-title">
+        <h3 id="block-prompt-title" class="panel-title">{blocks[2].title}</h3>
+        <p>A prompt is a reusable message template. The user selects it, the client fills in the arguments, and the result is sent to the model. The prompt itself does not call tools or change data; it only writes the request.</p>
+        <p class="in-server">In this server: <span>{blocks[2].names.join(', ')}</span></p>
+        <CodeBlock code={promptCode} lang="python" file="server.py" />
+        <p>Notice that this prompt tells the model which tool to use and what not to do. Prompts are a good place to package instructions your users would otherwise have to type every time.</p>
+      </section>
     </div>
-    <p>If a capability <em>does</em> something, such as changing data, it is a tool. If it <em>provides</em> context to read, it is a resource. If it is a reusable way to <em>ask</em> for something, it is a prompt.</p>
+
+    <p class="closing-question">If it <em>does</em> something, such as changing data, it’s a tool. If it <em>provides</em> context to read, it’s a resource. If it’s a reusable way to <em>ask</em> for something, it’s a prompt.</p>
   </section>
 
   <section aria-labelledby="tools">
-    <h2 id="tools">Tools: Actions the Model Can Take</h2>
-    <p>A tool is a function the model can choose to call. The decorator registers it, and the function’s name, parameters, and docstring describe it to the client. That description is what the model reads when deciding whether to call the tool, so a clear docstring matters.</p>
-    <Code code={addTaskCode} lang="python" theme={theme} />
+    <StepHead id="tools" step={3}>Tools in depth</StepHead>
     <p>Type hints do real work here. In <code>list_tasks</code>, the <code>Literal</code> type limits the status filter to two values, so the model cannot invent a third:</p>
-    <Code code={listTasksCode} lang="python" theme={theme} />
+    <CodeBlock code={listTasksCode} lang="python" file="server.py" />
     <p>When something goes wrong, raise <code>ToolError</code>. The client receives a clear error message instead of a crashed server:</p>
-    <Code code={completeTaskCode} lang="python" theme={theme} />
-  </section>
-
-  <section aria-labelledby="resources">
-    <h2 id="resources">Resources: Data the Application Reads</h2>
-    <p>A resource is data that the client reads and can hand to the model as context. It has a URI, and reading it is not a tool call: nothing changes.</p>
-    <Code code={resourceCode} lang="python" theme={theme} />
-    <p>Use a resource when the application should decide what context to load, for example showing the current tasks before the conversation starts.</p>
-  </section>
-
-  <section aria-labelledby="prompts">
-    <h2 id="prompts">Prompts: Templates the User Picks</h2>
-    <p>A prompt is a reusable message template. The user selects it, the client fills in the arguments, and the result is sent to the model. The prompt itself does not call tools or change data; it only writes the request.</p>
-    <Code code={promptCode} lang="python" theme={theme} />
-    <p>Notice that this prompt tells the model which tool to use and what not to do. Prompts are a good place to package instructions your users would otherwise have to type every time.</p>
+    <CodeBlock code={completeTaskCode} lang="python" file="server.py" />
   </section>
 
   <section aria-labelledby="transports">
-    <h2 id="transports">Running It: STDIO and Streamable HTTP</h2>
+    <StepHead id="transports" step={4}>STDIO and Streamable HTTP</StepHead>
     <p>The same server can talk to clients in two ways, chosen when it starts:</p>
-    <Code code={runCode} lang="python" theme={theme} />
-    <ul>
-      <li><strong>STDIO</strong> (the default): the client launches the server as a local process and exchanges messages over standard input and output. This suits desktop apps on your own machine.</li>
-      <li><strong>Streamable HTTP</strong>: the server listens at <code>http://127.0.0.1:8000/mcp</code>, for clients that connect over a network.</li>
-    </ul>
+    <CodeBlock code={runCode} lang="python" file="server.py" />
+    <div class="transports">
+      <div>
+        <p class="transport-kind">Default</p>
+        <p class="transport-name serif">STDIO</p>
+        <p>The client launches the server as a local process and exchanges messages over standard input and output. This suits desktop apps on your own machine.</p>
+      </div>
+      <div>
+        <p class="transport-kind">--http</p>
+        <p class="transport-name serif">Streamable HTTP</p>
+        <p>The server listens at <code>http://127.0.0.1:8000/mcp</code>, for clients that connect over a network.</p>
+      </div>
+    </div>
     <p>To try it, install the dependencies and start the server in either mode:</p>
-    <Code code={installCode} lang="bash" theme={theme} />
+    <CodeBlock code={installCode} lang="bash" />
     <p>Any client that can launch a local process connects the same way over STDIO: point it at your virtual environment’s Python as the command, and at the absolute path to <code>server.py</code> as the argument.</p>
   </section>
 
   <section aria-labelledby="testing">
-    <h2 id="testing">Testing With MCP Inspector</h2>
+    <StepHead id="testing" step={5}>Testing with MCP Inspector</StepHead>
     <p>Before connecting a real AI client, test every building block with <strong>MCP Inspector</strong>. It launches the server over STDIO and opens a browser interface:</p>
-    <Code code={inspectorCode} lang="bash" theme={theme} />
+    <CodeBlock code={inspectorCode} lang="bash" />
     <p>Use the <strong>Tools</strong> tab to call <code>add_task</code> or <code>list_tasks</code>, the <strong>Resources</strong> tab to read <code>taskboard://tasks</code>, and the <strong>Prompts</strong> tab to fill in <code>plan_open_tasks</code> with a goal such as “Prepare the demo by Friday”.</p>
     <p>You can also use the server from your own code. The repository’s <code>client.py</code> launches the server and reads the resource:</p>
-    <Code code={clientCode} lang="python" theme={theme} />
+    <CodeBlock code={clientCode} lang="python" file="client.py" />
   </section>
 
-  <aside class="limitations" aria-labelledby="security-note">
-    <h2 id="security-note">A Note on Security</h2>
+  <aside class="caution" aria-labelledby="security-note">
+    <p class="caution-label">Step 06 · Caution</p>
+    <h2 id="security-note">A note on security</h2>
     <p>This server has no authentication. Over STDIO that is acceptable, because only the app that launched it can talk to it. Over HTTP, anyone who can reach the URL can add and complete tasks. If you expose it through a public tunnel for testing, keep the URL private and stop the tunnel when you finish, and put authentication in front of any MCP server that can change data.</p>
   </aside>
 
   <section aria-labelledby="summary">
-    <h2 id="summary">Summary</h2>
-    <h3>Key Takeaways</h3>
-    <ul>
-      <li><strong>One server, many clients:</strong> MCP standardizes how AI applications connect to tools and data, so a server you build once works with any MCP client.</li>
-      <li><strong>Ask who decides:</strong> tools are actions the model chooses, resources are context the application reads, and prompts are templates the user picks.</li>
-      <li><strong>Python makes it small:</strong> a decorator, type hints, and a clear docstring are enough to expose each building block.</li>
-      <li><strong>Pick the transport for the client:</strong> STDIO suits local apps; Streamable HTTP suits networked clients and needs authentication before it is exposed.</li>
-      <li><strong>Test first:</strong> MCP Inspector lets you exercise every tool, resource, and prompt before a real AI client uses them.</li>
-    </ul>
-    <p>The complete server, tests, and setup guides for ChatGPT Desktop and the web are in the <a href={repo} target="_blank" rel="noopener noreferrer">taskboard-mcp repository</a>.</p>
+    <StepHead id="summary" step={7}>Key takeaways</StepHead>
+    <ol class="numbered">
+      <li><span><strong>One server, many clients.</strong> MCP standardizes how AI applications connect to tools and data, so a server you build once works with any MCP client.</span></li>
+      <li><span><strong>Ask who decides.</strong> Tools are actions the model chooses, resources are context the application reads, and prompts are templates the user picks.</span></li>
+      <li><span><strong>Python makes it small.</strong> A decorator, type hints, and a clear docstring are enough to expose each building block.</span></li>
+      <li><span><strong>Pick the transport for the client.</strong> STDIO suits local apps; Streamable HTTP suits networked clients and needs authentication before it is exposed.</span></li>
+      <li><span><strong>Test first.</strong> MCP Inspector lets you exercise every tool, resource, and prompt before a real AI client uses them.</span></li>
+    </ol>
+    <div class="repo-callout">
+      <p class="serif">The complete server, tests, and setup guides for ChatGPT Desktop and the web are on GitHub.</p>
+      <a href={repo} class="btn btn-forest" target="_blank" rel="noopener noreferrer">taskboard-mcp <span aria-hidden="true">↗</span></a>
+    </div>
   </section>
 </ArticleLayout>
 
+<script>
+  // Tabs for the three building blocks. Without JavaScript the panels stay one after another, each with its heading.
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(root => {
+    const tablist = root.querySelector<HTMLElement>('[role="tablist"]');
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls') ?? ''));
+    if (!tablist || panels.some(panel => !panel)) return;
+    tablist.hidden = false;
+    root.classList.add('is-tabs');
+    panels.forEach((panel, index) => {
+      panel!.setAttribute('role', 'tabpanel');
+      panel!.setAttribute('aria-labelledby', tabs[index].id);
+      panel!.tabIndex = 0;
+    });
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => {
+        const selected = i === index;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        panels[i]!.hidden = !selected;
+      });
+      if (focus) tabs[index].focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(index));
+      tab.addEventListener('keydown', event => {
+        const last = tabs.length - 1;
+        const next = { ArrowRight: index === last ? 0 : index + 1, ArrowLeft: index === 0 ? last : index - 1, Home: 0, End: last }[event.key];
+        if (next === undefined) return;
+        event.preventDefault();
+        select(next, true);
+      });
+    });
+    select(0);
+  });
+</script>
+
 <style>
-  .mcp-diagram { margin-block: 28px 32px; }
-  .mcp-diagram ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 0; padding: 0; list-style: none; }
-  .mcp-diagram li { position: relative; display: grid; gap: 6px; margin: 0; padding: 18px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); font-size: 14px; line-height: 1.5; }
-  .mcp-diagram li + li::before { content: '⇄'; position: absolute; top: 50%; left: -24px; translate: 0 -50%; font: 16px/1 var(--font-utility); color: var(--signal); }
-  .mcp-diagram li:nth-child(2) { border-color: var(--signal); }
-  .mcp-diagram strong { font-family: var(--font-display); font-size: 16px; }
-  .mcp-diagram span { color: var(--slate); }
-  .mcp-diagram figcaption { margin-top: 12px; font-size: 13px; line-height: 1.6; color: var(--slate); }
+  .mcp-diagram ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin: 0; padding: 0; list-style: none; font-size: 14px; line-height: 1.5; }
+  .mcp-diagram li { position: relative; display: flex; flex-direction: column; gap: 4px; margin: 0 !important; padding: 20px; border: 1px solid var(--rule); background: var(--paper-raised); }
+  .mcp-diagram li + li::before { content: '⇄'; position: absolute; top: 50%; left: -30px; translate: 0 -50%; font: 16px/1 var(--font-mono); color: var(--emerald); }
+  .mcp-diagram li.server { border-color: var(--forest); background: var(--forest); color: var(--forest-ink); }
+  .mcp-diagram strong { font-size: 24px; font-weight: 400; line-height: 1.1; color: var(--ink); }
+  .mcp-diagram li.server strong { color: var(--forest-ink); }
+  .mcp-diagram span { color: var(--muted); }
+  .mcp-diagram li.server span { color: var(--mint); }
+
+  .block-tabs { margin-top: 24px !important; }
+  .tablist { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--ink); }
+  .tablist button {
+    flex: 1 1 180px;
+    min-height: 76px;
+    margin-bottom: -1px;
+    padding: 14px 18px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--ink);
+    text-align: left;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 160ms ease, color 160ms ease;
+  }
+  .tablist button:hover { background: var(--paper-sunk); }
+  .tablist button[aria-selected='true'] { border-color: var(--forest); background: var(--forest); color: var(--forest-ink); }
+  .tab-label { display: block; font-size: 26px; line-height: 1.1; }
+  .tab-who { display: block; margin-top: 4px; font: 400 12px/1.5 var(--font-mono); }
+  .tab-panel { margin-top: 32px; }
+  .tab-panel > * + * { margin-top: 16px; }
+  .is-tabs .tab-panel { margin-top: 0; padding-top: 24px; }
+  .is-tabs .panel-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .panel-title { font-size: 28px; }
+  .in-server { font: 400 13px/1.6 var(--font-mono); color: var(--muted); }
+  .in-server span { color: var(--emerald); }
+
+  .transports { display: flex; flex-wrap: wrap; gap: 12px; font-size: 15px; line-height: 1.65; }
+  .transports > div { flex: 1 1 260px; padding: 24px; border: 1px solid var(--rule); background: var(--paper-raised); }
+  .transport-kind { font: 400 12px/1.5 var(--font-mono); color: var(--emerald); }
+  .transport-name { margin-top: 6px; font-size: 28px; line-height: 1.1; color: var(--ink); }
+  .transports p + p:last-child { margin-top: 8px; }
+
+  .repo-callout { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; margin-top: 40px !important; padding: 28px; background: var(--forest); color: var(--forest-ink); }
+  .repo-callout p { flex: 1 1 280px; font-size: 26px; line-height: 1.2; }
+
   @media (max-width: 640px) {
-    .mcp-diagram ol { grid-template-columns: 1fr; gap: 28px; }
-    .mcp-diagram li + li::before { content: '⇅'; top: -23px; left: 18px; translate: 0 0; }
+    .mcp-diagram ol { grid-template-columns: 1fr; gap: 32px; }
+    .mcp-diagram li + li::before { content: '⇅'; top: -24px; left: 20px; translate: 0 0; }
   }
 </style>

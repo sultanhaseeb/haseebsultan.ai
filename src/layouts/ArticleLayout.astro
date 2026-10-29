@@ -1,51 +1,233 @@
 ---
-// Shared frame for articles and lessons: header with "Read this with AI" links, lead image, body, author box, and read next.
+// Shared frame for articles and lessons.
+// Articles: breadcrumb, serif title, deck, author row, "Read this with AI", a sticky "In this article" list beside
+// a 720px reading column that opens with a drop cap, then the author card, two "Read next" posts and the newsletter.
+// Lessons: a forest hero with the lesson number, progress through the series and the code link; a learning
+// objectives box (the `objectives` slot, as <li> items); a numbered step rail pointing at the "Step 0X" headings;
+// then the previous and next lessons and the newsletter.
 import { Image, getImage } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import ArticleEnd from '../components/ArticleEnd.astro';
+import Accent from '../components/Accent.astro';
 import AskAI from '../components/AskAI.astro';
-import { type Post, isLesson, postLabel } from '../data/blog';
+import AuthorCard from '../components/AuthorCard.astro';
+import ArticleEnd from '../components/ArticleEnd.astro';
+import portrait from '../assets/images/haseeb.jpg';
+import { site } from '../data/site';
+import { profile } from '../data/resume';
+import { type Post, isLesson, lessonNumber, lessonNeighbours } from '../data/blog';
 import { formatDate } from '../utils/date';
 interface Props {
   post: Post;
+  // The sections, for the contents list (articles) or the step rail (lessons). Ids match the headings.
+  toc?: { id: string; label: string }[];
 }
-const { post } = Astro.props;
+const { post, toc = [] } = Astro.props;
 const lesson = isLesson(post);
+const { number, total } = lessonNeighbours(post);
 // Social previews get a 1200px JPEG of the lead image; posts without one use the site card.
 const socialImage = post.image ? await getImage({ src: post.image, width: 1200, format: 'jpg' }) : undefined;
+const city = profile.location.split(',')[0];
+const topics = [post.category, ...(post.tags ?? [])].join(' · ');
 ---
 <BaseLayout title={`${post.title} | Haseeb Sultan`} description={post.description} image={socialImage?.src} article={{ published: post.published, headline: post.title }}>
   <Header />
-  <main id="main" class="shell article-page">
+  <main id="main">
     <article aria-labelledby="article-title">
-      <header class="article-heading reading-column">
-        <a href={lesson ? '/learning/' : '/blog/'} class="article-back"><span aria-hidden="true">←</span> {lesson ? 'All lessons' : 'All posts'}</a>
-        <p class="eyebrow">{postLabel(post)}</p>
-        <h1 id="article-title">{post.title}</h1>
-        <p class="article-deck">{post.description}</p>
-        <p class="article-byline">Haseeb Sultan <span aria-hidden="true">·</span> <time datetime={post.published}>{formatDate(post.published)}</time></p>
-        <AskAI post={post} />
-      </header>
+      {lesson ? (
+        <header class="band lesson-hero">
+          <div class="shell lesson-hero-inner">
+            <div class="kicker-strip on-forest">
+              <span><a href="/learning/">The lesson series</a> / <span class="here">Lesson {lessonNumber(post)}</span></span>
+              <span>{topics}</span>
+              <time datetime={post.published}>{formatDate(post.published)}</time>
+            </div>
+            <div class="lesson-title-row">
+              <span class="lesson-numeral" aria-hidden="true">{lessonNumber(post)}</span>
+              <div class="lesson-title">
+                <h1 id="article-title"><Accent text={post.title} accent={post.accent} /></h1>
+                <p class="deck">{post.description}</p>
+              </div>
+            </div>
+            <div class="lesson-meta">
+              <p class="byline">
+                <Image src={portrait} alt="" width={80} class="avatar" />
+                <span><strong>{site.name}</strong><span class="role"> · {site.title}</span></span>
+              </p>
+              <p class="progress">
+                <span>Lesson {number} of {total}</span>
+                <span class="progress-bar" aria-hidden="true"><span style={`width: ${(number / total) * 100}%`}></span></span>
+              </p>
+              {post.repo && <a href={post.repo.href} class="btn btn-forest-outline repo" target="_blank" rel="noopener noreferrer">Code on GitHub: {post.repo.name} <span aria-hidden="true">↗</span></a>}
+            </div>
+            <div class="hero-ai"><AskAI post={post} /></div>
+          </div>
+        </header>
+      ) : (
+        <header class="post-head shell">
+          <p class="crumb"><a href="/blog/">Blog</a> / <span class="here">{post.category}</span></p>
+          <h1 id="article-title"><Accent text={post.title} accent={post.accent} /></h1>
+          <p class="deck">{post.description}</p>
+          <div class="byline-row">
+            <Image src={portrait} alt="" width={88} class="avatar" />
+            <div class="who"><p class="name">{site.name}</p><p class="role">{site.title}, {city}</p></div>
+            <p class="meta">Article · <time datetime={post.published}>{formatDate(post.published)}</time></p>
+          </div>
+          <div class="head-ai"><AskAI post={post} /></div>
+        </header>
+      )}
+
       {post.image && (
-        <figure class="article-cover">
+        <figure class="post-cover shell">
           <Image
             src={post.image}
             alt={post.imageAlt ?? ''}
             widths={[720, 960, 1440, 1920]}
-            sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1040px) calc(100vw - 80px), 960px"
+            sizes="(max-width: 1240px) calc(100vw - 40px), 1144px"
             loading="eager"
             fetchpriority="high"
           />
           {post.imageCaption && <figcaption>{post.imageCaption}</figcaption>}
         </figure>
       )}
-      <div class="article-body reading-column">
-        <slot />
+
+      {lesson && Astro.slots.has('objectives') && (
+        <section class="objectives-wrap shell" aria-labelledby="objectives-title">
+          <div class="objectives">
+            <div class="objectives-head">
+              <p class="mono-label emerald">Learning objectives</p>
+              <h2 id="objectives-title" class="serif">By the end of this lesson, you will be able to:</h2>
+            </div>
+            <ol class="objectives-list"><slot name="objectives" /></ol>
+          </div>
+        </section>
+      )}
+
+      <div class:list={['post-body shell', { lesson }]}>
+        {toc.length > 0 && (
+          <nav class="toc" aria-label={lesson ? 'Steps in this lesson' : 'In this article'}>
+            <p class="mono-label">{lesson ? 'In this lesson' : 'In this article'}</p>
+            <ol>
+              {toc.map((item, index) => (
+                <li><a href={`#${item.id}`}>{lesson && <span class="toc-no">{String(index + 1).padStart(2, '0')}</span>}{item.label}</a></li>
+              ))}
+            </ol>
+          </nav>
+        )}
+        <div class="article-body">
+          <slot />
+          {!lesson && <AuthorCard post={post} />}
+        </div>
       </div>
     </article>
     <ArticleEnd post={post} />
   </main>
   <Footer />
 </BaseLayout>
+
+<script>
+  // Marks the contents entry for the section being read: the last heading that has passed the top third of the
+  // screen. Without JavaScript the list still works as plain links.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a[href^="#"]')];
+  const targets = links.map(link => document.getElementById(decodeURIComponent(link.hash.slice(1))));
+  if (links.length && targets.every(Boolean)) {
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const line = innerHeight * 0.33;
+      let current = -1;
+      targets.forEach((target, index) => { if (target!.getBoundingClientRect().top <= line) current = index; });
+      links.forEach((link, index) => link.toggleAttribute('aria-current', index === current));
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  }
+</script>
+
+<style>
+  /* Article header */
+  .post-head { padding-top: clamp(40px, 6vw, 80px); }
+  .crumb { font: 400 12px/1.5 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .crumb a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+  .crumb .here { color: var(--emerald); }
+  .post-head h1 { margin-top: 24px; max-width: 18ch; font-size: clamp(48px, 6.6vw, 96px); line-height: .98; }
+  .post-head .deck { margin-top: 28px; max-width: 58ch; font-size: 20px; line-height: 1.6; color: var(--body); }
+  .byline-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 36px; padding-block: 20px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
+  .byline-row :global(.avatar) { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; }
+  .who { flex: 1 1 200px; }
+  .name { font-size: 15px; font-weight: 600; }
+  .role { margin-top: 2px; font-size: 13px; color: var(--muted); }
+  .head-ai { margin-top: 20px; }
+
+  .post-cover { margin-top: 48px; }
+  .post-cover :global(img) { display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: var(--placeholder); }
+  .post-cover figcaption { margin-top: 12px; font-size: 13px; line-height: 1.6; color: var(--muted); }
+
+  /* Lesson hero */
+  .lesson-hero-inner { padding-block: clamp(40px, 6vw, 80px) clamp(48px, 6vw, 72px); }
+  .kicker-strip.on-forest { border-bottom-color: rgba(239, 235, 226, .3); color: var(--forest-muted); }
+  .kicker-strip.on-forest .here { color: var(--mint); }
+  .lesson-title-row { display: flex; flex-wrap: wrap; align-items: end; gap: 32px 64px; margin-top: 40px; }
+  .lesson-numeral { flex: 0 0 auto; font-family: var(--font-serif); font-size: clamp(140px, 18vw, 260px); line-height: .72; color: var(--mint); }
+  .lesson-title { flex: 1 1 520px; min-width: 0; }
+  .lesson-title h1 { font-size: clamp(44px, 5.6vw, 84px); line-height: .98; letter-spacing: -.02em; }
+  .lesson-title .deck { margin-top: 24px; max-width: 58ch; font-size: 19px; line-height: 1.6; color: var(--forest-body); }
+  .lesson-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; margin-top: 48px; }
+  .byline { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+  .byline :global(.avatar) { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; }
+  .byline strong { font-weight: 600; }
+  .byline .role { color: var(--forest-muted); font-size: 14px; }
+  .progress { flex: 1 1 240px; display: flex; align-items: center; gap: 12px; font: 400 12px/1.5 var(--font-mono); color: var(--forest-muted); }
+  .progress-bar { position: relative; flex: 1; max-width: 220px; height: 3px; background: var(--forest-rule); }
+  .progress-bar span { position: absolute; inset: 0 auto 0 0; background: var(--mint); }
+  .repo { min-height: 46px; padding: 0 20px; font-size: 14px; }
+  .hero-ai { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--forest-rule); }
+
+  /* Learning objectives */
+  .objectives-wrap { padding-top: 64px; }
+  .objectives { display: flex; flex-wrap: wrap; gap: 24px 72px; padding: clamp(28px, 4vw, 44px); border: 1px solid var(--rule); background: var(--paper-raised); }
+  .objectives-head { flex: 1 1 240px; }
+  .emerald { color: var(--emerald); }
+  .objectives-head h2 { margin-top: 12px; font-size: 32px; line-height: 1.1; }
+  .objectives-list { flex: 2 1 520px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 18px 32px; margin: 0; padding: 0; list-style: none; font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+  .objectives-list :global(li) { position: relative; padding-left: 34px; }
+  .objectives-list :global(li)::before { content: '✓'; position: absolute; top: 1px; left: 0; display: grid; place-items: center; width: 22px; height: 22px; border: 1.5px solid var(--emerald); font-size: 12px; color: var(--emerald); }
+  .objectives-list :global(strong) { color: var(--ink); font-weight: 600; }
+
+  /* Body with the contents list or step rail on the left */
+  .post-body { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 40px 72px; padding-top: 56px; }
+  .post-body.lesson { padding-top: 64px; }
+  .toc { flex: 1 1 220px; max-width: 260px; }
+  .lesson .toc { max-width: 270px; }
+  .toc ol { margin: 14px 0 0; padding: 0; list-style: none; border-left: 1px solid var(--rule); font-size: 14px; }
+  .toc a { display: block; margin-left: -1px; padding: 8px 0 8px 16px; border-left: 2px solid transparent; color: var(--muted); }
+  .toc a:hover { color: var(--ink); }
+  .toc a[aria-current] { border-left-color: var(--emerald); color: var(--ink); font-weight: 500; }
+  .lesson .toc ol { margin-top: 16px; border-left: 0; }
+  .lesson .toc a { display: flex; gap: 12px; margin: 0; padding: 9px 0; border: 0; }
+  .toc-no { font-family: var(--font-mono); color: inherit; }
+  .lesson .toc a[aria-current] .toc-no { color: var(--emerald); }
+  .post-body .article-body { flex: 999 1 560px; max-width: 720px; }
+  .post-body.lesson .article-body { max-width: 760px; }
+  /* The opening paragraph of an article gets the drop cap. */
+  .post-body:not(.lesson) .article-body > :global(p:first-child)::first-letter {
+    float: left;
+    margin: 8px 12px 0 0;
+    font-family: var(--font-serif);
+    font-size: 88px;
+    line-height: .8;
+    color: var(--emerald);
+  }
+
+  @media (min-width: 960px) {
+    .toc { position: sticky; top: calc(var(--header-h) + 24px); max-height: calc(100vh - var(--header-h) - 48px); overflow-y: auto; }
+  }
+  @media (max-width: 959px) {
+    .toc { max-width: none; flex-basis: 100%; }
+  }
+  @media (max-width: 767px) {
+    .post-head .deck { font-size: 18px; }
+    .lesson-title .deck { font-size: 17px; }
+  }
+</style>

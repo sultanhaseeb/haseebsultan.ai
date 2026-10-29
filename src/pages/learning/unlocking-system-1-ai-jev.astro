@@ -1,38 +1,32 @@
 ---
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import StepHead from '../../components/StepHead.astro';
 import { jevLesson as post } from '../../data/blog';
+
+const toc = [
+  { id: 'traditional-llm-bottleneck', label: 'The bottleneck of traditional LLMs' },
+  { id: 'how-jev-thinks', label: 'How Jev thinks' },
+  { id: 'architectural-patterns', label: 'Architectural patterns' },
+  { id: 'limitations', label: 'Limitations' },
+  { id: 'summary', label: 'Key takeaways' },
+];
 ---
-<ArticleLayout post={post}>
-  <section aria-labelledby="introduction">
-    <h2 id="introduction">Introduction</h2>
+<ArticleLayout post={post} toc={toc}>
+  <Fragment slot="objectives">
+    <li><strong>Distinguish</strong> between System 1 (fast and intuitive) and System 2 (slow and deliberative) AI models.</li>
+    <li><strong>Explain</strong> how Reinforcement Learning for Calibrated Decisions (RLCD) produces reliable probability scores.</li>
+    <li><strong>Identify</strong> Jev’s three question types and how they are structured.</li>
+    <li><strong>Leverage</strong> design patterns like speculative fan-out and confidence-gated routing to build highly efficient workflows.</li>
+    <li><strong>Analyze</strong> the architectural and pricing differences that make Jev incredibly cheap and fast compared with traditional LLMs.</li>
+  </Fragment>
+
+  <section>
     <p>What if you could run an AI model that makes thousands of split-second decisions for your application every day, costs next to nothing, and completely eliminates the slow, expensive bottleneck of text generation?</p>
     <p>In this lesson, you will learn how <strong>Jev</strong>, a specialized model designed by Typesafe AI, shifts the paradigm of how application code interacts with artificial intelligence.</p>
   </section>
 
-  <aside class="learning-objectives" aria-labelledby="learning-objectives">
-    <h2 id="learning-objectives">Learning Objectives</h2>
-    <ul>
-      <li><strong>Distinguish</strong> between System 1 (fast and intuitive) and System 2 (slow and deliberative) AI models.</li>
-      <li><strong>Explain</strong> how Reinforcement Learning for Calibrated Decisions (RLCD) produces reliable probability scores.</li>
-      <li><strong>Identify</strong> Jev’s three question types and how they are structured.</li>
-      <li><strong>Leverage</strong> design patterns like speculative fan-out and confidence-gated routing to build highly efficient workflows.</li>
-      <li><strong>Analyze</strong> the architectural and pricing differences that make Jev incredibly cheap and fast compared with traditional LLMs.</li>
-    </ul>
-  </aside>
-
-  <nav class="article-contents" aria-label="In this article">
-    <p>In this article</p>
-    <ol>
-      <li><a href="#traditional-llm-bottleneck">The bottleneck of traditional LLMs</a></li>
-      <li><a href="#how-jev-thinks">How Jev thinks</a></li>
-      <li><a href="#architectural-patterns">Architectural patterns</a></li>
-      <li><a href="#limitations">Limitations</a></li>
-      <li><a href="#summary">Key takeaways</a></li>
-    </ol>
-  </nav>
-
   <section aria-labelledby="traditional-llm-bottleneck">
-    <h2 id="traditional-llm-bottleneck">The Bottleneck of Traditional LLMs</h2>
+    <StepHead id="traditional-llm-bottleneck" step={1}>The Bottleneck of Traditional LLMs</StepHead>
     <p>Most mainstream large language models (LLMs) today behave like <strong>System 2</strong> thinkers. Based on the cognitive science concepts popularized by Daniel Kahneman, System 2 thinking is slow, deliberate, and effortful, like calculating 17 × 24 in your head. Traditional LLMs are designed to generate conversational text for human consumption, which makes them slow, expensive, and difficult for application code to parse.</p>
     <p>If you try to use a standard LLM to categorize 2,000 support tickets, it might return a wordy paragraph instead of a simple label. Even if you force it into a strict JSON schema to get a single word like “billing,” you face another hurdle: <strong>unreliable confidence scores</strong>.</p>
     <p>Traditional models are trained using <strong>Reinforcement Learning from Human Feedback (RLHF)</strong>. This tuning process rewards answers that human testers <em>prefer</em>, which does not necessarily align with mathematical accuracy. Consequently, if you ask a standard LLM how sure it is, its confidence score is essentially a guess.</p>
@@ -40,7 +34,7 @@ import { jevLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="how-jev-thinks">
-    <h2 id="how-jev-thinks">How Jev Thinks: Inputs, Outputs, and Question Types</h2>
+    <StepHead id="how-jev-thinks" step={2}>How Jev Thinks: Inputs, Outputs, and Question Types</StepHead>
     <p>Instead of sending conversational prompts, your application interacts with Jev by passing it two specific structures:</p>
     <ol>
       <li><strong>The State:</strong> The raw text or data that needs to be judged, such as a customer support ticket.</li>
@@ -56,7 +50,7 @@ import { jevLesson as post } from '../../data/blog';
   </section>
 
   <section aria-labelledby="architectural-patterns">
-    <h2 id="architectural-patterns">Architectural Patterns: Speculative Fan-Out and Gated Routing</h2>
+    <StepHead id="architectural-patterns" step={3}>Architectural Patterns: Speculative Fan-Out and Gated Routing</StepHead>
     <p>Traditional LLMs charge a premium for output tokens because text generation is the most resource-intensive part of running AI infrastructure. Generating text requires the GPU to repeatedly load its entire weight library into memory for every single token produced, creating a massive memory-bandwidth bottleneck.</p>
     <p>Because Jev only outputs numbers and probabilities, <strong>its output tokens are completely free</strong>. Its input cost is also incredibly low, sitting at about 4 cents per million tokens ($42 per billion).</p>
     <p>This unique pricing and architecture enables developers to leverage highly efficient patterns:</p>
@@ -66,20 +60,20 @@ import { jevLesson as post } from '../../data/blog';
     </ul>
   </section>
 
-  <aside class="limitations" aria-labelledby="limitations">
-    <h2 id="limitations">A Note on Limitations</h2>
+  <aside class="caution" aria-labelledby="limitations">
+    <p class="caution-label">Step 04 · Caution</p>
+    <h2 id="limitations">A note on limitations</h2>
     <p>Jev is not a general-purpose model. It reads queries very literally, cannot perform arithmetic or counting, and treats dates as plain text rather than points in time. Keep these algorithmic tasks inside your application code.</p>
   </aside>
 
   <section aria-labelledby="summary">
-    <h2 id="summary">Summary</h2>
-    <h3>Key Takeaways</h3>
-    <ul>
-      <li><strong>System 1 vs. System 2:</strong> Traditional LLMs are slow, conversational System 2 processors. Jev is a fast, numeric System 1 processor designed specifically to be called by application code.</li>
-      <li><strong>RLCD vs. RLHF:</strong> Jev is trained via RLCD (Reinforcement Learning for Calibrated Decisions), ensuring its probability outputs are mathematically aligned with actual accuracy, unlike human-preferred RLHF models.</li>
-      <li><strong>Zero-Cost Outputs:</strong> Because Jev returns numbers rather than generating text, there is no text-generation bottleneck, making output tokens entirely free.</li>
-      <li><strong>Advanced Routing Patterns:</strong> Developers can use speculative fan-out to ask multiple questions in a single pass and build confidence-gated routing systems to automate high-volume workflows safely.</li>
-      <li><strong>Explicit Limitations:</strong> Jev excels at high-volume micro-judgments of text but cannot count, do math, or process dates chronologically.</li>
-    </ul>
+    <StepHead id="summary" step={5}>Key takeaways</StepHead>
+    <ol class="numbered">
+      <li><span><strong>System 1 vs. System 2:</strong> Traditional LLMs are slow, conversational System 2 processors. Jev is a fast, numeric System 1 processor designed specifically to be called by application code.</span></li>
+      <li><span><strong>RLCD vs. RLHF:</strong> Jev is trained via RLCD (Reinforcement Learning for Calibrated Decisions), ensuring its probability outputs are mathematically aligned with actual accuracy, unlike human-preferred RLHF models.</span></li>
+      <li><span><strong>Zero-Cost Outputs:</strong> Because Jev returns numbers rather than generating text, there is no text-generation bottleneck, making output tokens entirely free.</span></li>
+      <li><span><strong>Advanced Routing Patterns:</strong> Developers can use speculative fan-out to ask multiple questions in a single pass and build confidence-gated routing systems to automate high-volume workflows safely.</span></li>
+      <li><span><strong>Explicit Limitations:</strong> Jev excels at high-volume micro-judgments of text but cannot count, do math, or process dates chronologically.</span></li>
+    </ol>
   </section>
 </ArticleLayout>

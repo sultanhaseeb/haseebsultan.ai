@@ -2,117 +2,76 @@
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
 import portrait from '../../assets/images/haseeb.jpg';
+import { site } from '../../data/site';
 import { profile } from '../../data/resume';
 
 // Career start (June 2019). Counted at build time, so the figure rises after each anniversary once the site is rebuilt.
 const careerStart = new Date(Date.UTC(2019, 5, 1));
 const now = new Date();
 const yearsOfExperience = now.getUTCFullYear() - careerStart.getUTCFullYear() - (now.getUTCMonth() < careerStart.getUTCMonth() ? 1 : 0);
+
+const facts = [
+  { label: 'Experience', value: `${yearsOfExperience}+ years`, big: true },
+  { label: 'Clouds', value: 'Azure, AWS, Google Cloud' },
+  { label: 'Certified', value: 'Kubernetes Administrator (CKA), Azure DevOps Engineer Expert' },
+  { label: 'Focus now', value: 'LLMOps, agent infrastructure, AI security' },
+];
 ---
 <section class="home-hero shell" aria-labelledby="hero-title">
-  <div class="copy">
-    <p class="kicker"><span>AI Platform Engineer</span><span aria-hidden="true">/</span><span>{profile.location}</span></p>
-    <h1 id="hero-title">I build the infrastructure AI runs on.</h1>
-    <p class="lede">Since 2019 I've built cloud and Kubernetes platforms across Azure, AWS, and Google Cloud. Now I focus on what AI systems need underneath: LLMOps, agent infrastructure, and AI security.</p>
-    <div class="actions">
-      <a href="/projects/" class="btn btn-primary">See selected work <Icon name="arrow" size={17} /></a>
-      <a href="#contact" class="btn btn-quiet">Get in touch</a>
-    </div>
-    <dl class="facts">
-      <div><dt>Certified</dt><dd>Kubernetes Administrator (CKA)<br />Azure DevOps Engineer Expert</dd></div>
-      <div><dt>Clouds</dt><dd>Azure, AWS,<br />Google Cloud</dd></div>
-      <div><dt>Experience</dt><dd class="year">{yearsOfExperience}+ years</dd></div>
-    </dl>
+  <div class="kicker-strip">
+    <span>{site.title}</span>
+    <span>{profile.location}</span>
+    <span>Since {careerStart.getUTCFullYear()}</span>
   </div>
-  <div class="photo">
-    <Image
-      src={portrait}
-      alt="Haseeb Sultan smiling outdoors, wearing a navy blazer and white shirt"
-      widths={[144, 340, 680]}
-      sizes="(max-width: 900px) 72px, 340px"
-      loading="eager"
-      fetchpriority="high"
-    />
+  <div class="hero-main">
+    <div class="copy">
+      <h1 id="hero-title">I build the infrastructure <em>AI runs on.</em></h1>
+      <p class="lede">Since 2019 I've built cloud and Kubernetes platforms across Azure, AWS, and Google Cloud. Now I focus on what AI systems need underneath: LLMOps, agent infrastructure, and AI security.</p>
+      <div class="btn-row actions">
+        <a href="/projects/" class="btn btn-primary">See selected work <Icon name="arrow" size={17} /></a>
+        <a href="#contact" class="btn btn-secondary">Get in touch</a>
+      </div>
+    </div>
+    <figure class="photo">
+      <Image
+        src={portrait}
+        alt="Haseeb Sultan smiling outdoors, wearing a navy blazer and white shirt"
+        widths={[360, 400, 800]}
+        sizes="(max-width: 440px) calc(100vw - 40px), 400px"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption>{site.name}, Dubai</figcaption>
+    </figure>
+  </div>
+  <div class="ruled rows facts">
+    <dl class="ruled-grid">
+      {facts.map(fact => (
+        <div>
+          <dt class="mono-label">{fact.label}</dt>
+          <dd class:list={{ big: fact.big }}>{fact.value}</dd>
+        </div>
+      ))}
+    </dl>
   </div>
 </section>
 
 <style>
-  .home-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
-    gap: clamp(40px, 7vw, 96px);
-    align-items: end;
-    padding-block: clamp(48px, 7vw, 88px) 0;
-  }
-  .kicker {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    font: 500 12px/1.5 var(--font-utility);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--slate);
-  }
-  .kicker span:first-child { color: var(--signal); }
-  h1 {
-    margin-top: 22px;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(42px, 6.2vw, 76px);
-    line-height: 1.02;
-    letter-spacing: -.035em;
-    text-wrap: balance;
-    max-width: 13ch;
-  }
-  .lede {
-    margin-top: 26px;
-    max-width: 54ch;
-    font-size: 18px;
-    line-height: 1.65;
-    color: var(--slate);
-  }
-  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .home-hero { padding-top: clamp(48px, 7vw, 96px); }
+  .hero-main { display: flex; flex-wrap: wrap; align-items: stretch; gap: 48px 72px; margin-top: 48px; }
+  .copy { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; }
+  .lede { margin-top: 36px; max-width: 52ch; font-size: 19px; line-height: 1.65; color: var(--body); }
+  .actions { gap: 14px; margin-top: 36px; }
+  .photo { flex: 1 1 300px; max-width: 400px; }
+  .photo :global(img) { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; background: var(--placeholder); }
+  .photo figcaption { margin-top: 12px; font: 400 12px/1.5 var(--font-mono); color: var(--muted); }
 
-  .facts {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr .8fr;
-    gap: 24px;
-    margin: 48px 0 0;
-    padding-top: 22px;
-    border-top: 1px solid var(--rule);
-  }
-  .facts dt {
-    font: 500 11px/1.5 var(--font-utility);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--slate);
-  }
-  .facts dd { margin: 8px 0 0; font-size: 14px; line-height: 1.55; font-weight: 500; }
-  .facts .year { font-family: var(--font-display); font-size: 22px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .facts { margin-top: 64px; }
+  .facts .ruled-grid > div { padding-block: 24px; }
+  .facts dd { margin-top: 10px; font-size: 15px; line-height: 1.55; font-weight: 500; }
+  .facts dd.big { margin-top: 8px; font-family: var(--font-serif); font-size: 40px; font-weight: 400; line-height: 1; }
 
-  /* Pushes the portrait level with the facts row, where the caption used to sit. */
-  .photo { margin-bottom: 30px; }
-  .photo img {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    object-position: 50% 30%;
-    border-radius: 2px;
-    background: var(--rule);
-  }
-
-  /* Phones and tablets: the headline comes first; the portrait shrinks to an avatar above it. */
-  @media (max-width: 900px) {
-    .home-hero { grid-template-columns: 1fr; align-items: start; gap: 20px; }
-    .photo { order: -1; width: 72px; margin-bottom: 0; }
-    .photo img { aspect-ratio: 1 / 1; border-radius: 50%; }
-  }
   @media (max-width: 560px) {
     .lede { font-size: 17px; }
-    .facts { grid-template-columns: 1fr 1fr; }
-    .facts > div:first-child { grid-column: 1 / -1; }
   }
 </style>
