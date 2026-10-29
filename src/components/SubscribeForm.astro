@@ -1,6 +1,6 @@
 ---
 // Email signup. A plain form that posts straight to Kit (no script needed to subscribe).
-// Kit then sends a confirmation email and redirects back to /subscribe/check-your-inbox/.
+// Kit adds the subscriber straight away (no confirmation email) and redirects to /subscribe/confirmed/.
 // Tones: "forest" is the newsletter box, "night" sits on the dark footer, "light" is the pop-up.
 // The `.subscribe-form` class and data-location are what the pop-up and Umami listen for.
 import { newsletter } from '../data/site';
@@ -39,7 +39,7 @@ const inputId = `${id}-email`;
     </div>
     <form action={newsletter.action} method="post" class="subscribe-form" aria-labelledby={`${id}-title`} data-location={id.replace(/^subscribe-/, '')}>
       <label for={inputId} class="sr-only">Email address</label>
-      <input id={inputId} type="email" name="email_address" required autocomplete="email" placeholder="you@company.com" />
+      <input id={inputId} type="email" name="email_address" required autocomplete="email" placeholder="Your email address" />
       <button type="submit">Subscribe <span aria-hidden="true">→</span></button>
     </form>
   </div>

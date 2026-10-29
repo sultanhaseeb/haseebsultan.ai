@@ -12,7 +12,8 @@ export const site = {
 };
 
 // Email signup through Kit. formId is the number in the form's Kit URL; the forms stay hidden until it is set.
-// In Kit, the form redirects to /subscribe/check-your-inbox/ after signup and to /subscribe/confirmed/ after confirming.
+// Single opt-in: Kit adds subscribers straight away (no confirmation email) and redirects to /subscribe/confirmed/.
+// /subscribe/check-your-inbox/ is only needed if the confirmation email is turned back on.
 const newsletterFormId = '10101370';
 export const newsletter = {
   formId: newsletterFormId,

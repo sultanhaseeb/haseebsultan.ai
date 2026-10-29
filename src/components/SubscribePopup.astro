@@ -3,6 +3,7 @@
 // halfway down the page or spent 30 seconds on it, and stays away for 30 days once closed.
 // The browser remembers who has subscribed (any signup form on this site, a visit to a /subscribe/ page,
 // or a link from a Kit email), because a static site cannot ask Kit who is on the list.
+// To check it in a browser that already remembers you, add ?popup to any page address: it opens straight away.
 import SubscribeForm from './SubscribeForm.astro';
 import { newsletter } from '../data/site';
 interface Props {
@@ -65,7 +66,14 @@ const { enabled = true } = Astro.props;
   }
 
   const dialog = document.querySelector<HTMLDialogElement>('.subscribe-popup');
-  const saved = read();
+  const forced = new URLSearchParams(location.search).has('popup');
+  if (dialog && forced && typeof dialog.showModal === 'function') {
+    dialog.showModal();
+    dialog.focus();
+    dialog.querySelectorAll('[data-popup-close]').forEach(button => button.addEventListener('click', () => dialog.close()));
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  }
+  const saved = forced ? undefined : read();
   const snoozed = saved?.state === 'dismissed' && Date.now() - saved.at < SNOOZE_DAYS * 86_400_000;
 
   if (dialog && typeof dialog.showModal === 'function' && saved !== undefined && saved?.state !== 'subscribed' && !snoozed) {
