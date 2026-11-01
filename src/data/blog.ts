@@ -96,6 +96,16 @@ export const mcpLesson: Post = {
   published: '2026-10-26',
 };
 
+export const conceptsLesson: Post = {
+  title: 'The AI Concepts Every Engineer Should Know',
+  coverTitle: 'AI Concepts',
+  description: 'A living guide to the core ideas of AI engineering: how models think, how we talk to them, how agents act, and how we keep it all safe.',
+  category: 'AI Fundamentals',
+  accent: 'Should Know',
+  href: '/learning/ai-concepts/',
+  published: '2026-11-01',
+};
+
 // Articles: my own views on AI, what it is, and where it is heading. Pages live in src/pages/blog/.
 // Posts published on the same day are listed in this order, so put the newest first among them.
 export const articles = [
@@ -110,6 +120,7 @@ export const lessons = [
   specDrivenLesson,
   jevLesson,
   mcpLesson,
+  conceptsLesson,
 ];
 
 // Every article and lesson, newest first.

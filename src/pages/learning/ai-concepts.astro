@@ -1,0 +1,518 @@
+---
+// Lesson 04: a living guide to the core AI concepts. Unlike the step-by-step lessons it has its own frame:
+// a progress map in the hero, a sticky bar of parts, every concept explained the same three ways with a
+// "Got it" toggle, a cheat sheet with a quiz mode, then the previous lesson and the newsletter.
+// The concepts live in src/data/ai-concepts.ts. Progress is kept in this browser only (localStorage).
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import AskAI from '../../components/AskAI.astro';
+import SubscribeForm from '../../components/SubscribeForm.astro';
+import portrait from '../../assets/images/haseeb.jpg';
+import { site } from '../../data/site';
+import { conceptsLesson as post, lessonNumber, lessonNeighbours } from '../../data/blog';
+import { conceptParts } from '../../data/ai-concepts';
+import { formatDate } from '../../utils/date';
+
+const pad = (n: number) => String(n).padStart(2, '0');
+// Progress is stored by concept title, so adding a concept later does not shift what readers have ticked.
+const slug = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+let count = 0;
+const parts = conceptParts.map((part, index) => {
+  const concepts = part.concepts.map(concept => {
+    count += 1;
+    return { ...concept, n: count, num: pad(count), key: slug(concept.title) };
+  });
+  const first = concepts[0].n;
+  const last = concepts[concepts.length - 1].n;
+  return { ...part, no: index + 1, concepts, range: concepts.length > 1 ? `Concepts ${first}–${last}` : `Concept ${first}` };
+});
+const total = count;
+const concepts = parts.flatMap(part => part.concepts);
+// The protocol diagram sits at the top of this part.
+const protocolsPart = 'Agent Protocols';
+
+const { previous } = lessonNeighbours(post);
+const shareHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(new URL(post.href, Astro.site).href)}`;
+---
+<BaseLayout title={`${post.title} | Haseeb Sultan`} description={post.description} article={{ published: post.published, headline: post.title }}>
+  <Header />
+  <main id="main">
+    <article aria-labelledby="article-title">
+      <header id="top" class="concepts-hero shell">
+        <div class="kicker-strip">
+          <span><a href="/learning/">The lesson series</a> / <span class="here">Lesson {lessonNumber(post)}</span></span>
+          <span>AI fundamentals · A living guide</span>
+          <time datetime={post.published}>{formatDate(post.published)}</time>
+        </div>
+
+        <div class="hero-main">
+          <div class="hero-copy">
+            <h1 id="article-title">The AI concepts every engineer <em>should know.</em></h1>
+            <p class="lede">AI moves fast, but the core vocabulary is small. These concepts cover how models think, how we talk to them, how agents act, and how we keep it all safe. The guide grows as AI does: new concepts are added as they start to matter.</p>
+            <div class="hero-actions">
+              <a href="#part-1" class="btn btn-primary">Start with Part 1 <span aria-hidden="true">↓</span></a>
+              <a href="#cheatsheet" class="btn btn-secondary">Jump to the cheat sheet</a>
+              <span class="byline"><Image src={portrait} alt="" width={64} class="avatar" />By {site.name}</span>
+            </div>
+            <div class="hero-ai"><AskAI post={post} /></div>
+          </div>
+
+          <aside class="map" aria-labelledby="map-title">
+            <p id="map-title" class="map-label">Your progress map</p>
+            <p class="map-count serif"><span class="on" data-done-count>0</span> of {total} understood</p>
+            <ol class="map-parts">
+              {parts.map(part => (
+                <li>
+                  <a href={`#part-${part.no}`}>{part.no} · {part.short}</a>
+                  <span class="dots" aria-hidden="true">
+                    {part.concepts.map(concept => <span class="dot" data-dot={concept.key} title={concept.title}></span>)}
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <p class="map-note">Tick “Got it” on each concept as you read. Each square fills in.</p>
+          </aside>
+        </div>
+
+        <div class="ruled rows how">
+          <div class="ruled-grid">
+            <div>
+              <p class="mono-label">How to read this</p>
+              <p class="how-title serif">Every concept is explained the same way, <em class="plain">so it sticks.</em></p>
+            </div>
+            <div><p class="how-step">① In one line</p><p class="how-text">What it is, in plain words.</p></div>
+            <div><p class="how-step">② Think of it like</p><p class="how-text">An everyday picture you can recall later.</p></div>
+            <div><p class="how-step">③ Why it matters</p><p class="how-text">Where you will meet it in real work.</p></div>
+          </div>
+        </div>
+        <p class="how-note">Read it top to bottom once. Each part builds on the one before.</p>
+      </header>
+
+      <div class="parts-wrap">
+        <div class="part-bar">
+          <div class="part-bar-inner shell">
+            <nav class="part-chips" aria-label="Parts of this lesson">
+              {parts.map(part => <a href={`#part-${part.no}`} data-chip={part.concepts.map(concept => concept.key).join(' ')}>{part.no} {part.short}</a>)}
+            </nav>
+            <div class="bar-progress">
+              <span class="bar-count"><strong data-done-count>0</strong> / {total}</span>
+              <span class="bar" aria-hidden="true"><span data-done-bar></span></span>
+            </div>
+          </div>
+        </div>
+
+        {parts.map((part, index) => {
+          const next = parts[index + 1];
+          return (
+            <section id={`part-${part.no}`} class="part shell" aria-labelledby={`part-title-${part.no}`}>
+              <div class="part-head">
+                <div class="part-num">
+                  <p class="part-label">Part {part.no} of {parts.length} · {part.range}</p>
+                  <span class="part-numeral serif" aria-hidden="true">{part.no}</span>
+                </div>
+                <div class="part-title">
+                  <h2 id={`part-title-${part.no}`}>{part.name}</h2>
+                  <p class="part-intro">{part.intro}</p>
+                </div>
+              </div>
+
+              {part.name === protocolsPart && (
+                <figure class="wires">
+                  <p class="wires-label">Three wires out of one agent</p>
+                  <div class="wires-grid">
+                    <div class="node people"><p class="node-name serif">People</p><p class="node-note">the user it works for</p></div>
+                    <p class="wire agui"><span aria-hidden="true">↑ </span>AG-UI<span aria-hidden="true"> ↓</span></p>
+                    <div class="node tools"><p class="node-name serif">Tools &amp; data</p><p class="node-note">APIs, databases, files</p></div>
+                    <div class="hub">
+                      <p class="wire mcp"><span class="arrow-wide" aria-hidden="true">← </span><span class="arrow-narrow" aria-hidden="true">↓ </span>MCP</p>
+                      <p class="agent serif">Agent</p>
+                      <p class="wire a2a">A2A<span class="arrow-wide" aria-hidden="true"> →</span><span class="arrow-narrow" aria-hidden="true"> ↓</span></p>
+                    </div>
+                    <div class="node others"><p class="node-name serif">Other agents</p><p class="node-note">built by other teams</p></div>
+                  </div>
+                  <figcaption>MCP points inward to tools, A2A sideways to other agents, and AG-UI outward to the person the agent works for.</figcaption>
+                </figure>
+              )}
+
+              <ol class="concepts">
+                {part.concepts.map(concept => (
+                  <li id={`concept-${concept.n}`} class="concept" data-concept={concept.key}>
+                    <div class="concept-side">
+                      <span class="concept-num serif" aria-hidden="true">{concept.num}</span>
+                      <h3>{concept.title}</h3>
+                      <p class="hook-line">Remember it as<br /><span>“{concept.hook}”</span></p>
+                      <button type="button" class="got-it" data-toggle={concept.key} aria-pressed="false"><span data-label>Got it</span><span class="sr-only">: {concept.title}</span></button>
+                    </div>
+                    <div class="concept-main">
+                      <p class="concept-label">In one line</p>
+                      <p class="concept-line">{concept.line}</p>
+                      <div class="concept-pair">
+                        <div class="like">
+                          <p class="concept-label">Think of it like</p>
+                          <p class="like-text serif">{concept.like}</p>
+                        </div>
+                        <div class="why">
+                          <p class="concept-label">Why it matters</p>
+                          <p class="why-text">{concept.why}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              {next && (
+                <p class="part-next">
+                  <a href="#top" class="back">↑ Back to top</a>
+                  <a href={`#part-${next.no}`} class="forward">Next: Part {next.no} · {next.name} <span aria-hidden="true">→</span></a>
+                </p>
+              )}
+            </section>
+          );
+        })}
+      </div>
+
+      <section id="cheatsheet" class="band cheat" aria-labelledby="cheat-title" data-quiz="off">
+        <div class="band-inner shell">
+          <div class="cheat-head">
+            <div class="cheat-copy">
+              <p class="sec-label">Cheat sheet</p>
+              <h2 id="cheat-title">Every concept <em>at a glance.</em></h2>
+              <p class="cheat-intro">Save this table. It is the whole guide in one memory hook per concept. Switch on quiz mode to hide the hooks and test yourself.</p>
+            </div>
+            <div class="cheat-actions">
+              <button type="button" class="quiz-btn" data-quiz-toggle aria-pressed="false" data-umami-event="Quiz mode">Quiz me</button>
+              <button type="button" class="reveal-all" data-reveal-all>Reveal all</button>
+            </div>
+          </div>
+          <p class="quiz-status" aria-live="polite">Quiz mode: say the hook out loud, then tap to check. Revealed <span data-revealed-count>0</span> of {total}.</p>
+          <ol class="cheat-grid">
+            {concepts.map(concept => (
+              <li class="cheat-row" data-row={concept.key}>
+                <span class="cheat-num">{concept.num}</span>
+                <a href={`#concept-${concept.n}`} class="cheat-title">{concept.title}</a>
+                <span class="cheat-hook serif" tabindex="-1">{concept.hook}</span>
+                <button type="button" class="reveal" data-reveal={concept.key}>Tap to reveal<span class="sr-only"> the hook for {concept.title}</span></button>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section class="finish shell" aria-labelledby="finish-title">
+        <div class="finish-row">
+          <div class="finish-copy">
+            <p class="finish-label">You made it</p>
+            <h2 id="finish-title">You now speak the language <em>of AI engineering.</em></h2>
+            <p class="finish-text">From tokens to agents to guardrails, you have the full map. Next time someone mentions RAG, MCP or prompt injection, you will know exactly where it fits.</p>
+          </div>
+          <div class="score">
+            <p class="score-num serif"><span class="on" data-done-count>0</span>/{total}</p>
+            <p class="score-text">concepts marked as understood</p>
+            <a href={shareHref} class="share" target="_blank" rel="noopener noreferrer" data-umami-event="Share" data-umami-event-to="LinkedIn" data-umami-event-post={post.href}>Share on LinkedIn <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <nav class="ruled rows lesson-links" aria-label="More lessons">
+          <div class="ruled-grid">
+            {previous && (
+              <a href={previous.href} class="step-link">
+                <span class="meta">← Previous · Lesson {lessonNumber(previous)}</span>
+                <span class="step-title serif">{previous.title}</span>
+              </a>
+            )}
+            <a href="/learning/" class="step-link end">
+              <span class="meta">All lessons →</span>
+              <span class="step-title serif">The lesson series</span>
+            </a>
+          </div>
+        </nav>
+      </section>
+
+      <section class="end-news shell" aria-label="Newsletter">
+        <SubscribeForm
+          id="subscribe-concepts"
+          layout="split"
+          title="Get the next lesson"
+          text="One short email when a new lesson goes up, so we keep learning together."
+        />
+      </section>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  const KEY = 'hs-ai-concepts';
+  const load = (): Set<string> => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) ?? '[]');
+      return new Set(Array.isArray(saved) ? saved : []);
+    } catch {
+      return new Set();
+    }
+  };
+  const save = () => {
+    try { localStorage.setItem(KEY, JSON.stringify([...done])); } catch { /* Progress just isn't remembered. */ }
+  };
+
+  const done = load();
+  const toggles = [...document.querySelectorAll<HTMLButtonElement>('[data-toggle]')];
+  const total = toggles.length;
+  // Drop ticks for concepts that no longer exist.
+  const keys = new Set(toggles.map(button => button.dataset.toggle!));
+  done.forEach(key => { if (!keys.has(key)) done.delete(key); });
+
+  const render = () => {
+    document.querySelectorAll('[data-done-count]').forEach(el => { el.textContent = String(done.size); });
+    document.querySelectorAll<HTMLElement>('[data-done-bar]').forEach(el => { el.style.width = `${Math.round((done.size / total) * 100)}%`; });
+    toggles.forEach(button => {
+      const isDone = done.has(button.dataset.toggle!);
+      button.setAttribute('aria-pressed', String(isDone));
+      button.querySelector('[data-label]')!.textContent = isDone ? '✓ Understood' : 'Got it';
+      button.closest('.concept')?.classList.toggle('is-done', isDone);
+    });
+    document.querySelectorAll<HTMLElement>('[data-dot]').forEach(dot => dot.classList.toggle('on', done.has(dot.dataset.dot!)));
+    document.querySelectorAll<HTMLElement>('[data-chip]').forEach(chip => {
+      chip.classList.toggle('complete', chip.dataset.chip!.split(' ').every(key => done.has(key)));
+    });
+  };
+
+  toggles.forEach(button => {
+    button.addEventListener('click', () => {
+      const key = button.dataset.toggle!;
+      if (done.has(key)) done.delete(key); else done.add(key);
+      save();
+      render();
+    });
+  });
+  render();
+
+  // Quiz mode hides the hooks in the cheat sheet until each one is revealed.
+  const cheat = document.querySelector<HTMLElement>('.cheat');
+  const quizButton = document.querySelector<HTMLButtonElement>('[data-quiz-toggle]');
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-row]')];
+  const revealedCount = document.querySelector('[data-revealed-count]');
+  const updateRevealed = () => {
+    if (revealedCount) revealedCount.textContent = String(rows.filter(row => row.classList.contains('revealed')).length);
+  };
+  quizButton?.addEventListener('click', () => {
+    const on = cheat?.dataset.quiz !== 'on';
+    if (cheat) cheat.dataset.quiz = on ? 'on' : 'off';
+    quizButton.setAttribute('aria-pressed', String(on));
+    quizButton.textContent = on ? 'Quiz mode: on' : 'Quiz me';
+    rows.forEach(row => row.classList.remove('revealed'));
+    updateRevealed();
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-reveal]').forEach(button => {
+    button.addEventListener('click', () => {
+      const row = button.closest<HTMLElement>('[data-row]');
+      row?.classList.add('revealed');
+      updateRevealed();
+      // The button disappears, so keep focus on the hook it revealed.
+      row?.querySelector<HTMLElement>('.cheat-hook')?.focus();
+    });
+  });
+  document.querySelector('[data-reveal-all]')?.addEventListener('click', () => {
+    rows.forEach(row => row.classList.add('revealed'));
+    updateRevealed();
+  });
+
+  // Anchored parts and concepts land below the sticky part bar, whatever height it wraps to.
+  const bar = document.querySelector<HTMLElement>('.part-bar');
+  const wrap = document.querySelector<HTMLElement>('.parts-wrap');
+  if (bar && wrap) {
+    new ResizeObserver(() => wrap.style.setProperty('--part-bar-h', `${bar.offsetHeight}px`)).observe(bar);
+  }
+</script>
+
+<style>
+  /* Hero */
+  .concepts-hero { padding-top: clamp(40px, 6vw, 80px); }
+  .kicker-strip .here { color: var(--emerald); }
+  .hero-main { display: flex; flex-wrap: wrap; align-items: end; gap: 40px 72px; margin-top: 48px; }
+  .hero-copy { flex: 999 1 600px; min-width: 0; }
+  .hero-copy h1 { font-size: clamp(60px, 8.6vw, 128px); line-height: .92; letter-spacing: -.025em; }
+  .lede { margin-top: 32px; max-width: 54ch; font-size: 20px; line-height: 1.6; color: var(--body); }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 32px; }
+  .byline { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+  .byline :global(.avatar) { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; }
+  .hero-ai { margin-top: 28px; }
+
+  /* Progress map */
+  .map { flex: 1 1 340px; max-width: 420px; padding: 28px; background: var(--forest); color: var(--forest-ink); }
+  .map-label { font: 400 11px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--forest-muted); }
+  .map-count { margin-top: 10px; font-size: 40px; line-height: 1; }
+  .map-count .on, .score-num .on { color: var(--mint); }
+  .map-parts { display: flex; flex-direction: column; gap: 2px; margin: 20px 0 0; padding: 0; list-style: none; }
+  .map-parts li { display: flex; align-items: center; gap: 12px; }
+  .map-parts a { flex: 0 0 132px; display: inline-flex; align-items: center; min-height: 32px; overflow: hidden; font-size: 13px; color: var(--forest-ink); white-space: nowrap; text-overflow: ellipsis; }
+  .map-parts a:hover { color: var(--mint); }
+  .map :focus-visible { outline-color: var(--mint); }
+  .dots { display: flex; flex-wrap: wrap; gap: 4px; }
+  .dot { display: block; width: 14px; height: 14px; border: 1px solid rgba(239, 235, 226, .45); transition: background-color 160ms ease, border-color 160ms ease; }
+  .dot.on { border-color: var(--mint); background: var(--mint); }
+  .map-note { margin-top: 18px; font-size: 13px; line-height: 1.6; color: var(--forest-body); }
+
+  /* How to read this */
+  .how { margin-top: 64px; }
+  .how .ruled-grid { --cell-min: 240px; --cell-pad: 28px; }
+  .how .ruled-grid > div { padding-block: 28px; }
+  .how-title { margin-top: 10px; font-size: 28px; line-height: 1.15; }
+  .how-step { font: 400 12px/1.5 var(--font-mono); color: var(--emerald); }
+  .how-text { margin-top: 8px; font-size: 15px; line-height: 1.6; color: var(--body); }
+  .how-note { margin-top: 20px; font-size: 15px; color: var(--muted); }
+
+  /* Sticky part bar */
+  .parts-wrap { --part-bar-h: 60px; margin-top: 56px; }
+  .part-bar { position: sticky; top: var(--header-h); z-index: 5; border-block: 1px solid var(--rule); background: rgba(246, 242, 234, .95); backdrop-filter: blur(8px); }
+  .part-bar-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding-block: 10px; }
+  .part-chips { flex: 999 1 560px; display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+  .part-chips a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--rule); font-size: 13px; white-space: nowrap; color: var(--ink); transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
+  .part-chips a:hover { border-color: var(--ink); color: var(--ink); }
+  .part-chips a.complete { border-color: var(--emerald); background: var(--emerald); color: var(--paper); }
+  .bar-progress { flex: 1 1 220px; display: flex; align-items: center; gap: 12px; font: 400 12px/1.5 var(--font-mono); color: var(--muted); }
+  .bar-count { white-space: nowrap; }
+  .bar-count strong { font-weight: 500; color: var(--emerald); }
+  .bar { position: relative; flex: 1; height: 4px; background: var(--rule); }
+  .bar span { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--emerald); transition: width 200ms ease; }
+
+  /* Parts */
+  .part, .concept { scroll-margin-top: calc(var(--part-bar-h) + 8px); }
+  .part { padding-top: 112px; }
+  .part-head { display: flex; flex-wrap: wrap; align-items: end; gap: 16px 72px; padding-bottom: 28px; border-bottom: 1px solid var(--ink); }
+  .part-num { flex: 1 1 200px; }
+  .part-label { font: 400 12px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--emerald); }
+  .part-numeral { display: block; margin-top: 8px; font-size: 120px; line-height: .8; color: var(--rule); }
+  .part-title { flex: 999 1 600px; min-width: 0; }
+  .part-title h2 { font-size: clamp(44px, 5.4vw, 76px); line-height: .98; }
+  .part-intro { margin-top: 16px; max-width: 60ch; font-size: 18px; line-height: 1.65; color: var(--body); }
+
+  .concepts { margin: 0; padding: 0; list-style: none; }
+  .concept { display: flex; flex-wrap: wrap; gap: 24px 56px; padding-block: 44px; border-bottom: 1px solid var(--rule); }
+  .concept-side { flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px; }
+  .concept-num { font-size: 64px; line-height: .85; color: var(--faint); transition: color 160ms ease; }
+  .concept.is-done .concept-num { color: var(--emerald); }
+  .concept h3 { font-size: 36px; line-height: 1.05; }
+  .hook-line { font: 400 12px/1.6 var(--font-mono); color: var(--muted); }
+  .hook-line span { color: var(--emerald); }
+  .got-it { align-self: flex-start; min-height: 44px; padding: 0 18px; border: 1px solid var(--ink); font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
+  .got-it:hover { border-color: var(--emerald); color: var(--emerald); }
+  .got-it[aria-pressed='true'] { border-color: var(--emerald); background: var(--emerald); color: var(--paper); }
+  .got-it[aria-pressed='true']:hover { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+  .concept-main { flex: 2.4 1 560px; min-width: 0; }
+  .concept-label { font: 400 11px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--emerald); }
+  .concept-line { margin-top: 8px; font-size: 20px; line-height: 1.55; color: var(--ink); }
+  .concept-pair { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .like { flex: 1 1 280px; padding: 24px; border: 1px solid var(--rule); background: var(--paper-raised); }
+  .like-text { margin-top: 10px; font-size: 22px; font-style: italic; line-height: 1.35; color: var(--ink); }
+  .why { flex: 1 1 280px; padding: 24px 0 0 4px; }
+  .why-text { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--body); }
+  .part-next { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; margin-top: 12px; font-size: 14px; }
+  .part-next a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+  .part-next .back { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .part-next .forward { font-weight: 500; color: var(--emerald); text-decoration: underline; text-underline-offset: 3px; }
+  .part-next a:hover { color: var(--ink); }
+
+  /* Protocol diagram */
+  .wires { margin-top: 40px; padding: clamp(28px, 4vw, 48px); background: var(--forest); color: var(--forest-ink); }
+  .wires-label { font: 400 11px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--forest-muted); }
+  .wires-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas: '. people .' '. agui .' 'tools hub others';
+    gap: 12px;
+    align-items: center;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .node { padding: 18px; border: 1px solid var(--mint); }
+  .node-name { font-size: 26px; line-height: 1.1; }
+  .node-note { margin-top: 4px; font-size: 13px; line-height: 1.5; color: var(--forest-body); }
+  .people { grid-area: people; }
+  .tools { grid-area: tools; }
+  .others { grid-area: others; }
+  .agui { grid-area: agui; }
+  .wire { font: 400 13px/1.5 var(--font-mono); color: var(--mint); white-space: nowrap; }
+  .hub { grid-area: hub; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .agent { padding: 22px 26px; background: var(--mint); color: var(--forest); font-size: 30px; line-height: 1; }
+  .arrow-narrow { display: none; }
+  .wires figcaption { margin-top: 24px; font-size: 15px; line-height: 1.6; color: var(--forest-body); }
+
+  /* Cheat sheet */
+  .cheat { margin-top: 128px; }
+  .cheat-head { display: flex; flex-wrap: wrap; align-items: end; gap: 24px 72px; }
+  .cheat-copy { flex: 999 1 560px; min-width: 0; }
+  .cheat-copy h2 { margin-top: 14px; font-size: clamp(44px, 5.4vw, 76px); line-height: .98; }
+  .cheat-intro { margin-top: 16px; max-width: 56ch; font-size: 17px; line-height: 1.65; color: var(--forest-body); }
+  .cheat-actions { flex: 1 1 280px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .quiz-btn { min-height: 48px; padding: 0 22px; border: 1px solid var(--forest-ink); background: var(--forest-ink); color: var(--forest); font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease; }
+  .quiz-btn:hover, .quiz-btn[aria-pressed='true'] { border-color: var(--mint); background: var(--mint); }
+  .reveal-all { display: none; min-height: 48px; padding: 0 20px; border: 1px solid rgba(239, 235, 226, .4); color: var(--forest-ink); font-size: 14px; cursor: pointer; }
+  .reveal-all:hover { border-color: var(--mint); color: var(--mint); }
+  .quiz-status { display: none; margin-top: 28px; font: 400 13px/1.5 var(--font-mono); color: var(--mint); }
+  .cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); column-gap: 48px; margin: 32px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--forest-ink); }
+  .cheat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-height: 56px; padding-block: 8px; border-bottom: 1px solid rgba(239, 235, 226, .16); }
+  .cheat-num { flex: 0 0 28px; font: 400 12px/1.5 var(--font-mono); color: var(--forest-muted); }
+  .cheat-title { flex: 1 1 140px; display: inline-flex; align-items: center; min-height: 40px; font-size: 15px; font-weight: 500; color: var(--forest-ink); }
+  .cheat-hook { flex: 1.3 1 180px; font-size: 19px; font-style: italic; line-height: 1.25; color: var(--mint); }
+  .cheat-hook:focus { outline: none; }
+  .reveal { display: none; flex: 1.3 1 180px; min-height: 40px; padding: 0 14px; border: 1px dashed rgba(159, 224, 196, .6); color: var(--mint); font: 400 12px/1.4 var(--font-mono); text-align: left; cursor: pointer; }
+  .reveal:hover { border-style: solid; }
+  .cheat[data-quiz='on'] .reveal-all, .cheat[data-quiz='on'] .quiz-status { display: block; }
+  .cheat[data-quiz='on'] .cheat-row:not(.revealed) .cheat-hook { display: none; }
+  .cheat[data-quiz='on'] .cheat-row:not(.revealed) .reveal { display: block; }
+
+  /* Finish */
+  .finish { padding-top: 112px; }
+  .finish-row { display: flex; flex-wrap: wrap; align-items: end; gap: 40px 72px; padding-bottom: 48px; }
+  .finish-copy { flex: 999 1 560px; min-width: 0; }
+  .finish-label { font: 400 12px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--emerald); }
+  .finish-copy h2 { margin-top: 14px; font-size: clamp(44px, 5.6vw, 84px); line-height: .98; }
+  .finish-text { margin-top: 18px; max-width: 58ch; font-size: 18px; line-height: 1.65; color: var(--body); }
+  .score { flex: 1 1 300px; padding: 28px; border: 1px solid var(--rule); background: var(--paper-raised); }
+  .score-num { font-size: 48px; line-height: 1; }
+  .score-num .on { color: var(--emerald); }
+  .score-text { margin-top: 6px; font-size: 14px; color: var(--muted); }
+  .share { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; margin-top: 20px; padding: 0 20px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; transition: background-color 160ms ease; }
+  .share:hover { background: var(--emerald); color: var(--paper); }
+
+  .lesson-links .ruled-grid { --cell-min: 320px; --cell-pad: 32px; }
+  .step-link { display: flex; flex-direction: column; gap: 8px; padding-block: 32px; color: var(--ink); }
+  .step-link.end { text-align: right; }
+  .step-link .meta { display: block; }
+  .step-title { font-size: 34px; line-height: 1.05; transition: color 160ms ease; }
+  .step-link:hover .step-title { color: var(--emerald); }
+
+  .end-news { padding-block: 96px 112px; }
+
+  @media (max-width: 767px) {
+    /* The part bar stays one row: the chips scroll sideways instead of stacking up over the page. */
+    .part-bar-inner { padding-inline: 0; }
+    .part-chips { flex-wrap: nowrap; overflow-x: auto; padding-inline: var(--gutter); scrollbar-width: none; }
+    .part-chips::-webkit-scrollbar { display: none; }
+    .bar-progress { padding-inline: var(--gutter); }
+    .step-link.end { text-align: left; }
+  }
+  @media (max-width: 640px) {
+    .wires-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: 'people people' 'agui agui' 'hub hub' 'tools others'; }
+    .people { justify-self: center; min-width: 60%; }
+    .hub { flex-wrap: wrap; justify-content: space-around; }
+    .agent { order: -1; flex-basis: 100%; }
+    .arrow-wide { display: none; }
+    .arrow-narrow { display: inline; }
+    .node { padding: 14px 10px; }
+    .node-name { font-size: 22px; }
+  }
+  @media (max-width: 560px) {
+    /* Room for Part 1's eight squares on one line beside the label. */
+    .map { padding: 24px 20px; }
+    .map-parts a { flex-basis: 116px; }
+    .lede { font-size: 18px; }
+    .concept h3 { font-size: 32px; }
+    .concept-line { font-size: 18px; }
+    .like-text { font-size: 20px; }
+    .why { padding: 12px 0 0; }
+  }
+</style>
