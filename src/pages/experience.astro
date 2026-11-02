@@ -1,7 +1,7 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import Qualifications from '../components/Qualifications.astro';
-import { profile, expertise, experience, certifications } from '../data/resume';
+import { profile, expertise, certifications } from '../data/resume';
 import { platformLayers } from '../data/site';
 
 // Career start (June 2019), counted at build time, as on the homepage.
@@ -19,7 +19,7 @@ const aiExpertise = 3;
 ---
 <PageLayout
   title="Experience & Skills"
-  kicker={[`Since ${careerStart.getUTCFullYear()}`, profile.title, profile.location]}
+  kicker={[`Since ${careerStart.getUTCFullYear()}`, profile.location]}
   description="Haseeb Sultan’s career experience, skills, certifications, and education in DevOps, cloud architecture, Kubernetes, MLOps, and LLMOps."
   intro={profile.summary}
 >
@@ -30,31 +30,10 @@ const aiExpertise = 3;
     </dl>
   </div>
 
-  <section id="career" class="section shell" aria-labelledby="career-title">
-    <div class="sec-head">
-      <p class="sec-label">§ 01 · Roles</p>
-      <h2 id="career-title">From full-stack to the platform underneath.</h2>
-    </div>
-    <ol class="roles rule-top">
-      {experience.map((job, index) => (
-        <li class="job">
-          <div class="job-head">
-            <p class:list={['period', { current: index === 0 }]}>{job.period}</p>
-            <h3>{job.role}</h3>
-            <p class="location">{job.location}</p>
-            <p class="focus">{job.focus}</p>
-            <p class="industry"><span class="mono-label">{job.industries.length === 1 ? 'Industry' : 'Industries'}</span> {job.industries.join(' · ')}</p>
-          </div>
-          {job.highlights.length > 0 && <ul class="highlights">{job.highlights.map(highlight => <li>{highlight}</li>)}</ul>}
-        </li>
-      ))}
-    </ol>
-  </section>
-
   <section id="expertise" class="band skills-band" aria-labelledby="expertise-title">
     <div class="band-inner shell">
       <div class="sec-head">
-        <p class="sec-label">§ 02 · Expertise</p>
+        <p class="sec-label">§ 01 · Expertise</p>
         <h2 id="expertise-title">What I work on, <em>and with.</em></h2>
       </div>
       <ul class="chip-list skills">
@@ -91,20 +70,6 @@ const aiExpertise = 3;
   .facts .ruled-grid { --cell-min: 200px; }
   .facts .ruled-grid > div { padding-block: 24px; }
   .facts dd { margin-top: 8px; font-size: 44px; line-height: 1; }
-
-  .roles { margin: 48px 0 0; padding: 0; list-style: none; }
-  .job { display: flex; flex-wrap: wrap; gap: 16px 48px; padding-block: 40px; border-bottom: 1px solid var(--rule); }
-  .job-head { flex: 1 1 260px; }
-  .period { font: 400 13px/1.5 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-  .period.current { color: var(--emerald); }
-  .job h3 { margin-top: 10px; font-size: 34px; line-height: 1.05; }
-  .location { margin-top: 6px; font-size: 13px; color: var(--muted); }
-  .focus { margin-top: 8px; font-size: 15px; line-height: 1.6; color: var(--body); }
-  .industry { margin-top: 12px; font-size: 14px; line-height: 1.6; color: var(--ink); }
-  .industry .mono-label { display: block; margin-bottom: 2px; color: var(--emerald); }
-  .highlights { flex: 2 1 520px; display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
-  .highlights li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.65; color: var(--ink-soft); }
-  .highlights li::before { content: ''; position: absolute; left: 0; top: .8em; width: 12px; height: 1px; background: var(--emerald); }
 
   .skills-band { margin-top: var(--section-gap); }
   .skills { margin-top: 40px; }

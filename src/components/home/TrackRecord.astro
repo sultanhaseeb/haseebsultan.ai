@@ -1,15 +1,10 @@
 ---
-import { experience } from '../../data/resume';
-
 const metrics = [
   { value: '45%', unit: 'up to', label: 'Azure infrastructure cost reduction', accent: true },
   { value: '23+', label: 'Microservices with DevSecOps in CI/CD' },
   { value: '100+', label: 'Virtual machines migrated to Azure' },
   { value: '10+', label: 'DevOps projects led, with a team of 8' },
 ];
-
-// Newest first, from the résumé data, with the industries each role served.
-const roles = experience.map((job, index) => ({ role: job.role, dates: job.period, location: job.location, industries: job.industries, current: index === 0 }));
 ---
 <section id="experience" class="section shell" aria-labelledby="record-title">
   <div class="sec-head">
@@ -28,15 +23,6 @@ const roles = experience.map((job, index) => ({ role: job.role, dates: job.perio
     </dl>
   </div>
 
-  <ol class="roles" aria-label="Roles, newest first">
-    {roles.map(item => (
-      <li>
-        <span class:list={['dates', { current: item.current }]}>{item.dates}</span>
-        <span class="role-cell"><strong class="serif">{item.role}</strong><span class="location">{item.location}</span></span>
-        <span class="industry"><span class="sr-only">Industries: </span>{item.industries.join(' · ')}</span>
-      </li>
-    ))}
-  </ol>
   <a href="/experience/" class="text-link more">Full experience and skills <span aria-hidden="true">→</span></a>
 </section>
 
@@ -48,19 +34,9 @@ const roles = experience.map((job, index) => ({ role: job.role, dates: job.perio
   .metric dd { font-family: var(--font-serif); font-size: 96px; line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
   .metric dd.accent { color: var(--emerald); }
   .unit { vertical-align: top; font: 400 12px/1.5 var(--font-mono); letter-spacing: 0; color: var(--muted); }
-
-  .roles { margin: 72px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
-  .roles li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding-block: 22px; border-bottom: 1px solid var(--rule); }
-  .dates { flex: 0 0 200px; font: 400 13px/1.5 var(--font-mono); color: var(--muted); }
-  .dates.current { color: var(--emerald); }
-  .role-cell { flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px; }
-  .roles strong { font-size: 28px; line-height: 1.1; }
-  .location { font-size: 13px; color: var(--muted); }
-  .industry { flex: 1 1 260px; font-size: 15px; color: var(--body); }
-  .more { margin-top: 20px; }
+  .more { margin-top: 32px; }
 
   @media (max-width: 560px) {
     .metric dd { font-size: 80px; }
-    .dates { flex-basis: 100%; }
   }
 </style>

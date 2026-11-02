@@ -9,8 +9,6 @@ import sadiqLogo from '../assets/images/education/sadiq-public-school.jpg';
 
 // Public résumé content. Employer and client identities are omitted.
 export const profile = {
-  // Current job title, shown as a fact on /experience/. The positioning title is site.title.
-  title: 'Senior AI Platform Engineer',
   location: 'Dubai, UAE',
   email: 'hello@haseebsultan.ai',
   summary: 'My background spans full-stack development, cloud architecture, DevOps, and LLMOps. I build automated, secure platforms across Azure, AWS, and Google Cloud, with hands-on work in Kubernetes, infrastructure as code, CI/CD, MLOps, and LLM applications.',
@@ -20,17 +18,6 @@ export const expertise = [
   'Generative AI', 'Designing LLM applications', 'MLOps & LLMOps',
   'Public & private cloud platforms', 'Infrastructure as Code (IaC)',
   'Security & compliance', 'Containerization & orchestration', 'CI/CD', 'Monitoring & logging',
-];
-
-// `location` is where each role was based, and `industries` the sectors it served; both show on the homepage and /experience/.
-export const experience = [
-  {
-    role: 'Senior AI Platform Engineer', period: 'Nov 2025 – Present', focus: 'AI platforms, LLMOps & agent infrastructure',
-    location: 'Dubai, United Arab Emirates',
-    industries: ['Cybersecurity', 'AI security'],
-    // Add what you have delivered in this role.
-    highlights: [],
-  },
 ];
 
 // `id` is the anchor on /projects/ and how the homepage picks its selected projects.
