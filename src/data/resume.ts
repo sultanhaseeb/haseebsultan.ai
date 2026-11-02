@@ -31,52 +31,6 @@ export const experience = [
     // Add what you have delivered in this role.
     highlights: [],
   },
-  {
-    role: 'Senior DevOps Engineer', period: 'Feb 2025 – Nov 2025', focus: 'AWS infrastructure & platform automation',
-    location: 'Dubai, United Arab Emirates',
-    industries: ['Fintech', 'Banking'],
-    highlights: [
-      'Architected secure, multi-tier AWS networking with VPCs, public and private subnets, route tables, and security groups for fintech microservices.',
-      'Orchestrated Rails applications on ECS Fargate and a full ELK stack on EKS for centralized logging and real-time analytics.',
-      'Codified VPCs, ECS/EKS, RDS, ElastiCache, and security groups in version-controlled Terraform for repeatable development-to-production environments.',
-      'Built Bitbucket Pipelines for linting, testing, image builds, and zero-downtime deployments to ECS and EKS.',
-      'Integrated Datadog APM and infrastructure monitoring, and maintained DevOps, IaC, and security documentation for observability and team onboarding.',
-    ],
-  },
-  {
-    role: 'Senior DevOps Engineer', period: 'Oct 2023 – Feb 2025', focus: 'Azure optimization & DevSecOps',
-    location: 'Dubai, United Arab Emirates',
-    industries: ['Aviation'],
-    highlights: [
-      'Reduced Azure infrastructure costs by up to 45% through resource management, scaling strategies, cost-effective services, and reserved instances.',
-      'Implemented DevSecOps in CI/CD for 23+ microservices, including secure code integration, continuous security testing, and compliance checks.',
-      'Designed robust, scalable solutions using Azure services and infrastructure.',
-      'Supported Agile delivery, continuous improvement, and rapid responses to changing business needs.',
-      'Maintained comprehensive documentation of DevOps processes, configurations, and best practices.',
-    ],
-  },
-  {
-    role: 'Senior DevOps Engineer', period: 'Oct 2020 – Oct 2023', focus: 'Cloud migrations, architecture & technical leadership',
-    location: 'Pakistan',
-    industries: ['Healthcare', 'Insurance', 'Banking', 'Fintech'],
-    highlights: [
-      'Led more than 10 DevOps projects covering infrastructure automation, CI/CD implementation, and cloud migration.',
-      'Migrated 5 applications, 100+ virtual machines, 25+ Kubernetes clusters, and 20+ database clusters across 11 environments to Azure, using Terraform and automated Azure DevOps pipelines.',
-      'Designed infrastructure and DevOps practices for healthcare workloads, including scalable architecture, CI/CD, automated monitoring, and compliance.',
-      'Deployed a containerized Temenos T24 banking solution on Azure for scalability and operational efficiency.',
-      'Led a team of 8 people, coordinating delivery and project milestones.',
-      'Worked across Azure, AWS, and Google Cloud, using Git and GitHub for source control and Docker and Helm to deploy and maintain microservices across Dev, QA, UAT, and production.',
-    ],
-  },
-  {
-    role: 'Cloud / Full Stack Engineer', period: 'Jun 2019 – Sep 2020', focus: 'Application development & collaborative delivery',
-    location: 'Pakistan',
-    industries: ['Transportation'],
-    highlights: [
-      'Built full-stack applications using React, Node.js, MySQL, and Sequelize within Agile teams.',
-      'Collaborated with domestic and international teams on application delivery and the DevOps platform.',
-    ],
-  },
 ];
 
 // `id` is the anchor on /projects/ and how the homepage picks its selected projects.
