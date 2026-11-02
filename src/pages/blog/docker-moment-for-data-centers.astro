@@ -1,0 +1,190 @@
+---
+import { Image } from 'astro:assets';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { dockerMomentArticle as post } from '../../data/blog';
+import { site } from '../../data/site';
+import podExterior from '../../assets/images/blog/docker-moment-for-data-centers/dsx-pod-exterior.jpg';
+import podCutaway from '../../assets/images/blog/docker-moment-for-data-centers/dsx-pod-cutaway.jpg';
+
+const podNumbers = [
+  { value: '1.2', unit: 'MW', label: 'Roughly, in each pod' },
+  { value: '7', unit: 'racks', label: 'Liquid-cooled, in each pod' },
+  { value: '14', unit: 'days', label: 'To go live at a prepared site, down from about six months' },
+  { value: '30%', label: 'Less power for the same token output with DSX MaxLPS, by NVIDIA’s figure' },
+];
+
+// Docker's ideas, one level up: what each promise looks like for a container and for a DSX POD.
+const comparison = [
+  { idea: 'Package everything', docker: 'The app, its runtime and its libraries in one image.', pod: 'Compute, networking, storage, power, cooling and cabling in one container.' },
+  { idea: 'Test once', docker: 'If the image passes testing, it runs the same on any host.', pod: 'Tested as one system in the factory before it ships.' },
+  { idea: 'Clear interfaces', docker: 'Needs CPU, memory, network and storage from the host.', pod: 'Needs power, cooling and a network connection from the site.' },
+  { idea: 'Scale in blocks', docker: 'Kubernetes adds replicas as traffic grows.', pod: 'A site adds capacity roughly 1.2 MW at a time.' },
+];
+
+const limits = [
+  { title: 'Atoms aren’t bits.', text: 'You can’t docker pull a 1.2 MW pod. It still has to be manufactured, shipped, craned into place and connected. “14 days” applies only to a prepared site.' },
+  { title: 'The grid is still the bottleneck.', text: 'Analysts note that DSX POD speeds up deployment but doesn’t solve access to grid power, which is the binding constraint for AI factories in Europe.' },
+  { title: 'Docker was open; DSX is a vendor design.', text: 'Docker images run on any vendor’s hardware. A DSX POD is an NVIDIA-specified system. That suits buyers who want one validated stack, but it is not a neutral standard.' },
+  { title: 'Sovereignty has layers.', text: 'A government can own the site, the data and the models. The chips are still designed in the US, made largely in Taiwan and subject to US export controls.' },
+  { title: 'Prefab data centers already exist.', text: 'Containerized data centers are not new. What is new is the depth of validation: compute, network and cooling are tested together as one system before shipping.' },
+  { title: 'It isn’t proven at scale yet.', text: 'Partner deliveries begin in early 2027, so the 14-day claim has not yet been shown in the field.' },
+];
+
+const toc = [
+  { id: 'works-on-my-machine', label: 'It works on my machine, at data-center scale' },
+  { id: 'what-docker-changed', label: 'What Docker and Kubernetes changed' },
+  { id: 'what-dsx-pod-is', label: 'What the DSX POD is' },
+  { id: 'game-changer', label: 'Why it could be a game changer' },
+  { id: 'where-it-breaks', label: 'Where the analogy breaks' },
+  { id: 'takeaway', label: 'The takeaway' },
+];
+---
+<ArticleLayout post={post} toc={toc}>
+  <section aria-labelledby="works-on-my-machine">
+    <h2 id="works-on-my-machine">“It works on my machine”, now at data-center scale</h2>
+    <p class="article-lead">In 2013, Docker fixed one of software’s oldest problems. An app that ran fine on a developer’s laptop would break in production because of a missing library or a different OS version. Docker put the app and everything it needed into one standard container. Ship the container, and it runs the same way everywhere.</p>
+    <p>Kubernetes then took that idea to fleets of machines. You stopped caring which server ran your code. You described what you wanted in a file, and the platform made it happen.</p>
+    <p>Building an AI data center today is stuck where software was before Docker. Every build is a one-off project. Thousands of GPUs, switches, cables, cooling loops, power feeds and software layers have to be designed, sourced, wired and tested together. A small mismatch can delay the whole site by months.</p>
+    <p>NVIDIA’s DSX POD is a bet that the container idea can fix this too, at the scale of the building itself.</p>
+  </section>
+
+  <section aria-labelledby="what-docker-changed">
+    <h2 id="what-docker-changed">What Docker and Kubernetes pods really changed</h2>
+    <p>Docker didn’t invent isolation; Linux already had it. What Docker added was a standard box with a standard interface. Three ideas made it work:</p>
+    <ol class="blocks">
+      <li><strong>Package everything together.</strong> The app, its runtime and its libraries go into one image. Nothing is left to be assembled on the target machine.</li>
+      <li><strong>Test once, run anywhere.</strong> If the image passes testing, it behaves the same on any host that runs containers.</li>
+      <li><strong>Define clear interfaces.</strong> A container only needs a few things from the host: CPU, memory, network and storage. Everything else is inside.</li>
+    </ol>
+    <p>Kubernetes added a fourth idea: declare what you want, and let the platform do the work. Its smallest unit, the pod, groups one or more containers that share a network and storage. You write a YAML file saying “run three copies of this pod,” and Kubernetes places, starts, heals and scales them.</p>
+    <p>Together these ideas turned deployment from a craft into a repeatable process. A team that once needed weeks to set up a server could ship in minutes.</p>
+  </section>
+
+  <section aria-labelledby="what-dsx-pod-is">
+    <h2 id="what-dsx-pod-is">What the NVIDIA DSX POD is</h2>
+    <p>The DSX POD is a factory-built, containerized reference design for AI factories running NVIDIA’s Vera Rubin systems. NVIDIA announced it at <a href="/blog/nvidia-gtc-berlin-keynote/">GTC Berlin</a> on 21 October 2026. It is one of several ways to build under the wider NVIDIA DSX platform.</p>
+    <figure class="article-figure">
+      <Image src={podExterior} alt="A rendering of the NVIDIA DSX POD from the outside: a long white and green shipping container with the NVIDIA logo and three pairs of double doors." widths={[720, 1210]} sizes="(max-width: 767px) calc(100vw - 40px), 720px" />
+      <figcaption>From the outside, a DSX POD is a shipping container. Image: NVIDIA</figcaption>
+    </figure>
+    <p>In practice, it works like this:</p>
+    <ul>
+      <li><strong>Built and tested in a factory.</strong> Partners put rack-scale systems into shipping containers, wire them, add liquid cooling and test everything as one system before it ships.</li>
+      <li><strong>A standard unit.</strong> Each pod holds roughly 1.2 MW across seven liquid-cooled racks, according to Data Center Knowledge.</li>
+      <li><strong>The whole facility, not just servers.</strong> The design covers compute, management, scale-out networking, storage, power, cooling and cabling.</li>
+      <li><strong>Defined interfaces to the site.</strong> The reference design sets out the power and cooling each pod needs. Partners engineer the local grid connection and electrical setup for each site.</li>
+      <li><strong>Efficiency choices built in.</strong> It uses dry cooling instead of evaporative (water-hungry) cooling, plus 800 V DC power delivery.</li>
+      <li><strong>A software layer on top.</strong> DSX also includes DSX Sim (digital-twin simulation), DSX OS and DSX MaxLPS, which NVIDIA says delivers the same token output with up to 30% less power.</li>
+    </ul>
+    <figure class="article-figure wide-figure">
+      <Image src={podCutaway} alt="A cutaway rendering of the inside of a DSX POD: an electrical cabinet, a control panel and a red fire suppression cylinder at one end, then rows of compute and networking racks with yellow cabling, under red cooling pipework." widths={[720, 1096]} sizes="(max-width: 767px) calc(100vw - 40px), 720px" />
+      <figcaption>Inside the container: power, fire suppression, cooling pipework and racks, wired and tested before the pod leaves the factory. Image: NVIDIA</figcaption>
+    </figure>
+    <p>The headline claim: deployment at a prepared site drops from about six months to as little as 14 days. Partners named include Bull, Dell Technologies, HPE, Lenovo, Schneider Electric and Vertiv. Worldwide deliveries are planned from early 2027.</p>
+    <dl class="numbers">
+      {podNumbers.map(item => (
+        <div>
+          <dt>{item.label}</dt>
+          <dd>{item.value}{item.unit && <span class="unit">{item.unit}</span>}</dd>
+        </div>
+      ))}
+    </dl>
+    <p>Look closely and these are Docker’s three ideas again, one level up. Everything is packaged together in the container. It is tested once in the factory. It connects to the site through a few clear interfaces.</p>
+    <table class="compare">
+      <caption class="sr-only">Docker’s ideas compared for a Docker container and a DSX POD</caption>
+      <thead>
+        <tr><th scope="col">The idea</th><th scope="col">Docker container</th><th scope="col">DSX POD</th></tr>
+      </thead>
+      <tbody>
+        {comparison.map(row => (
+          <tr>
+            <th scope="row">{row.idea}</th>
+            <td data-label="Docker container">{row.docker}</td>
+            <td data-label="DSX POD">{row.pod}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p>A Docker container promises: give me CPU, memory and a network, and I will run correctly. A DSX POD makes the same promise to a building:</p>
+    <figure class="pull-quote">
+      <blockquote><p>Give me power, cooling and a network connection, and I will come online as tested.</p></blockquote>
+    </figure>
+  </section>
+
+  <section aria-labelledby="game-changer">
+    <h2 id="game-changer">Why this could be a game changer</h2>
+    <p>Docker didn’t make servers faster. It made deployment predictable, and that changed who could ship software and how often. The DSX POD could do the same for AI infrastructure.</p>
+    <ol class="blocks">
+      <li><strong>Speed becomes a planning number, not a hope.</strong> If a prepared site can go live in weeks, AI capacity can be planned like any other procurement. Capacity can follow demand instead of trailing it by a year.</li>
+      <li><strong>Smaller teams can build AI factories.</strong> Before Docker, only large ops teams ran complex systems well. A pre-validated pod moves most of the hard integration work to the factory. A national lab, a university or a mid-sized cloud provider doesn’t need its own team of GPU-cluster integrators.</li>
+      <li><strong>A path to sovereign AI for governments.</strong> Many countries want AI that runs on their own soil, under their own laws, with their own data. An IDC analyst quoted by Data Center Knowledge said the pod suits sovereign deployments that need physical isolation, smaller specialized sites and edge AI. A ministry could put pods next to an existing secure facility instead of commissioning a multi-year hyperscale build.</li>
+      <li><strong>Grow one block at a time.</strong> Kubernetes lets you add replicas as traffic grows. DSX PODs let a site add capacity roughly 1.2 MW at a time. You don’t have to bet on the full campus on day one.</li>
+      <li><strong>Efficiency is built in, not added later.</strong> Dry cooling and 800 V DC are part of the standard design. Every site that uses the pod gets them, just as every container gets the same tested runtime.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="where-it-breaks">
+    <h2 id="where-it-breaks">Where the analogy breaks</h2>
+    <p>A fair article should say where the comparison stops working.</p>
+    <ul class="limits">
+      {limits.map(item => <li><strong>{item.title}</strong> <span set:html={item.text.replace('docker pull', '<code>docker pull</code>')} /></li>)}
+    </ul>
+  </section>
+
+  <section aria-labelledby="takeaway">
+    <h2 id="takeaway">The takeaway</h2>
+    <p>Docker turned servers into a place where standard boxes run. Kubernetes turned fleets of servers into one programmable platform. The DSX POD tries to turn the data center itself into a standard box that can be stacked, shipped and switched on.</p>
+    <p>If NVIDIA and its partners deliver on the 14-day promise, the question will shift. It will no longer be “can we build an AI factory?” but “how many pods do we need?” For governments chasing sovereign AI and for enterprises that can’t wait two years for capacity, that is the same leap developers made in 2013.</p>
+    <p>I’ll be watching the first deliveries in 2027.</p>
+    <p class="closing-question">Are you building or planning AI infrastructure? I’d like to hear whether a pod-based approach would change your timeline.</p>
+    <p>Connect with me on <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a> or <a href="/#contact">get in touch here</a>.</p>
+  </section>
+</ArticleLayout>
+
+<style>
+  /* The article opens with a heading, so the drop cap goes on the lead paragraph under it. */
+  :global(.article-body) > section:first-child h2 { margin-top: 0; }
+  .article-lead::first-letter { float: left; margin: 8px 12px 0 0; font-family: var(--font-serif); font-size: 88px; line-height: .8; color: var(--emerald); }
+
+  /* Numbered ideas, with serif numerals. */
+  .blocks { counter-reset: block; padding: 0 !important; list-style: none !important; }
+  .blocks li { position: relative; padding-left: 40px; }
+  .blocks li::before { counter-increment: block; content: counter(block); position: absolute; left: 0; top: -.05em; font-family: var(--font-serif); font-size: 34px; line-height: 1; color: var(--emerald); }
+  .blocks li + li { margin-top: 16px; }
+
+  .wide-figure :global(img) { background: #000; }
+
+  .numbers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 28px !important; border-top: 1px solid var(--ink); }
+  .numbers div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; padding: 22px 20px 22px 0; border-bottom: 1px solid var(--rule); }
+  .numbers div:nth-child(even) { padding-left: 20px; border-left: 1px solid var(--rule); }
+  .numbers dd { display: flex; align-items: baseline; gap: 6px; font-family: var(--font-serif); font-size: clamp(44px, 5vw, 64px); line-height: .95; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .numbers .unit { font: 400 12px/1 var(--font-mono); letter-spacing: 0; color: var(--muted); }
+  .numbers dt { font-size: 14px; line-height: 1.5; color: var(--body); }
+
+  /* Docker container and DSX POD, side by side. The DSX column carries the emerald accent. */
+  .compare { margin-top: 28px !important; border-top: 1px solid var(--ink); }
+  .compare thead th { padding-top: 14px; }
+  .compare thead th:last-child { color: var(--emerald); }
+  .compare tbody th { padding-right: 16px; border-bottom-color: var(--rule); font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.2; letter-spacing: 0; text-transform: none; color: var(--ink); }
+  .compare td { width: 38%; color: var(--body); }
+  .compare td:last-child { color: var(--ink); }
+
+  /* The limits of the analogy, as a ruled two-column grid. */
+  .limits { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 0 32px; margin-top: 24px !important; padding: 0 !important; list-style: none !important; border-top: 1px solid var(--ink); }
+  .limits li { margin: 0 !important; padding-block: 20px; border-bottom: 1px solid var(--rule); font-size: 16px; line-height: 1.7; color: var(--body); }
+  .limits strong { display: block; margin-bottom: 4px; font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.2; }
+
+  @media (max-width: 640px) {
+    .numbers div { padding-right: 12px; }
+    .numbers div:nth-child(even) { padding-left: 12px; }
+
+    /* Each idea becomes a block, with the column names shown above each cell. */
+    .compare thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .compare, .compare tbody, .compare tr, .compare th, .compare td { display: block; width: auto; }
+    .compare tr { padding-block: 16px; border-bottom: 1px solid var(--rule); }
+    .compare tbody th, .compare td { padding: 0; border: 0; }
+    .compare td { margin-top: 10px; }
+    .compare td::before { content: attr(data-label); display: block; font: 400 11px/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .compare td:last-child::before { color: var(--emerald); }
+  }
+</style>

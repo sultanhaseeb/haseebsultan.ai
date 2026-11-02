@@ -3,6 +3,7 @@ import controlProblemImage from '../assets/images/blog/the-control-problem/contr
 import specDrivenImage from '../assets/images/blog/spec-driven-development.jpg';
 import jevImage from '../assets/images/blog/unlocking-system-1-ai-jev/system-1-vs-system-2.png';
 import gtcBerlinImage from '../assets/images/blog/nvidia-gtc-berlin/keynote-robots.jpg';
+import dockerMomentImage from '../assets/images/blog/docker-moment-for-data-centers/keynote-dsx-pod.jpg';
 
 export interface Post {
   title: string;
@@ -48,6 +49,19 @@ export const gtcBerlinArticle: Post = {
   image: gtcBerlinImage,
   imageAlt: 'Jensen Huang kneels on the GTC Berlin stage holding a laptop beside three small walking robots, with humanoid robots from Disney Research and Enchanted Tools behind him.',
   imageCaption: 'Jensen Huang on stage at GTC Berlin with a group of walking robots. Image: NVIDIA',
+};
+
+export const dockerMomentArticle: Post = {
+  title: 'The Docker Moment for Data Centers: NVIDIA DSX POD vs Docker & Kubernetes Pods',
+  coverTitle: 'The Docker Moment',
+  description: 'Docker made software deployment predictable. NVIDIA’s DSX POD tries to do the same for the AI data center itself. Where the comparison holds, why it matters, and where it breaks.',
+  category: 'AI Infrastructure',
+  accent: 'Docker Moment',
+  href: '/blog/docker-moment-for-data-centers/',
+  published: '2026-11-02',
+  image: dockerMomentImage,
+  imageAlt: 'Jensen Huang on the GTC Berlin stage in front of a life-size cutaway of the Vera Rubin DSX POD, under the heading Full-Stack Modular AI Factory Reference Architecture and a row of partner logos.',
+  imageCaption: 'Jensen Huang announces the Vera Rubin DSX POD at GTC Berlin. Image: NVIDIA',
 };
 
 export const aiSecurityArticle: Post = {
@@ -109,6 +123,7 @@ export const conceptsLesson: Post = {
 // Articles: my own views on AI, what it is, and where it is heading. Pages live in src/pages/blog/.
 // Posts published on the same day are listed in this order, so put the newest first among them.
 export const articles = [
+  dockerMomentArticle,
   controlProblemArticle,
   aiSecurityArticle,
   gtcBerlinArticle,
